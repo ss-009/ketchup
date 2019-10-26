@@ -65,8 +65,12 @@ textarea:focus, input:focus, input[type]:focus {
 
 .header-link, .header-link:hover,
 .top-user-register-sign-up, .sns-auth a,
-.form-control, .question-tag-li, .footer-li a {
-	transition: background-color 0.3s ease, color 0.3s ease;
+.form-control, .question-tag-li {
+	transition: background-color 0.3s ease;
+}
+
+.footer-li a {
+	transition: color 0.3s ease;
 }
 
 .header-link img {
