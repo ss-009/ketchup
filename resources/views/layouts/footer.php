@@ -1,4 +1,4 @@
-<footer>
+	<footer>
 		<div class="ketchup-footer">
 			<ul class="footer-ul">
 				<li class="footer-li"><a href="#"><i class="fas fa-chevron-circle-right"></i>利用規約</a></li>

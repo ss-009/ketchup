@@ -7,8 +7,8 @@
 	<!-- CSRF Token -->
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 
-	<title>{{ config('app.name', 'Ketchup') }} | 音楽制作者のためのQ&Aサイト</title>
-	<meta content="Ketchupは音楽制作者のためのQ&Aサイトです。 作詞・作曲から編曲・DAW操作までDTMや曲作りに関する悩みを解決しましょう。" name="description">
+	<title>@yield('title') | 音楽制作者のためのQ&Aサイト</title>
+	<meta content="@yield('description')" name="description">
 
 	<!-- Scripts -->
 	<script src="{{ asset('js/app.js') }}" defer></script>
@@ -22,10 +22,11 @@
 	<!-- Styles -->
 	<link href="{{ asset('css/app.css') }}" rel="stylesheet">
 	<link href="{{ asset('css/common.css') }}" rel="stylesheet">
+	@yield('pageCss')
 	
 </head>
 <body>
-	<div id="body">
+	<div>
 		<nav id="header">
 			<div class="navbar-light bg-ketchup">
 				<div class="header-container text-center mx-3">
