@@ -9,6 +9,5 @@
 	</footer>
 </body>
 <script src="js/jquery-3.4.1.min.js" defer></script>
-<script src="js/app.js" defer></script>
 <script src="js/common.js" defer></script>
 </html>

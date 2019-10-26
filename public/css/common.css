@@ -66,10 +66,7 @@ textarea:focus, input:focus, input[type]:focus {
 .header-link, .header-link:hover,
 .top-user-register-sign-up, .sns-auth a,
 .form-control, .question-tag-li, .footer-li a {
-	-webkit-transition: all 0.2s ease-in-out;
-	-moz-transition: all 0.2s ease-in-out;
-	-o-transition: all 0.2s ease-in-out;
-	transition: all  0.2s ease-in-out;
+	transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .header-link img {
@@ -80,7 +77,6 @@ textarea:focus, input:focus, input[type]:focus {
 .header-link:hover {
 	color: #FFFFFF;
 	background-color: #c54b4b;
-	border: 1px solid #c54b4b;
 	text-decoration: none;
 }
 
@@ -177,7 +173,6 @@ ul {
 
 .top-user-register-sign-up:hover {
 	background-color: #424242;
-	border: 1px solid #424242;
 	text-decoration: none;
 	color:	#FFFFFF;
 }
