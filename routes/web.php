@@ -11,9 +11,12 @@
 |
 */
 
-Route::get('/', function () {
-	return view('index');
+Route::get('/', 'TopController@index');
+
+Route::group(['middleware' => 'auth'], function() {
+	Route::get('/question', 'QuestionController@index');
 });
+
 
 Auth::routes();
 

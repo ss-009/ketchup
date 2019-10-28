@@ -43,7 +43,7 @@
 					<div class="header-end d-inline-block">
 						<ul>
 							<li class="header-end-li">
-								<a class="header-link" href="javascript:void(0)" id="question">
+								<a class="header-link" href="/question" id="question">
 									<img src="{{ asset('img/common/question.svg') }}" id="svg_question" class="svg-question">
 									<span>質問する</span>
 								</a>

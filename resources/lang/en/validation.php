@@ -90,7 +90,7 @@ return [
         'string' => ':min 文字以上で入力してください。',
         'array' => 'The :attribute must have at least :min items.',
     ],
-    'not_in' => 'The selected :attribute is invalid.',
+    'not_in' => '選択してください。',
     'not_regex' => 'The :attribute format is invalid.',
     'numeric' => 'The :attribute must be a number.',
     'present' => 'The :attribute field must be present.',
