@@ -11,7 +11,7 @@
 	<div class="card-header">{{ __('質問投稿') }}</div>
 
 	<div class="card-body">
-		<form method="POST" action="question/confirm">
+		<form method="POST" action="complete">
 			@csrf
 
 			<div class="form-group row">
@@ -31,32 +31,32 @@
 			</div>
 
 			<div class="form-group row">
-				<label for="tag_id_1" class="col-md-4 col-form-label text-md-right">{{ __('タグ1') }}</label>
+				<label for="tag1" class="col-md-4 col-form-label text-md-right">{{ __('タグ1') }}</label>
 				<div class="col-md-6">
-					{{$tag_id_1}}
+					{{$tag_name_1}}<span class="d-none" id="tag_id_1">{{$tag_id_1}}</span>
 				</div>
 			</div>
 
 			<div class="form-group row">
-				<label for="tag_id_2" class="col-md-4 col-form-label text-md-right">{{ __('タグ2') }}</label>
+				<label for="tag2" class="col-md-4 col-form-label text-md-right">{{ __('タグ2') }}</label>
 				<div class="col-md-6">
-					{{$tag_id_2}}
+					{{$tag_name_2}}<span class="d-none" id="tag_id_2">{{$tag_id_2}}</span>
 				</div>
 			</div>
 
 			<div class="form-group row">
-				<label for="tag_id_2" class="col-md-4 col-form-label text-md-right">{{ __('タグ2') }}</label>
+				<label for="tag3" class="col-md-4 col-form-label text-md-right">{{ __('タグ3') }}</label>
 				<div class="col-md-6">
-					{{$tag_id_3}}
+					{{$tag_name_3}}<span class="d-none" id="tag_id_3">{{$tag_id_3}}</span>
 				</div>
 			</div>
 
 			<div class="form-group row mb-0">
 				<div class="col-md-6 offset-md-4">
-					<button type="return" class="btn btn-primary">
+					<button type="button" onclick="history.back()" class="btn btn-primary">
 						{{ __('戻る') }}
 					</button>
-					<button type="submit" class="btn btn-primary">
+					<button name="action" value="post" class="btn btn-primary">
 						{{ __('登録') }}
 					</button>
 				</div>

@@ -46,16 +46,16 @@
 				<label for="tag_id_1" class="col-md-4 col-form-label text-md-right"><span class="required">※</span>{{ __('タグ1') }}</label>
 				<div class="dropdown">
 					<select class="form-control @error('tag_id_1') is-invalid @enderror" name="tag_id_1" id="tag_id_1">
-						<option value="0">タグを選択</option>
-						<option value="1">作詞</option>
-						<option value="2">作曲</option>
-						<option value="3">編曲・アレンジ</option>
-						<option value="4">楽器・演奏</option>
-						<option value="5">レコーディング</option>
-						<option value="6">ミックスダウン</option>
-						<option value="7">マスタリング</option>
-						<option value="8">DAW・DTM全般</option>
-						<option value="9">その他</option>
+						<option @if(old("tag_id_1") == "0") selected @endif value="0">タグを選択</option>
+						<option @if(old("tag_id_1") == "1") selected @endif value="1">作詞</option>
+						<option @if(old("tag_id_1") == "2") selected @endif value="2">作曲</option>
+						<option @if(old("tag_id_1") == "3") selected @endif value="3">編曲・アレンジ</option>
+						<option @if(old("tag_id_1") == "4") selected @endif value="4">楽器・演奏</option>
+						<option @if(old("tag_id_1") == "5") selected @endif value="5">レコーディング</option>
+						<option @if(old("tag_id_1") == "6") selected @endif value="6">ミックスダウン</option>
+						<option @if(old("tag_id_1") == "7") selected @endif value="7">マスタリング</option>
+						<option @if(old("tag_id_1") == "8") selected @endif value="8">DAW・DTM全般</option>
+						<option @if(old("tag_id_1") == "9") selected @endif value="9">その他</option>
 					</select>
 
 					@error('tag_id_1')
@@ -70,16 +70,16 @@
 			<label for="tag_id_2" class="col-md-4 col-form-label text-md-right">{{ __('タグ2') }}</label>
 				<div class="dropdown">
 					<select class="form-control @error('tag_id_2') is-invalid @enderror" name="tag_id_2" id="tag_id_2">
-						<option value="0">タグを選択</option>
-						<option value="1">作詞</option>
-						<option value="2">作曲</option>
-						<option value="3">編曲・アレンジ</option>
-						<option value="4">楽器・演奏</option>
-						<option value="5">レコーディング</option>
-						<option value="6">ミックスダウン</option>
-						<option value="7">マスタリング</option>
-						<option value="8">DAW・DTM全般</option>
-						<option value="9">その他</option>
+						<option @if(old("tag_id_2") == "0") selected @endif value="0">タグを選択</option>
+						<option @if(old("tag_id_2") == "1") selected @endif value="1">作詞</option>
+						<option @if(old("tag_id_2") == "2") selected @endif value="2">作曲</option>
+						<option @if(old("tag_id_2") == "3") selected @endif value="3">編曲・アレンジ</option>
+						<option @if(old("tag_id_2") == "4") selected @endif value="4">楽器・演奏</option>
+						<option @if(old("tag_id_2") == "5") selected @endif value="5">レコーディング</option>
+						<option @if(old("tag_id_2") == "6") selected @endif value="6">ミックスダウン</option>
+						<option @if(old("tag_id_2") == "7") selected @endif value="7">マスタリング</option>
+						<option @if(old("tag_id_2") == "8") selected @endif value="8">DAW・DTM全般</option>
+						<option @if(old("tag_id_2") == "9") selected @endif value="9">その他</option>
 					</select>
 
 					@error('tag_id_2')
@@ -94,16 +94,16 @@
 			<label for="tag_id_3" class="col-md-4 col-form-label text-md-right">{{ __('タグ3') }}</label>
 				<div class="dropdown">
 					<select class="form-control @error('tag_id_3') is-invalid @enderror" name="tag_id_3" id="tag_id_3">
-						<option value="0">タグを選択</option>
-						<option value="1">作詞</option>
-						<option value="2">作曲</option>
-						<option value="3">編曲・アレンジ</option>
-						<option value="4">楽器・演奏</option>
-						<option value="5">レコーディング</option>
-						<option value="6">ミックスダウン</option>
-						<option value="7">マスタリング</option>
-						<option value="8">DAW・DTM全般</option>
-						<option value="9">その他</option>
+						<option @if(old("tag_id_3") == "0") selected @endif value="0">タグを選択</option>
+						<option @if(old("tag_id_3") == "1") selected @endif value="1">作詞</option>
+						<option @if(old("tag_id_3") == "2") selected @endif value="2">作曲</option>
+						<option @if(old("tag_id_3") == "3") selected @endif value="3">編曲・アレンジ</option>
+						<option @if(old("tag_id_3") == "4") selected @endif value="4">楽器・演奏</option>
+						<option @if(old("tag_id_3") == "5") selected @endif value="5">レコーディング</option>
+						<option @if(old("tag_id_3") == "6") selected @endif value="6">ミックスダウン</option>
+						<option @if(old("tag_id_3") == "7") selected @endif value="7">マスタリング</option>
+						<option @if(old("tag_id_3") == "8") selected @endif value="8">DAW・DTM全般</option>
+						<option @if(old("tag_id_3") == "9") selected @endif value="9">その他</option>
 					</select>
 
 					@error('tag_id_3')
