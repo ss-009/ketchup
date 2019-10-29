@@ -15,6 +15,7 @@ Route::get('/', 'TopController@index');
 
 Route::group(['middleware' => 'auth'], function() {
 	Route::get('/question', 'QuestionController@index');
+	Route::post('/question/confirm', 'QuestionController@question_confirm');
 });
 
 

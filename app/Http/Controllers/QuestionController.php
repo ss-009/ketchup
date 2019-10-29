@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Article;
+use Illuminate\Http\Request;
 
 class QuestionController extends Controller
 {
@@ -34,36 +33,38 @@ class QuestionController extends Controller
 	 *
 	 * @return View
 	 */
-	public function confirm(Request $request) {
-		//入力値の取得
-		$article = new Article($request->all());
+	public function question_confirm(Request $request) {
+
+		$data = $request->all();
 		
-		//入力チェック
-		$this->validate($request, [
+		// バリデーションチェック
+		$request->validate([
 		  'question_title' => 'required|min:5|max:30',
 		  'question_content' => 'required|min:5|max:2000',
-		  'tag1' => 'not_in: 0'
+		  'tag_id_1' => 'not_in:0|max:1',
+		  'tag_id_2' => 'in:tag_id_1',
+		  'tag_id_3' => 'in:tag_id_1,tag_id_2'
 		]);
-		
-		//セッションに保存
-		$request->session()->put('article', $article);
-		
-		//ビューの表示
-		return view('confirm', compact('article'));
-	}
 
-	/**
-	 * 質問投稿のバリデーション
-	 *
-	 * @param  array  $data
-	 * @return \Illuminate\Contracts\Validation\Validator
-	 */
-	protected function validator(array $data)
-	{
-		return Validator::make($data, [
-			'user_id' => ['required', 'string', 'min:3', 'max:20', 'unique:users' ,'regex:/^[!-~]+$/'],
-			'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-			'password' => ['required', 'string', 'min:8'],
+		// 変数に格納
+		$question_title = $data["question_title"];
+		$question_content = $data["question_content"];
+		$tag_id_1 = $data["tag_id_1"];
+		$tag_id_2 = $data["tag_id_2"];
+		$tag_id_3 = $data["tag_id_3"];
+
+		// セッションに保存
+		// $request->session()->put($question_title);
+		// $request->session()->put($question_content);
+		// $request->session()->put($tag_id_1);
+		
+		// ビューの表示
+		return view('question_confirm')->with([
+			"question_title" => $question_title,
+			"question_content"  => $question_content,
+			"tag_id_1"  => $tag_id_1,
+			"tag_id_2"  => $tag_id_2,
+			"tag_id_3"  => $tag_id_3
 		]);
 	}
 
