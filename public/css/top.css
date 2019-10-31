@@ -285,7 +285,11 @@ ul {
 	color: #000000;
 }
 
-.top-update-datetime, .top-question-user, .top-good-count {
+.top-entry-datetime {
+	float: left;
+}
+
+.top-question-user, .top-good-count {
 	margin-left: 20px;
 }
 

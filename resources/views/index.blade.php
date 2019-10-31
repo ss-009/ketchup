@@ -45,299 +45,55 @@
 			</div>
 
 			<ul class="top-question-list">
+				@foreach ($question_list as $question)
 				<li class="top-question">
 					<div class="top-question-left">
 						<div class="top-answer-count">
-							<div class="top-answer-count-div"><a class="top-answer-count-a" href="#">回答数</a></div>
-								<p class="top-answer-count-p"><a class="top-answer-count-a" href="#">10</a></p>
+							<div class="top-answer-count-div"><a class="top-answer-count-a" href="questions/{{$question['question_id']}}">回答数</a></div>
+								<p class="top-answer-count-p"><a class="top-answer-count-a" href="questions/{{$question['question_id']}}">{{$question['count_answer']}}</a></p>
 							</a>
 						</div>
 						<div>
+							@if ($question['close_flg'] === 0)
 							<p class="top-question-status">募集中</p>
-						</div>
-					</div>
-					<div class="top-question-inner d-inline-block">
-						<div class="top-question-title">
-							<a href="#">テストテストテストテストテストテスト</a>
-						</div>
-						<div></div>
-						<div class="top-question-tag">
-							<ul class="question-tag-ul">
-								<li class="question-tag-li">
-									<a href="#">作曲</a>
-								</li>
-								<li class="question-tag-li">
-									<a href="#">編曲・アレンジ</a>
-								</li>
-							</ul>
-						</div>
-						<div class="top-question-data">
-							<div class="top-entry-datetime d-inline-block"><i class="fas fa-clock"></i>2019/10/23 09:31:43</div>
-							<div class="top-question-user d-inline-block"><a href="#"><img src="{{ asset('img/common/test-user.png') }}">bell-mere</a></div>
-							<div class="top-good-count d-inline-block"><i class="fas fa-thumbs-up"></i>20</div>
-						</div>	
-					</div>
-				</li>
-
-				<li class="top-question">
-					<div class="top-question-left">
-						<div class="top-answer-count">
-							<div class="top-answer-count-div"><a class="top-answer-count-a" href="#">回答数</a></div>
-								<p class="top-answer-count-p"><a class="top-answer-count-a" href="#">10</a></p>
-							</a>
-						</div>
-						<div>
+							@elseif($question['close_flg'] === 1)
 							<p class="top-question-status-finish">解決済</p>
+							@endif
 						</div>
 					</div>
 					<div class="top-question-inner d-inline-block">
 						<div class="top-question-title">
-							<a href="#">テストテストテストテストテストテストテストテストテストテストテストテスト</a>
+							<a href="questions/{{$question['question_id']}}">{{$question['question_title']}}</a>
 						</div>
 						<div></div>
 						<div class="top-question-tag">
 							<ul class="question-tag-ul">
 								<li class="question-tag-li">
-									<a href="#">レコーディング</a>
+									<a href="{{$question['tag_id_1']}}">{{$question['tag_name_1']}}</a>
 								</li>
+								@if ($question['tag_table_id_2'] !== 0)
 								<li class="question-tag-li">
-									<a href="#">DAW・DTM全般</a>
+									<a href="{{$question['tag_id_2']}}">{{$question['tag_name_2']}}</a>
 								</li>
+								@endif
+								@if ($question['tag_table_id_3'] !== 0)
 								<li class="question-tag-li">
-									<a href="#">マスタリング</a>
+									<a href="{{$question['tag_id_3']}}">{{$question['tag_name_3']}}</a>
 								</li>
+								@endif
 							</ul>
 						</div>
 						<div class="top-question-data">
-							<div class="top-entry-datetime d-inline-block"><i class="fas fa-clock"></i>2019/10/23 09:31:43</div>
-							<div class="top-question-user d-inline-block"><a href="#"><img src="{{ asset('img/common/test-user.png') }}">bell-mere</a></div>
-							<div class="top-good-count d-inline-block"><i class="fas fa-thumbs-up"></i>20</div>
+							<div class="top-entry-datetime d-inline-block"><i class="fas fa-clock"></i>{{$question['created_at']}}</div>
+							<!-- <div class="top-question-user d-inline-block"><a href="#"><img src="{{$question['image']}}">{{$question['user_id']}}</a></div> -->
+							<div class="top-question-user d-inline-block"><a href="#"><img src="{{ asset('img/common/test-user.png') }}">{{$question['user_id']}}</a></div>
+							<div class="top-good-count d-inline-block"><i class="fas fa-thumbs-up"></i>{{$question['good_question']}}</div>
 						</div>	
 					</div>
 				</li>
-
-				<li class="top-question">
-					<div class="top-question-left">
-						<div class="top-answer-count">
-							<div class="top-answer-count-div"><a class="top-answer-count-a" href="#">回答数</a></div>
-								<p class="top-answer-count-p"><a class="top-answer-count-a" href="#">10</a></p>
-							</a>
-						</div>
-						<div>
-							<p class="top-question-status">募集中</p>
-						</div>
-					</div>
-					<div class="top-question-inner d-inline-block">
-						<div class="top-question-title">
-							<a href="#">テストテストテストテストテストテストテストテストテストテストテストテスト</a>
-						</div>
-						<div></div>
-						<div class="top-question-tag">
-							<ul class="question-tag-ul">
-								<li class="question-tag-li">
-									<a href="#">レコーディング</a>
-								</li>
-								<li class="question-tag-li">
-									<a href="#">DAW・DTM全般</a>
-								</li>
-								<li class="question-tag-li">
-									<a href="#">マスタリング</a>
-								</li>
-							</ul>
-						</div>
-						<div class="top-question-data">
-							<div class="top-entry-datetime d-inline-block"><i class="fas fa-clock"></i>2019/10/23 09:31:43</div>
-							<div class="top-question-user d-inline-block"><a href="#"><img src="{{ asset('img/common/test-user.png') }}">bell-mere</a></div>
-							<div class="top-good-count d-inline-block"><i class="fas fa-thumbs-up"></i>20</div>
-						</div>	
-					</div>
-				</li>
-			
-				<li class="top-question">
-					<div class="top-question-left">
-						<div class="top-answer-count">
-							<div class="top-answer-count-div"><a class="top-answer-count-a" href="#">回答数</a></div>
-								<p class="top-answer-count-p"><a class="top-answer-count-a" href="#">10</a></p>
-							</a>
-						</div>
-						<div>
-							<p class="top-question-status">募集中</p>
-						</div>
-					</div>
-					<div class="top-question-inner d-inline-block">
-						<div class="top-question-title">
-							<a href="#">テストテストテストテストテストテストテストテストテストテストテストテスト</a>
-						</div>
-						<div></div>
-						<div class="top-question-tag">
-							<ul class="question-tag-ul">
-								<li class="question-tag-li">
-									<a href="#">レコーディング</a>
-								</li>
-								<li class="question-tag-li">
-									<a href="#">DAW・DTM全般</a>
-								</li>
-								<li class="question-tag-li">
-									<a href="#">マスタリング</a>
-								</li>
-							</ul>
-						</div>
-						<div class="top-question-data">
-							<div class="top-entry-datetime d-inline-block"><i class="fas fa-clock"></i>2019/10/23 09:31:43</div>
-							<div class="top-question-user d-inline-block"><a href="#"><img src="{{ asset('img/common/test-user.png') }}">bell-mere</a></div>
-							<div class="top-good-count d-inline-block"><i class="fas fa-thumbs-up"></i>20</div>
-						</div>	
-					</div>
-				</li>
-
-				<li class="top-question">
-					<div class="top-question-left">
-						<div class="top-answer-count">
-							<div class="top-answer-count-div"><a class="top-answer-count-a" href="#">回答数</a></div>
-								<p class="top-answer-count-p"><a class="top-answer-count-a" href="#">10</a></p>
-							</a>
-						</div>
-						<div>
-							<p class="top-question-status">募集中</p>
-						</div>
-					</div>
-					<div class="top-question-inner d-inline-block">
-						<div class="top-question-title">
-							<a href="#">テストテストテストテストテストテストテストテストテストテストテストテスト</a>
-						</div>
-						<div></div>
-						<div class="top-question-tag">
-							<ul class="question-tag-ul">
-								<li class="question-tag-li">
-									<a href="#">レコーディング</a>
-								</li>
-								<li class="question-tag-li">
-									<a href="#">DAW・DTM全般</a>
-								</li>
-								<li class="question-tag-li">
-									<a href="#">マスタリング</a>
-								</li>
-							</ul>
-						</div>
-						<div class="top-question-data">
-							<div class="top-entry-datetime d-inline-block"><i class="fas fa-clock"></i>2019/10/23 09:31:43</div>
-							<div class="top-question-user d-inline-block"><a href="#"><img src="{{ asset('img/common/test-user.png') }}">bell-mere</a></div>
-							<div class="top-good-count d-inline-block"><i class="fas fa-thumbs-up"></i>20</div>
-						</div>	
-					</div>
-				</li>
-
-				<li class="top-question">
-					<div class="top-question-left">
-						<div class="top-answer-count">
-							<div class="top-answer-count-div"><a class="top-answer-count-a" href="#">回答数</a></div>
-								<p class="top-answer-count-p"><a class="top-answer-count-a" href="#">10</a></p>
-							</a>
-						</div>
-						<div>
-							<p class="top-question-status">募集中</p>
-						</div>
-					</div>
-					<div class="top-question-inner d-inline-block">
-						<div class="top-question-title">
-							<a href="#">テストテストテストテストテストテストテストテストテストテストテストテスト</a>
-						</div>
-						<div></div>
-						<div class="top-question-tag">
-							<ul class="question-tag-ul">
-								<li class="question-tag-li">
-									<a href="#">レコーディング</a>
-								</li>
-								<li class="question-tag-li">
-									<a href="#">DAW・DTM全般</a>
-								</li>
-								<li class="question-tag-li">
-									<a href="#">マスタリング</a>
-								</li>
-							</ul>
-						</div>
-						<div class="top-question-data">
-							<div class="top-entry-datetime d-inline-block"><i class="fas fa-clock"></i>2019/10/23 09:31:43</div>
-							<div class="top-question-user d-inline-block"><a href="#"><img src="{{ asset('img/common/test-user.png') }}">bell-mere</a></div>
-							<div class="top-good-count d-inline-block"><i class="fas fa-thumbs-up"></i>20</div>
-						</div>
-					</div>
-				</li>
-
-				<li class="top-question">
-					<div class="top-question-left">
-						<div class="top-answer-count">
-							<div class="top-answer-count-div"><a class="top-answer-count-a" href="#">回答数</a></div>
-								<p class="top-answer-count-p"><a class="top-answer-count-a" href="#">10</a></p>
-							</a>
-						</div>
-						<div>
-							<p class="top-question-status">募集中</p>
-						</div>
-					</div>
-					<div class="top-question-inner d-inline-block">
-						<div class="top-question-title">
-							<a href="#">テストテストテストテストテストテストテストテストテストテストテストテスト</a>
-						</div>
-						<div></div>
-						<div class="top-question-tag">
-							<ul class="question-tag-ul">
-								<li class="question-tag-li">
-									<a href="#">レコーディング</a>
-								</li>
-								<li class="question-tag-li">
-									<a href="#">DAW・DTM全般</a>
-								</li>
-								<li class="question-tag-li">
-									<a href="#">マスタリング</a>
-								</li>
-							</ul>
-						</div>
-						<div class="top-question-data">
-							<div class="top-entry-datetime d-inline-block"><i class="fas fa-clock"></i>2019/10/23 09:31:43</div>
-							<div class="top-question-user d-inline-block"><a href="#"><img src="{{ asset('img/common/test-user.png') }}">bell-mere</a></div>
-							<div class="top-good-count d-inline-block"><i class="fas fa-thumbs-up"></i>20</div>
-						</div>
-					</div>
-				</li>
-
-				<li class="top-question">
-					<div class="top-question-left">
-						<div class="top-answer-count">
-							<div class="top-answer-count-div"><a class="top-answer-count-a" href="#">回答数</a></div>
-								<p class="top-answer-count-p"><a class="top-answer-count-a" href="#">10</a></p>
-							</a>
-						</div>
-						<div>
-							<p class="top-question-status">募集中</p>
-						</div>
-					</div>
-					<div class="top-question-inner d-inline-block">
-						<div class="top-question-title">
-							<a href="#">テストテストテストテストテストテストテストテストテストテストテストテスト</a>
-						</div>
-						<div></div>
-						<div class="top-question-tag">
-							<ul class="question-tag-ul">
-								<li class="question-tag-li">
-									<a href="#">レコーディング</a>
-								</li>
-								<li class="question-tag-li">
-									<a href="#">DAW・DTM全般</a>
-								</li>
-								<li class="question-tag-li">
-									<a href="#">マスタリング</a>
-								</li>
-							</ul>
-						</div>
-						<div class="top-question-data">
-							<div class="top-entry-datetime d-inline-block"><i class="fas fa-clock"></i>2019/10/23 09:31:43</div>
-							<div class="top-question-user d-inline-block"><a href="#"><img src="{{ asset('img/common/test-user.png') }}">bell-mere</a></div>
-							<div class="top-good-count d-inline-block"><i class="fas fa-thumbs-up"></i>20</div>
-						</div>
-					</div>
-				</li>
+				@endforeach
 			</ul>
+			{{ $question_list->links() }}
 		</div>
 	@include('layouts.side')
 	</div>

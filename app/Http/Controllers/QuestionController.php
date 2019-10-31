@@ -6,12 +6,11 @@ use Auth;
 use DB;
 use Exception;
 use Illuminate\Http\Request;
+use App\Http\Controllers\CommonController;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Controllers\CommonController as Common;
 use App\Rules\TagDuplicate;
 use App\Rules\TagUnselected;
-use App\Http\Controllers\CommonController;
-use App\Models\QuestionInsertModel;
+use App\Http\Models\QuestionInsertModel;
 
 class QuestionController extends Controller
 {
@@ -46,11 +45,11 @@ class QuestionController extends Controller
 		$data = $request->all();
 
 		// 変数に格納
-		$question_title = $data["question_title"];
-		$question_content = $data["question_content"];
-		$tag_id_1 = (int)$data["tag_id_1"];
-		$tag_id_2 = (int)$data["tag_id_2"];
-		$tag_id_3 = (int)$data["tag_id_3"];
+		$question_title = $data['question_title'];
+		$question_content = $data['question_content'];
+		$tag_id_1 = (int)$data['tag_id_1'];
+		$tag_id_2 = (int)$data['tag_id_2'];
+		$tag_id_3 = (int)$data['tag_id_3'];
 
 		// バリデーションルール
 		$rules = [	'question_title' => 'required|min:5|max:30',
@@ -89,14 +88,14 @@ class QuestionController extends Controller
 		
 		// ビューの表示
 		return view('question_confirm')->with([
-			"question_title" => $question_title,
-			"question_content"  => $question_content,
-			"tag_id_1"  => $tag_id_1,
-			"tag_id_2"  => $tag_id_2,
-			"tag_id_3"  => $tag_id_3,
-			"tag_name_1"  => $tag_name_1,
-			"tag_name_2"  => $tag_name_2,
-			"tag_name_3"  => $tag_name_3
+			'question_title' => $question_title,
+			'question_content'  => $question_content,
+			'tag_id_1'  => $tag_id_1,
+			'tag_id_2'  => $tag_id_2,
+			'tag_id_3'  => $tag_id_3,
+			'tag_name_1'  => $tag_name_1,
+			'tag_name_2'  => $tag_name_2,
+			'tag_name_3'  => $tag_name_3
 		]);
 	}
 
@@ -118,7 +117,7 @@ class QuestionController extends Controller
 		// 登録に使うModelと値の設定
 		$insert_model = new QuestionInsertModel;
 		$user_table_id = Auth::id();
-		$date_time = date("Y/m/d H:i:s");
+		$date_time = date('Y/m/d H:i:s');
 
 		// 登録処理
 		DB::beginTransaction();

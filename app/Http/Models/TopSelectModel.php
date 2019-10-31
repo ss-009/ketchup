@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Http\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -52,16 +52,29 @@ class TopSelectModel extends Model
 		// SQL文の作成
 		$sql = "";
 		$sql .= "SELECT ";
-		$sql .= "questions.id AS id, ";
+		$sql .= "questions.id AS question_id, ";
 		$sql .= "questions.question_title AS question_title, ";
-		$sql .= "questions.tag_id_1 AS tag_id_1, ";
-		$sql .= "questions.tag_id_2 AS tag_id_2, ";
-		$sql .= "questions.tag_id_3 AS tag_id_3, ";
 		$sql .= "questions.close_flg AS close_flg, ";
 		$sql .= "questions.created_at AS created_at, ";
+		$sql .= "tag1.id AS tag_table_id_1, ";
+		$sql .= "tag2.id AS tag_table_id_2, ";
+		$sql .= "tag3.id AS tag_table_id_3, ";
+		$sql .= "tag1.tag_id AS tag_id_1, ";
+		$sql .= "tag2.tag_id AS tag_id_2, ";
+		$sql .= "tag3.tag_id AS tag_id_3, ";
+		$sql .= "tag1.tag_name AS tag_name_1, ";
+		$sql .= "tag2.tag_name AS tag_name_2, ";
+		$sql .= "tag3.tag_name AS tag_name_3, ";
 		$sql .= "users.user_id AS user_id, ";
 		$sql .= "users.image AS image ";
 		$sql .= "FROM questions ";
+		$sql .= "LEFT OUTER JOIN tags AS tag1 ";
+		$sql .= "ON questions.tag_id_1 = tag1.id ";
+		$sql .= "LEFT OUTER JOIN tags AS tag2 ";
+		$sql .= "ON questions.tag_id_2 = tag2.id ";
+		$sql .= "LEFT OUTER JOIN tags AS tag3 ";
+		$sql .= "ON questions.tag_id_3 = tag3.id ";
+
 		$sql .= "LEFT OUTER JOIN users ";
 		$sql .= "ON questions.user_table_id = users.id ";
 		$sql .= "WHERE ";
@@ -241,7 +254,41 @@ class TopSelectModel extends Model
 		}
 	}
 
+	/**
+	 * タグ一覧を取得する
+	 * 
+	 * @param array $tag_list 取得したデータを格納する配列
+	 * @return int $select_count 取得したデータの件数を返す エラー時は-1を返す
+	 */
+	public function selectTags(&$tag_list)
+	{
+		// データ格納用配列の初期化
+		$tag_list = [];
 
+		// SQL文の作成
+		$sql = "";
+		$sql .= "SELECT ";
+		$sql .= "tags.id AS id, ";
+		$sql .= "tags.tag_id AS tag_id, ";
+		$sql .= "tags.tag_name AS tag_name ";
+		$sql .= "FROM tags ";
+		$sql .= "ORDER BY id ASC ";
+
+		try {
+			// SQLを実行
+			$result = DB::select($sql);
+			// オブジェクトを配列に変換して格納
+			$tag_list = json_decode(json_encode($result), true);
+			// 取得した件数をカウント
+			$select_count = count($tag_list);
+			// 取得したデータの件数を返す
+			return $select_count;
+
+		} catch (\Exception $e){
+			// エラー時は-1を返す
+			return -1;
+		}
+	}
 
 	/**
 	 * タグ一覧とタグの件数を取得する
@@ -249,7 +296,7 @@ class TopSelectModel extends Model
 	 * @param array $tag_list 取得したデータを格納する配列
 	 * @return int $select_count 取得したデータの件数を返す エラー時は-1を返す
 	 */
-	public function selectTags(&$tag_list)
+	public function selectTagsCount(&$count_tag_list)
 	{
 		// データ格納用配列の初期化
 		$tag_list = [];
@@ -270,9 +317,9 @@ class TopSelectModel extends Model
 			// SQLを実行
 			$result = DB::select($sql);
 			// オブジェクトを配列に変換して格納
-			$tag_list = json_decode(json_encode($result), true);
+			$count_tag_list = json_decode(json_encode($result), true);
 			// 取得した件数をカウント
-			$select_count = count($tag_list);
+			$select_count = count($count_tag_list);
 			// 取得したデータの件数を返す
 			return $select_count;
 

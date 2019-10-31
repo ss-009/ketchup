@@ -68,8 +68,8 @@ class TagsSeeder extends Seeder
 		DB::table('tags')->insert($param);
 
 		$param = [
-			'tag_id' => 'dtm-daw',
-			'tag_name' => 'DTM・DAW操作全般',
+			'tag_id' => 'daw-dtm',
+			'tag_name' => 'DAW・DTM全般',
 			'created_at' => date('Y-m-d H:i:s'),
 			'updated_at' => date('Y-m-d H:i:s'),
 		];

@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
+use DB;
+use Exception;
 use Illuminate\Http\Request;
+use App\Http\Models\TopSelectModel;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class TopController extends Controller
 {
@@ -21,8 +26,38 @@ class TopController extends Controller
 	 *
 	 * @return View
 	 */
-	public function index()
+	public function index(Request $request)
 	{
-		return view('index');
+		// 質問リストの取得に必要な配列と変数
+		$question_list = [];
+		$tag_id = '';
+		$keyword = '';
+		$top_model = new TopSelectModel;
+
+		// 質問リストを取得。取得エラーで戻り値が-1の時はエラーページを表示
+		$select_count = $top_model->selectQuestions($question_list, $tag_id, $keyword);
+		if ($select_count === -1) {
+		}
+
+		// 表示するために配列の追加、整理を行う
+		foreach ($question_list as &$question) {
+			// 回答数を取得
+			$count_answer = $top_model->selectCountAnswers($question['question_id']);
+			if ($count_answer === -1) {
+			}
+			// いいね数を取得
+			$good_question = $top_model->selectCountGoodQuestions($question['question_id']);
+			if ($good_question === -1) {
+			}
+			// 回答数といいね数を配列に格納
+			$question['count_answer'] = $count_answer;
+			$question['good_question'] = $good_question;
+		}
+
+		$result = new LengthAwarePaginator($question_list, count($question_list), 20, 1, array('path' => $request->url()));
+
+		return view('index')->with([
+			'question_list' => $result
+		]);
 	}
 }
