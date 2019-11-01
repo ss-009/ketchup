@@ -8,6 +8,8 @@ use Exception;
 use Illuminate\Http\Request;
 use App\Http\Models\TopSelectModel;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class TopController extends Controller
 {
@@ -54,8 +56,25 @@ class TopController extends Controller
 			$question['good_question'] = $good_question;
 		}
 
-		$result = new LengthAwarePaginator($question_list, count($question_list), 20, 1, array('path' => $request->url()));
+		$page_num = $request->page;
+		$slice = 0;
 
+		if ($page_num > 1) {
+			if ($page_num === 2) {
+				$slice = 10;
+			} else {
+				$slice = $page_num * 10 - 10;
+			}
+		};
+
+		$question_top = array_slice($question_list, $slice, 10);
+
+		$result = new LengthAwarePaginator(
+			$question_top,
+			$select_count,
+			10,
+			$request->page,
+			array('path' => $request->url()));
 		return view('index')->with([
 			'question_list' => $result
 		]);

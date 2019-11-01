@@ -12,6 +12,8 @@
 */
 
 Route::get('/', 'TopController@index');
+Route::get('/question/{question_id}', 'QuestionDetailController@index');
+Route::get('/tag/{tag_id}', 'TagController@index');
 
 Route::group(['middleware' => 'auth'], function() {
 	Route::get('/question', 'QuestionController@index');

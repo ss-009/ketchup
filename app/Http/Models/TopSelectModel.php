@@ -142,6 +142,8 @@ class TopSelectModel extends Model
 			}
 		}
 
+		$sql .= "ORDER BY questions.id ASC ";
+
 		try {
 			// SQLを実行
 			$result = DB::select($sql, $param);
