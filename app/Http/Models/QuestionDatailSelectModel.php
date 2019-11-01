@@ -30,17 +30,29 @@ class QuestionDatailSelectModel extends Model
 		$sql .= "questions.question_title AS question_title, ";
 		$sql .= "questions.question_content AS question_content, ";
 		$sql .= "questions.question_addition AS question_addition, ";
-		$sql .= "questions.tag_id_1, ";
-		$sql .= "questions.tag_id_2, ";
-		$sql .= "questions.tag_id_3, ";
 		$sql .= "questions.last_comment, ";
 		$sql .= "questions.close_flg, ";
 		$sql .= "questions.created_at, ";
 		$sql .= "questions.updated_at, ";
+		$sql .= "tag1.id AS tag_table_id_1, ";
+		$sql .= "tag2.id AS tag_table_id_2, ";
+		$sql .= "tag3.id AS tag_table_id_3, ";
+		$sql .= "tag1.tag_id AS tag_id_1, ";
+		$sql .= "tag2.tag_id AS tag_id_2, ";
+		$sql .= "tag3.tag_id AS tag_id_3, ";
+		$sql .= "tag1.tag_name AS tag_name_1, ";
+		$sql .= "tag2.tag_name AS tag_name_2, ";
+		$sql .= "tag3.tag_name AS tag_name_3, ";
 		$sql .= "users.user_id, ";
 		$sql .= "users.image, ";
 		$sql .= "users.score ";
 		$sql .= "FROM questions ";
+		$sql .= "LEFT OUTER JOIN tags AS tag1 ";
+		$sql .= "ON questions.tag_id_1 = tag1.id ";
+		$sql .= "LEFT OUTER JOIN tags AS tag2 ";
+		$sql .= "ON questions.tag_id_2 = tag2.id ";
+		$sql .= "LEFT OUTER JOIN tags AS tag3 ";
+		$sql .= "ON questions.tag_id_3 = tag3.id ";
 		$sql .= "LEFT OUTER JOIN users ";
 		$sql .= "ON questions.user_table_id = users.id ";
 		$sql .= "WHERE ";
@@ -49,7 +61,7 @@ class QuestionDatailSelectModel extends Model
 		$sql .= "questions.delete_flg = 0 ";
 		$sql .= "AND ";
 		$sql .= "questions.id = :question_id ";
-
+		$sql .= "LIMIT 1 ";
 
 		// パラメータ設定
 		$param = [];

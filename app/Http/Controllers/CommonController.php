@@ -22,30 +22,6 @@ class CommonController extends Controller
 	 * タグテーブルIDをタグID、タグ名に置換
 	 *
 	 * @param Int
-	 * @return Array error : -1
-	 */
-	public function tagIdToTag(Int $tag_id) {
-
-		$tag_list = [];
-		$top_model = new TopSelectModel;
-
-		$select_count = $top_model->selectTags($tag_list);
-		if ($select_count === -1) {
-			return -1;
-		}
-
-		foreach ($tag_list as $tag) {
-			if ($tag['id'] === $tag_id) {
-				return $tag;
-			}
-		}
-		return -1;
-	}
-
-	/**
-	 * タグテーブルIDをタグID、タグ名に置換
-	 *
-	 * @param Int
 	 * @return String
 	 */
 	public function tagIdToName(Int $tag_id) {

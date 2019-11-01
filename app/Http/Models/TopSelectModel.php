@@ -55,7 +55,7 @@ class TopSelectModel extends Model
 		$sql .= "questions.id AS question_id, ";
 		$sql .= "questions.question_title AS question_title, ";
 		$sql .= "questions.close_flg AS close_flg, ";
-		$sql .= "questions.created_at AS created_at, ";
+		$sql .= "DATE_FORMAT(questions.created_at, '%Y/%c/%e %h:%i') AS created_at, ";
 		$sql .= "tag1.id AS tag_table_id_1, ";
 		$sql .= "tag2.id AS tag_table_id_2, ";
 		$sql .= "tag3.id AS tag_table_id_3, ";
@@ -74,7 +74,6 @@ class TopSelectModel extends Model
 		$sql .= "ON questions.tag_id_2 = tag2.id ";
 		$sql .= "LEFT OUTER JOIN tags AS tag3 ";
 		$sql .= "ON questions.tag_id_3 = tag3.id ";
-
 		$sql .= "LEFT OUTER JOIN users ";
 		$sql .= "ON questions.user_table_id = users.id ";
 		$sql .= "WHERE ";
