@@ -3,7 +3,7 @@ html {
 }
 
 body {
-	color: #171717;
+	color: #333;
 	background-color: #FFFFFF;
 	letter-spacing: 0.3px;
 }
@@ -87,7 +87,7 @@ textarea:focus, input:focus, input[type]:focus {
 
 #question {
 	border: none;
-	background-color: #171717;
+	background-color: #333;
 	margin-right: 2rem;
 	border-radius: 5px;
 	box-shadow: 3px 3px #000000;
@@ -124,7 +124,7 @@ ul {
 
 .tag-ranking-header {
 	padding-bottom: 16px;
-	border-bottom: 2px solid #000000;
+	border-bottom: 2px solid #333;
 	font-size: 16px;
 }
 
@@ -146,7 +146,7 @@ ul {
 }
 
 .tag-ranking-li:nth-child(2) a {
-	color: #16181b;
+	color: #333;
 	vertical-align: middle;
 	font-size: 16px;
 }

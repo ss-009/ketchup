@@ -32,8 +32,8 @@ class QuestionDatailSelectModel extends Model
 		$sql .= "questions.question_addition AS question_addition, ";
 		$sql .= "questions.last_comment, ";
 		$sql .= "questions.close_flg, ";
-		$sql .= "questions.created_at, ";
-		$sql .= "questions.updated_at, ";
+		$sql .= "DATE_FORMAT(questions.created_at, '%Y/%c/%e %h:%i') AS created_at, ";
+		$sql .= "DATE_FORMAT(questions.updated_at, '%Y/%c/%e %h:%i') AS updated_at, ";
 		$sql .= "tag1.id AS tag_table_id_1, ";
 		$sql .= "tag2.id AS tag_table_id_2, ";
 		$sql .= "tag3.id AS tag_table_id_3, ";

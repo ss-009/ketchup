@@ -141,7 +141,7 @@ class TopSelectModel extends Model
 			}
 		}
 
-		$sql .= "ORDER BY questions.id ASC ";
+		$sql .= "ORDER BY questions.id DESC ";
 
 		try {
 			// SQLを実行

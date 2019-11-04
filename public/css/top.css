@@ -223,7 +223,7 @@
 }
 
 .top-answer-count-p a, .top-answer-count-p a:hover {
-	color: #a80000;
+	color: #a80000!important;
 	font-size: 20px;
 	font-weight: bold;
 	text-align: center;
@@ -240,7 +240,7 @@ p {
 }
 
 .top-question-title {
-	font-size: 20px;
+	font-size: 22px;
 	font-weight: bold;
 }
 
@@ -270,7 +270,7 @@ ul {
 
 .question-tag-li a {
 	display: block;
-	color: #16181b;
+	color: #333;
 	text-decoration: none;
 	font-weight: bold;
 	padding: 0 15px;

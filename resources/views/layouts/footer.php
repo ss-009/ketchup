@@ -9,6 +9,6 @@
 		</footer>
 	</div>
 </body>
-<script src="js/jquery-3.4.1.min.js" defer></script>
-<script src="js/common.js" defer></script>
+<script src="http://dev.ketchup/js/jquery-3.4.1.min.js"></script>
+<script src="http://dev.ketchup/js/common.js"></script>
 </html>
