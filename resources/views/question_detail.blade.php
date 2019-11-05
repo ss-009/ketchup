@@ -85,8 +85,8 @@
 						<div class="user">
 							<a href="#"><img src="https://placehold.jp/50x50.png" width="50px"><span>{{$question['user_id']}}</span></a>
 						</div>
-						<textarea></textarea>
-						<div class="answer-write-button"><button type="button" class="btn btn-outline-secondary answer-button">回答する</button></div>
+						<textarea id="answer_area"></textarea>
+						<div class="answer-write-button"><button type="button" class="btn btn-outline-secondary answer-button" data-toggle="modal" data-target="#modal_answer">回答する</button></div>
 					</div>
 				</div>
 			</div>
@@ -94,4 +94,30 @@
 	@include('layouts.side')
 	</div>
 </div>
+
+@section('pageJs')
+<script src="http://dev.ketchup/js/question.js"></script>
+@endsection
+
 @include('layouts.footer')
+
+<!-- モーダルの設定 -->
+<div class="modal fade" id="modal_answer" tabindex="-1" role="dialog" aria-labelledby="modalAnswer" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title" id="modalAnswer">回答確認画面</h5>
+			<button type="button" class="close" data-dismiss="modal" aria-label="閉じる">
+			<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			<p id="answer_content"></p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-outline-secondary" data-dismiss="modal">キャンセル</button>
+			<button type="button" class="btn btn-outline-secondary" id="answer_post">投稿する</button>
+		</div>
+		</div>
+	</div>
+</div>

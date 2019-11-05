@@ -12,7 +12,7 @@ $(function(){
 
 });
 
-/* set dropdown list */
+/* Set dropdown list */
 function setDropdownList() {
 	var select = $('.dropdown-toggle', $(this).closest('.dropdown'));
 	select.text($(this).data('name'));
