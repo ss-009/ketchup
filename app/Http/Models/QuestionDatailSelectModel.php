@@ -158,8 +158,8 @@ class QuestionDatailSelectModel extends Model
 		$sql .= "answers.id AS id, ";
 		$sql .= "answers.answer_content AS answer_content, ";
 		$sql .= "answers.best_answer_flg AS best_answer_flg, ";
-		$sql .= "answers.created_at AS created_at, ";
-		$sql .= "answers.updated_at AS updated_at, ";
+		$sql .= "DATE_FORMAT(answers.created_at, '%Y/%c/%e %h:%i') AS created_at, ";
+		$sql .= "DATE_FORMAT(answers.updated_at, '%Y/%c/%e %h:%i') AS updated_at, ";
 		$sql .= "users.user_id AS user_id, ";
 		$sql .= "users.image AS image, ";
 		$sql .= "users.score AS score ";

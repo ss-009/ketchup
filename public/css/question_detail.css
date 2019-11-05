@@ -22,12 +22,14 @@
 	display: flex;
 	align-items: center;
 	padding-top: 30px;
-	padding-bottom: 20px;
+	padding-bottom: 30px;
 	border-top: 3px solid #EEEEEE;
 }
 
 .date {
-	margin-left: 40px;
+	margin-left: auto;
+	margin-right: 10px;
+	margin-top: 5px;
 }
 
 .user span {
@@ -36,19 +38,39 @@
 	vertical-align: middle;
 }
 
-.question-content{
-	margin-bottom: 20px;
+.user img {
+	margin-right: 3px;
 }
 
-.question-content p {
-	white-space: pre;
+.question-content {
+	margin-bottom: 22px;
+}
+
+.question-content p, #answer_content_label, .answer-list p {
+	white-space: pre-wrap;
 	font-size: 16px;
 	color: #333;
 	letter-spacing: 0.5px;
 }
 
-.question-content p, .answer-write-content textarea,
-.answer-none, .top-entry-datetime, .question-status {
+.user-list {
+	display: flex;
+	align-items: center;
+	padding-top: 30px;
+	padding-bottom: 30px;
+}
+
+.answer-header {
+	border-bottom: 3px solid #EEEEEE;
+}
+
+.answer-list {
+	padding-bottom: 70px;
+	border-bottom: 3px solid #EEEEEE;
+}
+
+.question-content p, .answer-write-content textarea, .answer-list p,
+.answer-none, .top-entry-datetime, .question-status, #answer_content_label {
 	font-family: 'Nunito';
 }
 
@@ -139,7 +161,6 @@
 	padding-bottom: 20px;
 	font-weight: bold;
 	font-size: 20px;
-	border-bottom: 3px solid #EEEEEE;
 }
 
 .answer-none {

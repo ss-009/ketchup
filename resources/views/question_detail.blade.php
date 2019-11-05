@@ -40,7 +40,7 @@
 				</div>
 				<div class="user-date">
 					<div class="user">
-						<a href="#"><img src="https://placehold.jp/50x50.png" width="50px"><span>{{$question['user_id']}}</span></a>
+						<a href="#"><img src="https://placehold.jp/50x50.png" width="40px"><span>{{$question['user_id']}}</span></a>
 					</div>
 					<div class="date">
 						<div class="top-entry-datetime">投稿日時：{{$question['created_at']}}</div>
@@ -52,7 +52,7 @@
 						PV数：<span class="count-pv">5</span>
 					</div>
 					<div class="count-answer">
-						回答数：<span class="count-pv">5</span>
+						回答数：<span class="count-pv">{{$count_answer}}</span>
 					</div>
 					<div class="status">
 						@if ($question['close_flg'] === 0)
@@ -66,7 +66,7 @@
 					<div class="count-good">
 					<a href="#"><i class="fas fa-thumbs-up"></i></a>
 					<div class="count-fukidashi"><a href="#"><p>5</p></a></div>
-					<button type="button" class="btn btn-outline-secondary">回答する</button>
+					<button type="button" class="btn btn-outline-danger">回答する</button>
 				</div>
 				</div>
 			</div>
@@ -75,7 +75,23 @@
 					回答一覧
 				</div>
 				<div class="answer-content">
+					@if (count($answer_data) === 0)
 					<p class="answer-none">まだ回答がありません。</p>
+					@else
+						@foreach ($answer_data as $answer)
+							<div class="answer-list">
+								<div class="user-list">
+									<div class="user">
+										<a href="#"><img src="https://placehold.jp/50x50.png" width="40px"><span>{{$answer['user_id']}}</span></a>
+									</div>
+									<div class="date">
+										<div class="top-entry-datetime">投稿日時：{{$answer['created_at']}}</div>
+									</div>
+								</div>
+								<p>{{$answer['answer_content']}}</p>
+							</div>
+						@endforeach
+					@endif
 				</div>
 				<div class="answer-write-area">
 					<div class="answer-write-header">
@@ -83,10 +99,10 @@
 					</div>
 					<div class="answer-write-content">
 						<div class="user">
-							<a href="#"><img src="https://placehold.jp/50x50.png" width="50px"><span>{{$question['user_id']}}</span></a>
+							<a href="#"><img src="https://placehold.jp/50x50.png" width="40px"><span>{{ Auth::user()->user_id }}</span></a>
 						</div>
 						<textarea id="answer_area"></textarea>
-						<div class="answer-write-button"><button type="button" class="btn btn-outline-secondary answer-button" data-toggle="modal" data-target="#modal_answer">回答する</button></div>
+						<div class="answer-write-button"><button type="button" class="btn btn-outline-danger answer-button" data-toggle="modal" data-target="#modal_answer" id="answer_button">回答する</button></div>
 					</div>
 				</div>
 			</div>
@@ -95,29 +111,34 @@
 	</div>
 </div>
 
+<!-- 回答内容確認モーダル -->
+<div class="modal fade" id="modal_answer" tabindex="-1" role="dialog" aria-labelledby="modalAnswer" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="modalAnswer">回答内容確認</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="閉じる">
+				<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form method="POST" name="answer" id="answer" action="answer">
+					@csrf
+					<p id="answer_content_label"></p>
+					<input type="hidden" name="answer_content" id="answer_content">
+					<input type="hidden" name="question_id" value="{{$question_id}}">
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-outline-secondary" data-dismiss="modal">閉じる</button>
+				<button type="button" class="btn btn-outline-danger" id="answer_post">回答する</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 @section('pageJs')
 <script src="http://dev.ketchup/js/question.js"></script>
 @endsection
 
 @include('layouts.footer')
-
-<!-- モーダルの設定 -->
-<div class="modal fade" id="modal_answer" tabindex="-1" role="dialog" aria-labelledby="modalAnswer" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered" role="document">
-		<div class="modal-content">
-		<div class="modal-header">
-			<h5 class="modal-title" id="modalAnswer">回答確認画面</h5>
-			<button type="button" class="close" data-dismiss="modal" aria-label="閉じる">
-			<span aria-hidden="true">&times;</span>
-			</button>
-		</div>
-		<div class="modal-body">
-			<p id="answer_content"></p>
-		</div>
-		<div class="modal-footer">
-			<button type="button" class="btn btn-outline-secondary" data-dismiss="modal">キャンセル</button>
-			<button type="button" class="btn btn-outline-secondary" id="answer_post">投稿する</button>
-		</div>
-		</div>
-	</div>
-</div>

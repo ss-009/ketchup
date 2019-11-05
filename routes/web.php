@@ -17,12 +17,15 @@ Route::get('/tag/{tag_id}', 'TagController@index');
 
 Route::group(['middleware' => 'auth'], function() {
 	Route::get('/question', 'QuestionController@index');
-	Route::get('/question', 'QuestionController@index');
 	Route::post('/question', 'QuestionController@index');
 	Route::get('/question/confirm', 'QuestionController@questionConfirm');
 	Route::post('/question/confirm', 'QuestionController@questionConfirm');
 	Route::get('/question/complete', 'QuestionController@questionInsert');
 	Route::post('/question/complete', 'QuestionController@questionInsert');
+
+	Route::get('/question/answer', 'QuestionDetailController@answer');
+	Route::post('/question/answer', 'QuestionDetailController@answer');
+
 });
 
 

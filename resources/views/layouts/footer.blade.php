@@ -9,7 +9,7 @@
 		</footer>
 	</div>
 </body>
-<script src="http://dev.ketchup/js/jquery-3.4.1.min.js"></script>
-<script src="http://dev.ketchup/js/common.js"></script>
+<script src="{{ asset('js/jquery-3.4.1.min.js') }}"></script>
+<script src="{{ asset('js/common.js') }}"></script>
 @yield('pageJs')
 </html>
