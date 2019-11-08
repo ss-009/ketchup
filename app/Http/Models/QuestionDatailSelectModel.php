@@ -155,7 +155,7 @@ class QuestionDatailSelectModel extends Model
 		// SQL文の作成
 		$sql = "";
 		$sql .= "SELECT ";
-		$sql .= "answers.id AS id, ";
+		$sql .= "answers.id AS answer_id, ";
 		$sql .= "answers.answer_content AS answer_content, ";
 		$sql .= "answers.best_answer_flg AS best_answer_flg, ";
 		$sql .= "DATE_FORMAT(answers.created_at, '%Y/%c/%e %h:%i') AS created_at, ";
@@ -271,7 +271,7 @@ class QuestionDatailSelectModel extends Model
 		// SQL文の作成
 		$sql = "";
 		$sql .= "SELECT ";
-		$sql .= "replys.id AS id, ";
+		$sql .= "replys.id AS reply_id, ";
 		$sql .= "replys.reply_content AS reply_content, ";
 		$sql .= "replys.created_at AS created_at, ";
 		$sql .= "users.user_id AS user_id, ";
@@ -296,7 +296,7 @@ class QuestionDatailSelectModel extends Model
 		// 並べ替え条件の追加
 		if ($order_by !== "") {
 			$sql .= "ORDER BY ";
-			$sql .= "replys.updated_at ";
+			$sql .= "replys.created_at ";
 			$sql .= $order_by;
 		}
 

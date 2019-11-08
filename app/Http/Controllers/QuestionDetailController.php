@@ -48,10 +48,13 @@ class QuestionDetailController extends Controller
 			return 'ERROR PAGE';
 		}
 
-		// レスを取得する
-		// 回答データの配列に、回答ごとにレスを追加する
+		// レスを取得し、回答データの配列にレスを追加する
+		$order_by = '';
+		foreach ($answer_data as &$answer) {
+			$reply_count = $select_model->selectReplys($answer['reply_data'], $answer['answer_id'], $order_by);
+		}
 
-		// 質問者か、回答済か、その他か判定する
+		// ログイン済みか、質問者か、回答済か、その他か判定する
 
 		
 		return view('question_detail')->with([

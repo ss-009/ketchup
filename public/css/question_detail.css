@@ -65,13 +65,13 @@
 }
 
 .answer-list {
-	padding-bottom: 70px;
-	border-bottom: 3px solid #EEEEEE;
+	padding-bottom: 30px;
 }
 
-.question-content p, .answer-write-content textarea, .answer-list p,
+.question-content p, .answer-write-content textarea, .answer-list p, .reply-content p, #reply_area,
 .answer-none, .top-entry-datetime, .question-status, #answer_content_label {
 	font-family: 'Nunito';
+	color: #333;
 }
 
 .top-question-status {
@@ -158,7 +158,7 @@
 
 .answer-header, .answer-write-header {
 	margin-top: 60px;
-	padding-bottom: 20px;
+	padding-bottom: 10px;
 	font-weight: bold;
 	font-size: 20px;
 }
@@ -176,10 +176,6 @@
 
 .answer-write-content {
 	background-color: #EEEEEE;
-	border-radius: 7px;
-}
-
-.answer-write-content {
 	padding: 20px;
 }
 
@@ -201,4 +197,51 @@
 	padding: 7px 42px;
 	font-size: 18px;
 	background-color: #FFFFFF;
+}
+
+/* reply area */
+
+.reply-content {
+	margin-left: 100px;
+	padding-bottom: 30px;
+	border-top: 3px solid #eee;
+}
+
+.answer-reply {
+	padding-bottom: 20px;
+	border-bottom: 3px solid #EEE;
+}
+
+.reply-write-content {
+	background-color: #EEEEEE;
+	padding: 20px;
+	margin-left: 100px;
+	margin-top: 10px;
+	margin-bottom: 30px;
+}
+
+.reply-write-content .user {
+	margin-bottom: 10px;
+}
+
+.reply-write-content textarea {
+	width: 100%;
+	height: 150px;
+	padding: 5px;
+}
+
+.reply-write-button {
+	text-align: right;
+}
+
+.reply-button {
+	background-color: #FFFFFF;
+}
+
+.reply-list {
+	display: none;
+}
+
+div.reply-content:last-child{
+	border-bottom: 3px solid #EEE;
 }

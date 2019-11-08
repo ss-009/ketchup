@@ -2,17 +2,18 @@ $(function(){
 
 	$("#answer_button").on('click', textToModal);
 	$("#answer_post").on('click', answerCheck);
+	$(".reply-display").on('click', replyDisplayHidden);
 
 });
 
-// Text to modal
+// text to modal
 function textToModal() {
 	var answer_word = $('#answer_area').val()
 	$('#answer_content_label').text(answer_word);
 	$('#answer_content').val(answer_word);
 }
 
-// Check word count
+// check word count
 function answerCheck() {
 	var answer_content = $('#answer_content').val();
 	var word_count = answer_content.length;
@@ -24,3 +25,14 @@ function answerCheck() {
 		$('#answer').submit();
 	}
 }
+
+// display or hidden
+function replyDisplayHidden() {
+	var reply = $(this).parents('.answer-reply').find('.reply-list');
+	if (reply.css('display') == 'block') {
+		reply.slideUp(400);
+	} else {
+		reply.slideDown(400);
+	}
+}
+

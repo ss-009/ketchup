@@ -9,7 +9,7 @@
 @include('layouts.head')
 
 <div class="breadcrumb">
-	<a href="{{ url('/') }}"><span>トップ</span></a><span>/</span><a href="{{$question['tag_id_1']}}">{{$question['tag_name_1']}}</a><span>に関する質問</span>
+	<a href="{{ url('/') }}"><span>トップ</span></a><span>/</span><a href="{{$question['tag_id_1']}}"><span>{{$question['tag_name_1']}}</span></a><span>に関する質問</span>
 </div>
 
 <div class="ketchup-container">
@@ -64,10 +64,10 @@
 				</div>
 				<div class="question-button">
 					<div class="count-good">
-					<a href="#"><i class="fas fa-thumbs-up"></i></a>
-					<div class="count-fukidashi"><a href="#"><p>5</p></a></div>
-					<button type="button" class="btn btn-outline-danger">回答する</button>
-				</div>
+						<a href="#"><i class="fas fa-thumbs-up"></i></a>
+						<div class="count-fukidashi"><a href="#"><p>5</p></a></div>
+						<button type="button" class="btn btn-outline-danger">回答する</button>
+					</div>
 				</div>
 			</div>
 			<div class="answer-area">
@@ -79,16 +79,56 @@
 					<p class="answer-none">まだ回答がありません。</p>
 					@else
 						@foreach ($answer_data as $answer)
-							<div class="answer-list">
-								<div class="user-list">
-									<div class="user">
-										<a href="#"><img src="https://placehold.jp/50x50.png" width="40px"><span>{{$answer['user_id']}}</span></a>
+							<div class="answer-reply">
+								<div class="answer-list">
+									<div class="user-list">
+										<div class="user">
+											<a href="#"><img src="https://placehold.jp/50x50.png" width="40px"><span>{{$answer['user_id']}}</span></a>
+										</div>
+										<div class="date">
+											<div class="top-entry-datetime">投稿日時：{{$answer['created_at']}}</div>
+										</div>
 									</div>
-									<div class="date">
-										<div class="top-entry-datetime">投稿日時：{{$answer['created_at']}}</div>
+									<p>{{$answer['answer_content']}}</p>
+									<div class="question-button">
+									<div class="count-good">
+										<a href="#"><i class="fas fa-thumbs-up"></i></a>
+										<div class="count-fukidashi"><a href="#"><p>5</p></a></div>
+										@isset ($answer['reply_data'])
+										@if(count($answer['reply_data']) === 0)
+										<button type="button" class="btn btn-outline-secondary reply-display">返信する</button>
+										@else
+										<button type="button" class="btn btn-outline-secondary reply-display">返信 ( {{count($answer['reply_data'])}} )</button>
+										@endif
+										@endisset
 									</div>
 								</div>
-								<p>{{$answer['answer_content']}}</p>
+								</div>
+								<div class="reply-list">
+									@isset ($answer['reply_data'])
+									@foreach ($answer['reply_data'] as $reply)
+									<div class="reply-content">
+										<div class="user-list">
+											<div class="user">
+												<a href="#"><img src="https://placehold.jp/50x50.png" width="30px"><span>{{$reply['user_id']}}</span></a>
+											</div>
+											<div class="date">
+												<div class="top-entry-datetime">投稿日時：{{$reply['created_at']}}</div>
+											</div>
+										</div>
+										<p>{{$reply['reply_content']}}</p>
+									</div>
+									@endforeach
+									@endisset
+									<div class="reply-write-content">
+										<div class="user">
+											<a href="#"><img src="https://placehold.jp/50x50.png" width="30px"><span>{{ Auth::user()->user_id }}</span></a>
+										</div>
+										<input type="hidden" class="answer-id" value="{{$answer['answer_id']}}">
+										<textarea id="reply_area"></textarea>
+										<div class="reply-write-button"><button type="button" class="btn btn-outline-danger reply-button" id="reply_button">返信する</button></div>
+									</div>
+								</div>
 							</div>
 						@endforeach
 					@endif
