@@ -16,12 +16,14 @@ class CreateReplysTable extends Migration
 		Schema::create('replys', function (Blueprint $table) {
 			$table->bigIncrements('id');
 			$table->bigInteger('answer_id');
+			$table->bigInteger('question_id');
 			$table->string('reply_content', 1000);
 			$table->bigInteger('user_table_id');
 			$table->dateTime('created_at');
 			$table->dateTime('updated_at');
 			$table->dateTime('deleted_at')->nullable();
 			$table->unsignedTinyInteger('delete_flg')->length(1);
+			$table->unique(['id', 'answer_id', 'question_id']);
 		});
 	}
 

@@ -66,10 +66,10 @@ class QuestionDatailInsertModel extends Model
 	 * @param date $date_time 現在日時
 	 * @return boolean $result TRUE or FALSE 他エラー時は-1を返す
 	 */
-	public function insertReplys($answer_id, $reply_content, $user_table_id, $date_time)
+	public function insertReplys($question_id, $answer_id, $reply_content, $user_table_id, $date_time)
 	{
 		// キー項目がない場合はエラーで-1を返す
-		if ($answer_id == "" || $reply_content == "" || $user_table_id == "" || $date_time == "") {
+		if ($question_id == "" || $answer_id == "" || $reply_content == "" || $user_table_id == "" || $date_time == "") {
 			return -1;
 		}
 
@@ -77,6 +77,7 @@ class QuestionDatailInsertModel extends Model
 		$sql = "";
 		$sql .= "INSERT INTO replys ";
 		$sql .= "SET ";
+		$sql .= "question_id = :question_id, ";
 		$sql .= "answer_id = :answer_id, ";
 		$sql .= "reply_content = :reply_content, ";
 		$sql .= "user_table_id = :user_table_id, ";
@@ -86,6 +87,7 @@ class QuestionDatailInsertModel extends Model
 
 		// パラメータ設定
 		$param = [];
+		$param["question_id"] = $question_id;
 		$param["answer_id"] = $answer_id;
 		$param["reply_content"] = $reply_content;
 		$param["user_table_id"] = $user_table_id;

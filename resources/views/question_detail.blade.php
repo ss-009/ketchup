@@ -124,9 +124,13 @@
 										<div class="user">
 											<a href="#"><img src="https://placehold.jp/50x50.png" width="30px"><span>{{ Auth::user()->user_id }}</span></a>
 										</div>
-										<input type="hidden" class="answer-id" value="{{$answer['answer_id']}}">
-										<textarea id="reply_area"></textarea>
-										<div class="reply-write-button"><button type="button" class="btn btn-outline-danger reply-button" id="reply_button">返信する</button></div>
+										<form method="POST" class="reply" name="reply" action="reply">
+											@csrf
+											<input type="hidden" name="question_id" value="{{$question_id}}">
+											<input type="hidden" name="answer_id" class="answer-id" value="{{$answer['answer_id']}}">
+											<textarea class="reply-area" name="reply_content"></textarea>
+										</form>
+										<div class="reply-write-button"><button type="button" class="btn btn-outline-danger reply-button">返信する</button></div>
 									</div>
 								</div>
 							</div>

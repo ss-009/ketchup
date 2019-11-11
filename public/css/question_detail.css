@@ -68,7 +68,7 @@
 	padding-bottom: 30px;
 }
 
-.question-content p, .answer-write-content textarea, .answer-list p, .reply-content p, #reply_area,
+.question-content p, .answer-write-content textarea, .answer-list p, .reply-content p, .reply-area,
 .answer-none, .top-entry-datetime, .question-status, #answer_content_label {
 	font-family: 'Nunito';
 	color: #333;
@@ -244,4 +244,20 @@
 
 div.reply-content:last-child{
 	border-bottom: 3px solid #EEE;
+}
+
+.btn-outline-danger {
+	background-color: #a80000;
+	border-color: #a80000;
+	color: #FFFFFF;
+}
+
+.btn-outline-danger:hover, .btn-outline-danger:active{
+	background-color: #A84343!important;
+	border-color: #A84343!important;
+	color: #FFFFFF;
+}
+
+.btn {
+	box-shadow: none!important;
 }

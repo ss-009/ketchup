@@ -30,39 +30,42 @@ class QuestionDetailController extends Controller
 	 */
 	public function index($question_id)
 	{
-		// 質問データの取得
-		$question_data = [];
-		$select_model = new QuestionDatailSelectModel;
-		$select_count = $select_model->selectQuestionsData($question_data, $question_id);
-		// 質問データ未取得の場合エラー表示
-		if ($select_count === 0 || $select_count === -1) {
-			return 'ERROR PAGE';
+		try {
+			// 質問データの取得
+			$question_data = [];
+			$select_model = new QuestionDatailSelectModel;
+			$select_count = $select_model->selectQuestionsData($question_data, $question_id);
+			// 質問データ未取得の場合エラー表示
+			if ($select_count === 0 || $select_count === -1) {
+				throw new Exception();
+			}
+
+			// 回答データの取得
+			$answer_data = [];
+			$order_by = 'DESC';
+			$count_answer = $select_model->selectAnswers($answer_data, $question_id, $order_by);
+			// 質問データ未取得の場合エラー表示
+			if ($count_answer === -1) {
+				throw new Exception();
+			}
+
+			// レスを取得し、回答データの配列にレスを追加する
+			$order_by = '';
+			foreach ($answer_data as &$answer) {
+				$reply_count = $select_model->selectReplys($answer['reply_data'], $question_id, $answer['answer_id'], $order_by);
+			}
+
+			// ログイン済みか、質問者か、回答済か、その他か判定する
+			return view('question_detail')->with([
+				'question_id' => $question_id,
+				'question' => $question_data[0],
+				'answer_data' => $answer_data,
+				'count_answer' => $count_answer,
+			]);
+
+		} catch (\Exception $e) {
+			echo '<script type="text/javascript">alert("エラーが発生しました。");window.history.back(-2)</script>';
 		}
-
-		// 回答データの取得
-		$answer_data = [];
-		$order_by = 'DESC';
-		$count_answer = $select_model->selectAnswers($answer_data, $question_id, $order_by);
-		// 質問データ未取得の場合エラー表示
-		if ($count_answer === -1) {
-			return 'ERROR PAGE';
-		}
-
-		// レスを取得し、回答データの配列にレスを追加する
-		$order_by = '';
-		foreach ($answer_data as &$answer) {
-			$reply_count = $select_model->selectReplys($answer['reply_data'], $answer['answer_id'], $order_by);
-		}
-
-		// ログイン済みか、質問者か、回答済か、その他か判定する
-
-		
-		return view('question_detail')->with([
-			'question_id' => $question_id,
-			'question' => $question_data[0],
-			'answer_data' => $answer_data,
-			'count_answer' => $count_answer,
-		]);
 	}
 
 	/**
@@ -72,34 +75,123 @@ class QuestionDetailController extends Controller
 	 */
 	public function answer(Request $request)
 	{
-		// データ取得
-		$data = $request->all();
-
-		// 変数に格納
-		$question_id = $data['question_id'];
-		$answer_content = $data['answer_content'];
-
-		// 登録に使うModelと値の設定
-		$insert_model = new QuestionDatailInsertModel;
-		$user_table_id = Auth::id();
-		$date_time = date('Y/m/d H:i:s');
-
-		// 登録処理
-		DB::beginTransaction();
 		try {
-			$result = $insert_model->insertAnswers($question_id, $answer_content, $user_table_id, $date_time);
-			$insert_model = null;
+			// データ取得
+			$data = $request->all();
 
-			// 正常登録時、二重投稿を防止しViewを表示
-			if ($result === true) {
-				DB::commit();
-				return redirect()->action('QuestionDetailController@index', ['question_id' => $question_id]);
-			} else {
+			// 変数に格納
+			$question_id = $data['question_id'];
+			$page_id = $data['page_id'];
+			$answer_content = $data['answer_content'];
+
+			// 改ざんチェック
+			if ($question_id !== $page_id) {
+				throw new Exception();
+			}
+
+			// 回答一覧を取得する
+			$answer_data = [];
+			$order_by = '';
+			$select_model = new QuestionDatailSelectModel;
+			$select_count = $select_model->selectAnswers($answer_data, $question_id, $order_by);
+			if ($select_count === -1) {
+				throw new Exception();
+			}
+
+			// 既に回答済みでないかチェックを行う
+			$user_table_id = Auth::id();
+			foreach ($answer_data as $answer) {
+				if ($answer['user_table_id'] === $user_table_id) {
+					throw new Exception();
+				}
+			}
+
+			// 登録に使うModelと値の設定
+			$insert_model = new QuestionDatailInsertModel;
+			$date_time = date('Y/m/d H:i:s');
+
+			// 登録処理
+			DB::beginTransaction();
+			try {
+				$result = $insert_model->insertAnswers($question_id, $answer_content, $user_table_id, $date_time);
+				$insert_model = null;
+
+				// 正常登録時、二重投稿を防止しViewを表示
+				if ($result === true) {
+					$request->session()->regenerateToken();
+					DB::commit();
+					return redirect()->action('QuestionDetailController@index', ['question_id' => $question_id]);
+				} else {
+					throw new Exception();
+				}
+
+			} catch (\Exception $e) {
+				DB::rollback();
 				throw new Exception();
 			}
 
 		} catch (\Exception $e) {
-			DB::rollback();
+			echo '<script type="text/javascript">alert("エラーが発生しました。");window.history.back(-2)</script>';
+		}
+	}
+
+
+	/**
+	 * 返信（レス）をする
+	 *
+	 * @return View
+	 */
+	public function reply(Request $request)
+	{
+		try {
+			// データ取得
+			$data = $request->all();
+
+			// 変数に格納
+			$question_id = $data['question_id'];
+			$page_id = $data['page_id'];
+			$answer_id = $data['answer_id'];
+			$reply_content = $data['reply_content'];
+
+			// 改ざんチェック
+			if ($question_id !== $page_id) {
+				throw new Exception();
+			}
+
+			// 回答の存在チェック
+			$select_model = new QuestionDatailSelectModel;
+			$select_count = $select_model->checkAnswers($question_id, $answer_id);
+			$select_model = null;
+			if ($select_count !== 1) {
+				throw new Exception();
+			}
+
+			// 登録に使うModelと値の設定
+			$insert_model = new QuestionDatailInsertModel;
+			$user_table_id = Auth::id();
+			$date_time = date('Y/m/d H:i:s');
+
+			// 登録処理
+			DB::beginTransaction();
+			try {
+				$result = $insert_model->insertReplys($question_id, $answer_id, $reply_content, $user_table_id, $date_time);
+				$insert_model = null;
+
+				// 正常登録時、二重投稿を防止しViewを表示
+				if ($result === true) {
+					$request->session()->regenerateToken();
+					DB::commit();
+					return redirect()->action('QuestionDetailController@index', ['question_id' => $question_id]);
+				} else {
+					throw new Exception();
+				}
+
+			} catch (\Exception $e) {
+				DB::rollback();
+				throw new Exception();
+			}
+
+		} catch (\Exception $e) {
 			echo '<script type="text/javascript">alert("エラーが発生しました。");window.history.back(-2)</script>';
 		}
 	}

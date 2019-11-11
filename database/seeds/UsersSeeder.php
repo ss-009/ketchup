@@ -21,7 +21,6 @@ class UsersSeeder extends Seeder
 			'ip_address' => 'localhost.com',
 			'created_at' => date('Y-m-d H:i:s'),
 			'updated_at' => date('Y-m-d H:i:s'),
-			'delete_flg' => 0,
 		];
 		DB::table('users')->insert($param);
 
@@ -35,7 +34,6 @@ class UsersSeeder extends Seeder
 			'ip_address' => 'localhost.com',
 			'created_at' => date('Y-m-d H:i:s'),
 			'updated_at' => date('Y-m-d H:i:s'),
-			'delete_flg' => 0,
 		];
 		DB::table('users')->insert($param);
 
@@ -49,7 +47,6 @@ class UsersSeeder extends Seeder
 			'ip_address' => 'localhost.com',
 			'created_at' => date('Y-m-d H:i:s'),
 			'updated_at' => date('Y-m-d H:i:s'),
-			'delete_flg' => 0,
 		];
 		DB::table('users')->insert($param);
 	}

@@ -27,7 +27,6 @@ class CreateUsersTable extends Migration
 			$table->dateTime('created_at');
 			$table->dateTime('updated_at');
 			$table->datetime('deleted_at')->nullable();;
-			$table->unsignedTinyInteger('delete_flg');
 			$table->rememberToken();
 			$table->unique(['provider_id', 'provider_name']);
 		});

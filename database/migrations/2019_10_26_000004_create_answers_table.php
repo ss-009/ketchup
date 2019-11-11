@@ -23,7 +23,7 @@ class CreateAnswersTable extends Migration
 			$table->dateTime('updated_at');
 			$table->datetime('deleted_at')->nullable();
 			$table->unsignedTinyInteger('delete_flg');
-			$table->unique(['question_id', 'user_table_id']);
+			$table->unique(['question_id', 'id']);
 		});
 	}
 

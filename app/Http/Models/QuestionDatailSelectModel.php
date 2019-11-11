@@ -11,7 +11,7 @@ class QuestionDatailSelectModel extends Model
 	 * 質問ページの質問内容と件数を取得する
 	 * 
 	 * @param array $question_data 取得したデータを格納する配列
-	 * @param string $question_id 指定の質問ID
+	 * @param int $question_id 指定の質問ID
 	 * @return int $select_count 取得したデータの件数1を返す エラー時は-1を返す
 	 */
 	public function selectQuestionsData(&$question_data, $question_id)
@@ -90,7 +90,7 @@ class QuestionDatailSelectModel extends Model
 	/**
 	 * 質問のいいね数を取得する
 	 * 
-	 * @param string $question_id 質問のID
+	 * @param int $question_id 質問のID
 	 * @return int $select_count 取得したデータの件数を返す エラー時は-1を返す
 	 */
 	public function selectCountGoodQuestions($question_id)
@@ -138,7 +138,7 @@ class QuestionDatailSelectModel extends Model
 	 * 回答一覧と回答数を取得する
 	 * 
 	 * @param array $answer_data 取得したデータを格納する配列
-	 * @param string $question_id 質問のID
+	 * @param int $question_id 質問ID
 	 * @param string $order_by DESC or ASC
 	 * @return int $select_count 取得したデータの件数を返す エラー時は-1を返す
 	 */
@@ -160,6 +160,7 @@ class QuestionDatailSelectModel extends Model
 		$sql .= "answers.best_answer_flg AS best_answer_flg, ";
 		$sql .= "DATE_FORMAT(answers.created_at, '%Y/%c/%e %h:%i') AS created_at, ";
 		$sql .= "DATE_FORMAT(answers.updated_at, '%Y/%c/%e %h:%i') AS updated_at, ";
+		$sql .= "users.id AS user_table_id, ";
 		$sql .= "users.user_id AS user_id, ";
 		$sql .= "users.image AS image, ";
 		$sql .= "users.score AS score ";
@@ -205,7 +206,7 @@ class QuestionDatailSelectModel extends Model
 	/**
 	 * 回答のいいね数を取得する
 	 * 
-	 * @param string $answer_id 回答のID
+	 * @param int $answer_id 回答のID
 	 * @return int $select_count 取得したデータの件数を返す エラー時は-1を返す
 	 */
 	public function selectCountGoodAnswers($answer_id)
@@ -250,14 +251,73 @@ class QuestionDatailSelectModel extends Model
 
 
 	/**
+	 * 回答の存在チェックを行う
+	 * 
+	 * @param int $question_id 質問ID
+	 * @param int $answer_id 回答ID
+	 * @return int $select_count 取得したデータの件数を返す エラー時は-1を返す
+	 */
+	public function checkAnswers($question_id, $answer_id)
+	{
+		// 質問ID、または回答IDがない場合は-1を返して処理終了
+		if ($question_id == "" || $answer_id == "") {
+			return -1;
+		}
+
+		// データ格納用配列の初期化
+		$answer_data = [];
+
+		// SQL文の作成
+		$sql = "";
+		$sql .= "SELECT ";
+		$sql .= "questions.id AS question_id, ";
+		$sql .= "answers.id AS answer_id ";
+		$sql .= "FROM questions ";
+		$sql .= "LEFT OUTER JOIN answers ";
+		$sql .= "ON questions.id = answers.question_id ";
+		$sql .= "WHERE ";
+		$sql .= "answers.question_id IS NOT NULL ";
+		$sql .= "AND ";
+		$sql .= "questions.delete_flg = 0 ";
+		$sql .= "AND ";
+		$sql .= "answers.delete_flg = 0 ";
+		$sql .= "AND ";
+		$sql .= "questions.id = :question_id ";
+		$sql .= "AND ";
+		$sql .= "answers.id = :answer_id ";
+
+		// パラメータ設定
+		$param = [];
+		$param["question_id"] = $question_id;
+		$param["answer_id"] = $answer_id;
+
+		try {
+			// SQLを実行
+			$result = DB::select($sql, $param);
+			// オブジェクトを配列に変換して格納
+			$answer_data = json_decode(json_encode($result), true);
+			// 取得した件数をカウント
+			$select_count = count($answer_data);
+			// 取得したデータの件数を返す
+			return $select_count;
+
+		} catch (\Exception $e){
+			// エラー時は-1を返す
+			return -1;
+		}
+	}
+
+
+
+	/**
 	 * 返信一覧と返信数を取得する
 	 * 
 	 * @param array $reply_data 取得したデータを格納する配列
-	 * @param string $answer_id 回答のID
+	 * @param int $answer_id 回答のID
 	 * @param string $order_by DESC or ASC
 	 * @return int $select_count 取得したデータの件数を返す エラー時は-1を返す
 	 */
-	public function selectReplys(&$reply_data, $answer_id, $order_by)
+	public function selectReplys(&$reply_data, $question_id, $answer_id, $order_by)
 	{
 		
 		// 回答IDがない場合は-1を返して処理終了
@@ -277,15 +337,21 @@ class QuestionDatailSelectModel extends Model
 		$sql .= "users.user_id AS user_id, ";
 		$sql .= "users.image AS image, ";
 		$sql .= "users.score AS score ";
-		$sql .= "FROM answers ";
+		$sql .= "FROM questions ";
+		$sql .= "LEFT OUTER JOIN answers ";
+		$sql .= "ON questions.id = answers.question_id ";
 		$sql .= "LEFT OUTER JOIN replys ";
 		$sql .= "ON answers.id = replys.answer_id ";
 		$sql .= "LEFT OUTER JOIN users ";
 		$sql .= "ON replys.user_table_id = users.id ";
 		$sql .= "WHERE ";
+		$sql .= "answers.question_id IS NOT NULL ";
+		$sql .= "AND ";
 		$sql .= "replys.answer_id IS NOT NULL ";
 		$sql .= "AND ";
 		$sql .= "users.id IS NOT NULL ";
+		$sql .= "AND ";
+		$sql .= "questions.delete_flg = 0 ";
 		$sql .= "AND ";
 		$sql .= "answers.delete_flg = 0 ";
 		$sql .= "AND ";
@@ -326,8 +392,8 @@ class QuestionDatailSelectModel extends Model
 	 * 指定のタグの質問IDとタイトル、件数を取得する
 	 * 
 	 * @param array $question_data 取得したデータを格納する配列
-	 * @param string $question_id 指定の質問ID
-	 * @param string $tag_id 指定のタグID
+	 * @param int $question_id 指定の質問ID
+	 * @param int $tag_id 指定のタグID
 	 * @param string $order_by DESC or ASC
 	 * @return int $select_count 取得したデータの件数1を返す エラー時は-1を返す
 	 */
@@ -393,8 +459,8 @@ class QuestionDatailSelectModel extends Model
 	/**
 	 * 指定の質問に指定のユーザーがいいねをしているかチェック
 	 * 
-	 * @param string $question_id 質問ID
-	 * @param string $user_table_id ユーザーテーブルID
+	 * @param int $question_id 質問ID
+	 * @param int $user_table_id ユーザーテーブルID
 	 * @return int $select_count いいねをしている場合1、していない場合0、エラー-1
 	 */
 	public function checkGoodQuestions($question_id, $user_table_id)
@@ -439,8 +505,8 @@ class QuestionDatailSelectModel extends Model
 	/**
 	 * 指定の回答に指定のユーザーがいいねをしているかチェック
 	 * 
-	 * @param string $answer_id 回答のID
-	 * @param string $user_table_id ユーザーテーブルID
+	 * @param int $answer_id 回答のID
+	 * @param int $user_table_id ユーザーテーブルID
 	 * @return int $select_count いいねをしている場合1、していない場合0、エラー-1
 	 */
 	public function checkGoodAnswers($answer_id, $user_table_id)

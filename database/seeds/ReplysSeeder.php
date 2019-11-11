@@ -12,6 +12,7 @@ class ReplysSeeder extends Seeder
 	public function run()
 	{
 		$param = [
+			'question_id' => 1,
 			'answer_id' => 1,
 			'reply_content' => 'こうすればいいですよ\nこうすればOKです',
 			'user_table_id' => 1,
@@ -22,6 +23,7 @@ class ReplysSeeder extends Seeder
 		DB::table('replys')->insert($param);
 
 		$param = [
+			'question_id' => 1,
 			'answer_id' => 1,
 			'reply_content' => 'こうすればダメですよ\nこうすればダメです',
 			'user_table_id' => 1,
@@ -32,6 +34,7 @@ class ReplysSeeder extends Seeder
 		DB::table('replys')->insert($param);
 
 		$param = [
+			'question_id' => 1,
 			'answer_id' => 2,
 			'reply_content' => 'こうすればそうですよ\nこうすればそうです',
 			'user_table_id' => 1,
