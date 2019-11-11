@@ -180,9 +180,7 @@
 		</div>
 	</div>
 </div>
-
 @section('pageJs')
 <script src="http://dev.ketchup/js/question.js"></script>
 @endsection
-
 @include('layouts.footer')

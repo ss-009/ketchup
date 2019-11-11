@@ -83,4 +83,7 @@
 	@include('layouts.side')
 	</div>
 </div>
+@section('pageJs')
+<script src="http://dev.ketchup/js/top.js"></script>
+@endsection
 @include('layouts.footer')
