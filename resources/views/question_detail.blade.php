@@ -66,7 +66,11 @@
 					<div class="count-good">
 						<a href="#"><i class="fas fa-thumbs-up"></i></a>
 						<div class="count-fukidashi"><a href="#"><p>5</p></a></div>
+						@if($user_type === 'questioner')
+						<button type="button" class="btn btn-outline-secondary">補足する</button>
+						@elseif($user_type === 'login')
 						<button type="button" class="btn btn-outline-danger">回答する</button>
+						@endif
 					</div>
 				</div>
 			</div>
@@ -94,6 +98,9 @@
 									<div class="count-good">
 										<a href="#"><i class="fas fa-thumbs-up"></i></a>
 										<div class="count-fukidashi"><a href="#"><p>5</p></a></div>
+										@if($user_type === 'questioner' && $question['close_flg'] === 0)
+										<button type="button" class="btn btn-outline-danger best-answer">ベストアンサーに選ぶ</button>
+										@endif
 										@isset ($answer['reply_data'])
 										@if(count($answer['reply_data']) === 0)
 										<button type="button" class="btn btn-outline-secondary reply-display">返信する</button>
@@ -120,23 +127,22 @@
 									</div>
 									@endforeach
 									@endisset
+									@if($user_type !== 'logout')
 									<div class="reply-write-content">
 										<div class="user">
 											<a href="#"><img src="https://placehold.jp/50x50.png" width="30px"><span>{{ Auth::user()->user_id }}</span></a>
 										</div>
-										<form method="POST" class="reply" name="reply" action="reply">
-											@csrf
-											<input type="hidden" name="question_id" value="{{$question_id}}">
-											<input type="hidden" name="answer_id" class="answer-id" value="{{$answer['answer_id']}}">
-											<textarea class="reply-area" name="reply_content"></textarea>
-										</form>
-										<div class="reply-write-button"><button type="button" class="btn btn-outline-danger reply-button">返信する</button></div>
+										<input type="hidden" name="answer_id" class="answer-id" value="{{$answer['answer_id']}}">
+										<textarea class="reply-area"></textarea>
+										<div class="reply-write-button"><button type="button" class="btn btn-outline-danger reply-button" data-toggle="modal" data-target="#modal_reply">返信する</button></div>
 									</div>
+									@endif
 								</div>
 							</div>
 						@endforeach
 					@endif
 				</div>
+				@if($user_type === 'login' && $question['close_flg'] === 0)
 				<div class="answer-write-area">
 					<div class="answer-write-header">
 					回答する
@@ -149,12 +155,14 @@
 						<div class="answer-write-button"><button type="button" class="btn btn-outline-danger answer-button" data-toggle="modal" data-target="#modal_answer" id="answer_button">回答する</button></div>
 					</div>
 				</div>
+				@endif
 			</div>
 		</div>
 	@include('layouts.side')
 	</div>
 </div>
 
+@if($user_type === 'login' && $question['close_flg'] === 0)
 <!-- 回答内容確認モーダル -->
 <div class="modal fade" id="modal_answer" tabindex="-1" role="dialog" aria-labelledby="modalAnswer" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered" role="document">
@@ -180,7 +188,43 @@
 		</div>
 	</div>
 </div>
+@endif
+
+@if($user_type !== 'logout' && $question['close_flg'] === 0)
+<!-- 返信内容確認モーダル -->
+<div class="modal fade" id="modal_reply" tabindex="-1" role="dialog" aria-labelledby="modalReply" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="modalReply">返信内容確認</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="閉じる">
+				<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form method="POST" name="reply" id="reply" action="reply">
+					@csrf
+					<p id="reply_content_label"></p>
+					<input type="hidden" name="reply_content" id="reply_content">
+					<input type="hidden" name="question_id" value="{{$question_id}}">
+					<input type="hidden" name="answer_id" id="answer_id">
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-outline-secondary" data-dismiss="modal">閉じる</button>
+				<button type="button" class="btn btn-outline-danger" id="reply_post">返信する</button>
+			</div>
+		</div>
+	</div>
+</div>
+@endif
+
 @section('pageJs')
-<script src="http://dev.ketchup/js/question.js"></script>
+@if($user_type === 'questioner' && $question['close_flg'] === 0)
+<script src="{{ asset('js/question.js') }}"></script>
+@elseif($user_type === 'login' && $question['close_flg'] === 0)
+<script src="{{ asset('js/question_answer.js') }}"></script>
+@endif
+<script src="{{ asset('js/question_reply.js') }}"></script>
 @endsection
 @include('layouts.footer')

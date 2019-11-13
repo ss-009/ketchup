@@ -55,7 +55,7 @@ class TopSelectModel extends Model
 		$sql .= "questions.id AS question_id, ";
 		$sql .= "questions.question_title AS question_title, ";
 		$sql .= "questions.close_flg AS close_flg, ";
-		$sql .= "DATE_FORMAT(questions.created_at, '%Y/%c/%e %h:%i') AS created_at, ";
+		$sql .= "DATE_FORMAT(questions.created_at, '%Y年%c月%e日') AS created_at, ";
 		$sql .= "tag1.id AS tag_table_id_1, ";
 		$sql .= "tag2.id AS tag_table_id_2, ";
 		$sql .= "tag3.id AS tag_table_id_3, ";
@@ -255,41 +255,7 @@ class TopSelectModel extends Model
 		}
 	}
 
-	/**
-	 * タグ一覧を取得する
-	 * 
-	 * @param array $tag_list 取得したデータを格納する配列
-	 * @return int $select_count 取得したデータの件数を返す エラー時は-1を返す
-	 */
-	public function selectTags(&$tag_list)
-	{
-		// データ格納用配列の初期化
-		$tag_list = [];
 
-		// SQL文の作成
-		$sql = "";
-		$sql .= "SELECT ";
-		$sql .= "tags.id AS id, ";
-		$sql .= "tags.tag_id AS tag_id, ";
-		$sql .= "tags.tag_name AS tag_name ";
-		$sql .= "FROM tags ";
-		$sql .= "ORDER BY id ASC ";
-
-		try {
-			// SQLを実行
-			$result = DB::select($sql);
-			// オブジェクトを配列に変換して格納
-			$tag_list = json_decode(json_encode($result), true);
-			// 取得した件数をカウント
-			$select_count = count($tag_list);
-			// 取得したデータの件数を返す
-			return $select_count;
-
-		} catch (\Exception $e){
-			// エラー時は-1を返す
-			return -1;
-		}
-	}
 
 	/**
 	 * タグ一覧とタグの件数を取得する

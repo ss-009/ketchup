@@ -35,7 +35,7 @@ class QuestionDetailController extends Controller
 			$question_data = [];
 			$select_model = new QuestionDatailSelectModel;
 			$select_count = $select_model->selectQuestionsData($question_data, $question_id);
-			// 質問データ未取得の場合エラー表示
+			// 質問データ未取得の場合エラー表示（後ほど404エラーページを出力する）
 			if ($select_count === 0 || $select_count === -1) {
 				throw new Exception();
 			}
@@ -44,7 +44,7 @@ class QuestionDetailController extends Controller
 			$answer_data = [];
 			$order_by = 'DESC';
 			$count_answer = $select_model->selectAnswers($answer_data, $question_id, $order_by);
-			// 質問データ未取得の場合エラー表示
+			// 回答データ取得時エラーの場合
 			if ($count_answer === -1) {
 				throw new Exception();
 			}
@@ -53,14 +53,40 @@ class QuestionDetailController extends Controller
 			$order_by = '';
 			foreach ($answer_data as &$answer) {
 				$reply_count = $select_model->selectReplys($answer['reply_data'], $question_id, $answer['answer_id'], $order_by);
+				// 返信データ取得時エラーの場合
+				if ($reply_count === -1) {
+					throw new Exception();
+				}
 			}
 
-			// ログイン済みか、質問者か、回答済か、その他か判定する
+			// ユーザータイプを判定する
+			$user_type = 'logout';
+
+			// ログイン済みかチェック
+			if (Auth::check()) {
+				$user_table_id = Auth::id();
+				$user_type = 'login';
+
+				// 質問者かチェック
+				if ($question_data[0]['user_table_id'] === $user_table_id) {
+					$user_type = 'questioner';
+				
+				// 質問に回答済みかチェック
+				} else {
+					foreach ($answer_data as $answer) {
+						if ($answer['user_table_id'] === $user_table_id) {
+							$user_type = 'respondent';
+						}
+					}
+				}
+			}
+
 			return view('question_detail')->with([
 				'question_id' => $question_id,
 				'question' => $question_data[0],
 				'answer_data' => $answer_data,
 				'count_answer' => $count_answer,
+				'user_type' => $user_type
 			]);
 
 		} catch (\Exception $e) {

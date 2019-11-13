@@ -43,9 +43,10 @@ class QuestionDatailSelectModel extends Model
 		$sql .= "tag1.tag_name AS tag_name_1, ";
 		$sql .= "tag2.tag_name AS tag_name_2, ";
 		$sql .= "tag3.tag_name AS tag_name_3, ";
-		$sql .= "users.user_id, ";
-		$sql .= "users.image, ";
-		$sql .= "users.score ";
+		$sql .= "users.id AS user_table_id, ";
+		$sql .= "users.user_id AS user_id, ";
+		$sql .= "users.image AS image, ";
+		$sql .= "users.score AS score ";
 		$sql .= "FROM questions ";
 		$sql .= "LEFT OUTER JOIN tags AS tag1 ";
 		$sql .= "ON questions.tag_id_1 = tag1.id ";
@@ -280,6 +281,8 @@ class QuestionDatailSelectModel extends Model
 		$sql .= "AND ";
 		$sql .= "questions.delete_flg = 0 ";
 		$sql .= "AND ";
+		$sql .= "questions.close_flg = 0 ";
+		$sql .= "AND ";
 		$sql .= "answers.delete_flg = 0 ";
 		$sql .= "AND ";
 		$sql .= "questions.id = :question_id ";
@@ -333,7 +336,7 @@ class QuestionDatailSelectModel extends Model
 		$sql .= "SELECT ";
 		$sql .= "replys.id AS reply_id, ";
 		$sql .= "replys.reply_content AS reply_content, ";
-		$sql .= "replys.created_at AS created_at, ";
+		$sql .= "DATE_FORMAT(replys.created_at, '%Y/%c/%e %h:%i') AS created_at, ";
 		$sql .= "users.user_id AS user_id, ";
 		$sql .= "users.image AS image, ";
 		$sql .= "users.score AS score ";
@@ -455,7 +458,44 @@ class QuestionDatailSelectModel extends Model
 	}
 
 
+	/**
+	 * タグ一覧を取得する
+	 * 
+	 * @param array $tag_list 取得したデータを格納する配列
+	 * @return int $select_count 取得したデータの件数を返す エラー時は-1を返す
+	 */
+	public function selectTags(&$tag_list)
+	{
+		// データ格納用配列の初期化
+		$tag_list = [];
 
+		// SQL文の作成
+		$sql = "";
+		$sql .= "SELECT ";
+		$sql .= "tags.id AS id, ";
+		$sql .= "tags.tag_id AS tag_id, ";
+		$sql .= "tags.tag_name AS tag_name ";
+		$sql .= "FROM tags ";
+		$sql .= "ORDER BY id ASC ";
+
+		try {
+			// SQLを実行
+			$result = DB::select($sql);
+			// オブジェクトを配列に変換して格納
+			$tag_list = json_decode(json_encode($result), true);
+			// 取得した件数をカウント
+			$select_count = count($tag_list);
+			// 取得したデータの件数を返す
+			return $select_count;
+
+		} catch (\Exception $e){
+			// エラー時は-1を返す
+			return -1;
+		}
+	}
+
+
+	
 	/**
 	 * 指定の質問に指定のユーザーがいいねをしているかチェック
 	 * 

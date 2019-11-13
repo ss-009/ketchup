@@ -186,6 +186,14 @@
 	background-color: #FFFFFF;
 }
 
+.best-answer {
+	margin-right: 10px;
+}
+
+.question-button button {
+	font-size: 16px;
+}
+
 /* reply area */
 
 .reply-content {
@@ -246,8 +254,8 @@ div.reply-content:last-child{
 }
 
 .btn-outline-danger:hover, .btn-outline-danger:active{
-	background-color: #A84343!important;
-	border-color: #A84343!important;
+	background-color: #c54b4b!important;
+	border-color: #c54b4b!important;
 	color: #FFFFFF;
 }
 
@@ -258,12 +266,12 @@ div.reply-content:last-child{
 /* common area */
 
 .question-content p, .answer-write-content textarea, .answer-list p, .reply-content p, .reply-area,
-.answer-none, .top-entry-datetime, .question-status, #answer_content_label {
+.answer-none, .top-entry-datetime, .question-status, #answer_content_label, #reply_content_label {
 	font-family: 'Nunito';
 	color: #333;
 }
 
-.question-content p, #answer_content_label, .answer-list p {
+.question-content p, #answer_content_label, .answer-list p, #reply_content_label {
 	white-space: pre-wrap;
 	font-size: 16px;
 	color: #333;
