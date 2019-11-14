@@ -18,11 +18,14 @@ Route::get('/tag/{tag_id}', 'TagController@index');
 Route::group(['middleware' => 'auth'], function() {
 	Route::get('/question', 'QuestionController@index');
 	Route::post('/question', 'QuestionController@index');
-	Route::get('/question/confirm', 'QuestionController@questionConfirm');
 	Route::post('/question/confirm', 'QuestionController@questionConfirm');
-	Route::get('/question/complete', 'QuestionController@questionInsert');
 	Route::post('/question/complete', 'QuestionController@questionInsert');
 
+	Route::get('/question/{question_id}/addition', 'QuestionController@addition');
+	Route::post('/question/{question_id}/addition', 'QuestionController@addition');
+	Route::post('/question/{question_id}/addition/confirm', 'QuestionController@additionConfirm');
+	Route::post('/question/{question_id}/addition/complete', 'QuestionController@additionUpdate');
+	
 	Route::get('/question/answer', 'QuestionDetailController@answer');
 	Route::post('/question/answer', 'QuestionDetailController@answer');
 	Route::get('/question/reply', 'QuestionDetailController@reply');

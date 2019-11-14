@@ -73,9 +73,10 @@ class QuestionDetailController extends Controller
 				
 				// 質問に回答済みかチェック
 				} else {
-					foreach ($answer_data as $answer) {
-						if ($answer['user_table_id'] === $user_table_id) {
+					foreach ($answer_data as $data) {
+						if ($data['user_table_id'] === $user_table_id) {
 							$user_type = 'respondent';
+							break;
 						}
 					}
 				}

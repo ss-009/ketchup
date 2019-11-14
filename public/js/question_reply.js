@@ -16,10 +16,18 @@ function displayOrHiddenReply() {
 	}
 }
 
-// answer to modal
+// reply to modal
 function replyToModal() {
-	$('#answer_id').val($(this).parents('.reply-write-content').find('.answer-id').val());
 	var reply_word = $(this).parents('.reply-write-content').find('.reply-area').val();
+	word_count = reply_word.length;
+
+	// 文字数チェック
+	if(word_count < 5 || word_count > 2000) {
+		alert('5文字以上2000文字以下で入力してください。')
+		return false;
+	}
+
+	$('#answer_id').val($(this).parents('.reply-write-content').find('.answer-id').val());
 	$('#reply_content_label').text(reply_word);
 	$('#reply_content').val(reply_word);
 }

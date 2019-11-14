@@ -8,6 +8,14 @@ $(function(){
 // answer to modal
 function answerToModal() {
 	var answer_word = $('#answer_area').val()
+	var word_count = answer_word.length;
+
+	// 文字数チェック
+	if(word_count < 5 || word_count > 2000) {
+		alert('5文字以上2000文字以下で入力してください。')
+		return false;
+	}
+
 	$('#answer_content_label').text(answer_word);
 	$('#answer_content').val(answer_word);
 }

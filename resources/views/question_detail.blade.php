@@ -47,6 +47,12 @@
 					</div>
 				</div>
 				<div class="question-content"><p>{{$question['question_content']}}</p></div>
+				@if(isset($question['question_addition']))
+				<div class="question-addition">
+					<div class="addition-header"><span>補足</span></div>
+					<div class="addition-body"><p>{{$question['question_addition']}}</p></div>
+				</div>
+				@endif
 				<div class="question-status">
 					<div class="count-pv">
 						PV数：<span class="count-pv">5</span>
@@ -66,8 +72,8 @@
 					<div class="count-good">
 						<a href="#"><i class="fas fa-thumbs-up"></i></a>
 						<div class="count-fukidashi"><a href="#"><p>5</p></a></div>
-						@if($user_type === 'questioner')
-						<button type="button" class="btn btn-outline-secondary">補足する</button>
+						@if($user_type === 'questioner' && !isset($question['question_addition']))
+						<a href="{{$question_id}}/addition"><button type="button" class="btn btn-outline-secondary">補足する</button></a>
 						@elseif($user_type === 'login')
 						<button type="button" class="btn btn-outline-danger">回答する</button>
 						@endif
@@ -99,7 +105,7 @@
 										<a href="#"><i class="fas fa-thumbs-up"></i></a>
 										<div class="count-fukidashi"><a href="#"><p>5</p></a></div>
 										@if($user_type === 'questioner' && $question['close_flg'] === 0)
-										<button type="button" class="btn btn-outline-danger best-answer">ベストアンサーに選ぶ</button>
+										<button type="button" class="btn btn-outline-danger best-answer" data-toggle="modal" data-target="#modal_best_answer" id="best_answer_button">ベストアンサーに選ぶ</button>
 										@endif
 										@isset ($answer['reply_data'])
 										@if(count($answer['reply_data']) === 0)
@@ -213,6 +219,35 @@
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline-secondary" data-dismiss="modal">閉じる</button>
 				<button type="button" class="btn btn-outline-danger" id="reply_post">返信する</button>
+			</div>
+		</div>
+	</div>
+</div>
+@endif
+
+@if($user_type === 'questioner' && $question['close_flg'] === 0)
+<!-- ベストアンサー確認モーダル -->
+<div class="modal fade" id="modal_best_answer" tabindex="-1" role="dialog" aria-labelledby="modalBestAnswer" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="modalBestAnswer">ベストアンサー選択</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="閉じる">
+				<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form method="POST" name="best_answer" id="best_answer" action="best_answer">
+					@csrf
+					<p id="best_answer_content_label"></p>
+					<input type="hidden" name="last_comment" id="last_comment">
+					<input type="hidden" name="question_id" value="{{$question_id}}">
+					<input type="hidden" name="best_answer_id" id="best_answer_id">
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-outline-secondary" data-dismiss="modal">閉じる</button>
+				<button type="button" class="btn btn-outline-danger" id="answer_post">ベストアンサーに選ぶ</button>
 			</div>
 		</div>
 	</div>
