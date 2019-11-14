@@ -49,7 +49,7 @@
 .user-list {
 	display: flex;
 	align-items: center;
-	padding-top: 30px;
+	padding-top: 20px;
 	padding-bottom: 30px;
 }
 
@@ -153,6 +153,20 @@
 
 .addition-body p {
 	margin: 10px 0;
+}
+
+.last-comment-area {
+	margin-top: 50px;
+}
+
+.last-comment-area p {
+	font-size: 12px!important;
+}
+
+.last-comment {
+	width: 100%;
+	font-size: 14px!important;
+	padding: 5px;
 }
 
 /* answer area*/
@@ -280,12 +294,14 @@ div.reply-content:last-child{
 /* common area */
 
 .question-content p, .answer-write-content textarea, .answer-list p, .reply-content p, .reply-area,
-.answer-none, .top-entry-datetime, .question-status, #answer_content_label, #reply_content_label, .addition-body p {
+.answer-none, .top-entry-datetime, .question-status, #answer_content_label, #reply_content_label, .addition-body p,
+#best_answer_content_label, .last-comment, .last-comment-area p {
 	font-family: 'Nunito';
 	color: #333;
 }
 
-.question-content p, #answer_content_label, .answer-list p, #reply_content_label, .addition-body p {
+.question-content p, #answer_content_label, .answer-list p, #reply_content_label, .addition-body p,
+#best_answer_content_label, .last-comment, .last-comment-area p {
 	white-space: pre-wrap;
 	font-size: 16px;
 	color: #333;

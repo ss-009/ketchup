@@ -1,7 +1,7 @@
 $(function(){
 
 	$("#answer_button").on('click', answerToModal);
-	$("#answer_post").on('click', checkAnswer);
+	$("#answer_post").on('click', checkWriteAnswer);
 
 });
 
@@ -20,7 +20,7 @@ function answerToModal() {
 	$('#answer_content').val(answer_word);
 }
 
-// check answer, word count.
+// check & write answer
 function checkAnswer() {
 
 	// 回答の値と文字数を取得
@@ -35,7 +35,6 @@ function checkAnswer() {
 	// 文字数OK時submit
 	} else {
 
-		// ページIDを取得しフォームに追加する
 		var page_id = location.pathname.match( /[^/]+$/i )[0];
 		var answer_form = $('#answer');
 		answer_form.append($('<input />', {

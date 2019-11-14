@@ -269,7 +269,7 @@ class QuestionController extends Controller
 		$tag_id_3 = (int)$data['tag_id_3'];
 
 		// バリデーションルール
-		$rules = [	'question_addition' => 'required|min:5|max:2000',
+		$rules = [	'question_addition' => 'required|min:5|max:1000',
 					'tag_id_1' => 'not_in:0|max:1'
 		];
 

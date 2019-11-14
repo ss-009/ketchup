@@ -21,9 +21,8 @@ function replyToModal() {
 	var reply_word = $(this).parents('.reply-write-content').find('.reply-area').val();
 	word_count = reply_word.length;
 
-	// 文字数チェック
-	if(word_count < 5 || word_count > 2000) {
-		alert('5文字以上2000文字以下で入力してください。')
+	if(word_count < 5 || word_count > 1000) {
+		alert('5文字以上1000文字以下で入力してください。')
 		return false;
 	}
 
@@ -40,8 +39,8 @@ function writeReply() {
 	var word_count = reply_content.length;
 
 	// 文字数チェック
-	if(word_count < 5 || word_count > 2000) {
-		alert('5文字以上2000文字以下で入力してください。')
+	if(word_count < 5 || word_count > 1000) {
+		alert('5文字以上1000文字以下で入力してください。')
 		return false;
 	
 	// 文字数OK時submit

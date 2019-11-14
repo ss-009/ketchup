@@ -84,31 +84,33 @@
 				<div class="answer-header">
 					回答一覧
 				</div>
-				<div class="answer-content">
+				<div>
 					@if (count($answer_data) === 0)
 					<p class="answer-none">まだ回答がありません。</p>
 					@else
 						@foreach ($answer_data as $answer)
 							<div class="answer-reply">
 								<div class="answer-list">
+									<input type="hidden" name="answer_id" class="answer-id" value="{{$answer['answer_id']}}">
 									<div class="user-list">
 										<div class="user">
-											<a href="#"><img src="https://placehold.jp/50x50.png" width="40px"><span>{{$answer['user_id']}}</span></a>
+											<a href="#"><img src="https://placehold.jp/50x50.png" width="40px"><span class="user-id">{{$answer['user_id']}}</span></a>
 										</div>
 										<div class="date">
 											<div class="top-entry-datetime">投稿日時：{{$answer['created_at']}}</div>
 										</div>
 									</div>
-									<p>{{$answer['answer_content']}}</p>
+									<p class="answer-content">{{$answer['answer_content']}}</p>
 									<div class="question-button">
 									<div class="count-good">
 										<a href="#"><i class="fas fa-thumbs-up"></i></a>
 										<div class="count-fukidashi"><a href="#"><p>5</p></a></div>
 										@if($user_type === 'questioner' && $question['close_flg'] === 0)
-										<button type="button" class="btn btn-outline-danger best-answer" data-toggle="modal" data-target="#modal_best_answer" id="best_answer_button">ベストアンサーに選ぶ</button>
+										<button type="button" class="btn btn-outline-danger best-answer" data-toggle="modal" data-target="#modal_best_answer">ベストアンサーに選ぶ</button>
 										@endif
 										@isset ($answer['reply_data'])
-										@if(count($answer['reply_data']) === 0)
+										@if(count($answer['reply_data']) === 0 && $question['close_flg'] === 1)
+										@elseif(count($answer['reply_data']) === 0)
 										<button type="button" class="btn btn-outline-secondary reply-display">返信する</button>
 										@else
 										<button type="button" class="btn btn-outline-secondary reply-display">返信 ( {{count($answer['reply_data'])}} )</button>
@@ -231,7 +233,7 @@
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="modalBestAnswer">ベストアンサー選択</h5>
+				<h5 class="modal-title" id="modalBestAnswer">ベストアンサー確認</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="閉じる">
 				<span aria-hidden="true">&times;</span>
 				</button>
@@ -239,8 +241,16 @@
 			<div class="modal-body">
 				<form method="POST" name="best_answer" id="best_answer" action="best_answer">
 					@csrf
+					<div class="user-list">
+						<div class="user">
+							<a href="#"><img src="https://placehold.jp/50x50.png" width="40px"><span id="user_id"></span></a>
+						</div>
+					</div>
 					<p id="best_answer_content_label"></p>
-					<input type="hidden" name="last_comment" id="last_comment">
+					<div class="last-comment-area">
+						<p><span class="text-danger">※</span>コメント：<span>5文字以上50文字以下</span></p>
+						<textarea class="last-comment" name="last_comment" id="last_comment">ありがとうございました。</textarea>
+					</div>
 					<input type="hidden" name="question_id" value="{{$question_id}}">
 					<input type="hidden" name="best_answer_id" id="best_answer_id">
 				</form>
