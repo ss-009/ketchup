@@ -2,6 +2,7 @@
 @section('description', 'Ketchupは音楽制作者のためのQ&Aサイトです。 作詞・作曲から編曲・DAW操作までDTMや曲作りに関する悩みを解決しましょう。')
 
 @section('pageCss')
+<link href="{{ asset('css/common.css') }}" rel="stylesheet">
 <link href="{{ asset('css/top.css') }}" rel="stylesheet">
 @endsection
 
@@ -12,7 +13,7 @@
 @endguest
 
 <div class="ketchup-container">
-	<div class="row justify-content-center">
+	<div class="container-center">
 		<div class="top-contents">
 			<div class="top-contents-header">
 				<form class="form-inline float-right">

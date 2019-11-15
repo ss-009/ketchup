@@ -1,9 +1,16 @@
 $(function(){
 
+	$("#move_answer").on('click', moveAnswer);
 	$("#answer_button").on('click', answerToModal);
 	$("#answer_post").on('click', checkWriteAnswer);
 
 });
+
+// move answer 
+function moveAnswer() {
+	var position = $(".answer-write-area").offset().top;
+	$("html,body").animate({scrollTop: position}, {queue: false});
+}
 
 // answer to modal
 function answerToModal() {

@@ -49,7 +49,7 @@
 .user-list {
 	display: flex;
 	align-items: center;
-	padding-top: 20px;
+	padding-top: 30px;
 	padding-bottom: 30px;
 }
 
@@ -62,7 +62,8 @@
 }
 
 .top-question-status, .top-question-status-finish {
-	width: 60px;
+	font-size: 17px;
+	width: 80px;
 }
 
 .question-tag-ul {
@@ -222,6 +223,31 @@
 	font-size: 16px;
 }
 
+.best-answer-header {
+	margin-top: 30px;
+}
+
+.best-answer-footer {
+	margin-top: 20px;
+	margin-bottom: 30px;
+	background-color: #EEEEEE;
+	padding: 20px;
+}
+
+.best-answer-header p, .from-questioner {
+	font-size: 18px!important;
+	font-weight: bold;
+	font-family: 'Noto Sans JP', sans-serif!important;
+}
+
+.question-last-comment {
+	margin-top: 10px;
+}
+
+.question-last-comment-date {
+	text-align: right;
+}
+
 /* reply area */
 
 .reply-content {
@@ -272,7 +298,7 @@
 }
 
 div.reply-content:last-child{
-	border-bottom: 3px solid #EEE;
+	border-bottom: none;
 }
 
 .btn-outline-danger {
@@ -295,7 +321,7 @@ div.reply-content:last-child{
 
 .question-content p, .answer-write-content textarea, .answer-list p, .reply-content p, .reply-area,
 .answer-none, .top-entry-datetime, .question-status, #answer_content_label, #reply_content_label, .addition-body p,
-#best_answer_content_label, .last-comment, .last-comment-area p {
+#best_answer_content_label, .last-comment, .last-comment-area p, .question-last-comment, .question-last-comment-date {
 	font-family: 'Nunito';
 	color: #333;
 }

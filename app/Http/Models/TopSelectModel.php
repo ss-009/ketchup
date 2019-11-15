@@ -55,7 +55,7 @@ class TopSelectModel extends Model
 		$sql .= "questions.id AS question_id, ";
 		$sql .= "questions.question_title AS question_title, ";
 		$sql .= "questions.close_flg AS close_flg, ";
-		$sql .= "DATE_FORMAT(questions.created_at, '%Y年%c月%e日') AS created_at, ";
+		$sql .= "DATE_FORMAT(questions.created_at, '%Y年%c月%e日 %H:%i') AS created_at, ";
 		$sql .= "tag1.id AS tag_table_id_1, ";
 		$sql .= "tag2.id AS tag_table_id_2, ";
 		$sql .= "tag3.id AS tag_table_id_3, ";

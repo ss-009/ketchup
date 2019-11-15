@@ -119,11 +119,15 @@ class QuestionDetailController extends Controller
 			}
 
 			// 質問の存在チェック
+			$select_model = new QuestionDatailSelectModel;
+			$select_count = $select_model->checkQuestions($question_id);
+			if ($select_count !== 1) {
+				throw new Exception();
+			}
 
 			// 回答一覧を取得する
 			$answer_data = [];
 			$order_by = '';
-			$select_model = new QuestionDatailSelectModel;
 			$select_count = $select_model->selectAnswers($answer_data, $question_id, $order_by);
 			if ($select_count === -1) {
 				throw new Exception();
@@ -190,6 +194,13 @@ class QuestionDetailController extends Controller
 				throw new Exception();
 			}
 
+			// 質問の存在チェック
+			$select_model = new QuestionDatailSelectModel;
+			$select_count = $select_model->checkQuestions($question_id);
+			if ($select_count !== 1) {
+				throw new Exception();
+			}
+
 			// 回答の存在チェック
 			$select_model = new QuestionDatailSelectModel;
 			$select_count = $select_model->checkAnswers($question_id, $answer_id);
@@ -249,6 +260,13 @@ class QuestionDetailController extends Controller
 
 			// 改ざんチェック
 			if ($question_id !== $page_id) {
+				throw new Exception();
+			}
+
+			// 質問の存在チェック
+			$select_model = new QuestionDatailSelectModel;
+			$select_count = $select_model->checkQuestions($question_id);
+			if ($select_count !== 1) {
 				throw new Exception();
 			}
 

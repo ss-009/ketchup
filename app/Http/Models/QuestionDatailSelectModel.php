@@ -22,7 +22,7 @@ class QuestionDatailSelectModel extends Model
 		}
 
 		// データ格納用配列の初期化
-		$question = [];
+		$question_data = [];
 
 		// SQL文の作成
 		$sql = "";
@@ -32,8 +32,8 @@ class QuestionDatailSelectModel extends Model
 		$sql .= "questions.question_addition AS question_addition, ";
 		$sql .= "questions.last_comment, ";
 		$sql .= "questions.close_flg, ";
-		$sql .= "DATE_FORMAT(questions.created_at, '%Y/%c/%e %h:%i') AS created_at, ";
-		$sql .= "DATE_FORMAT(questions.updated_at, '%Y/%c/%e %h:%i') AS updated_at, ";
+		$sql .= "DATE_FORMAT(questions.created_at, '%Y/%c/%e %H:%i') AS created_at, ";
+		$sql .= "DATE_FORMAT(questions.updated_at, '%Y/%c/%e %H:%i') AS updated_at, ";
 		$sql .= "tag1.id AS tag_table_id_1, ";
 		$sql .= "tag2.id AS tag_table_id_2, ";
 		$sql .= "tag3.id AS tag_table_id_3, ";
@@ -89,6 +89,56 @@ class QuestionDatailSelectModel extends Model
 
 
 	/**
+	 * 指定の質問を取得する
+	 * 
+	 * @param int $question_id 指定の質問ID
+	 * @return int $select_count 取得したデータの件数1を返す エラー時は-1を返す
+	 */
+	public function checkQuestions($question_id)
+	{
+		// 質問IDがない場合は-1を返して処理終了
+		if ($question_id == "") {
+			return -1;
+		}
+
+		// データ格納用配列の初期化
+		$question_data = [];
+
+		// SQL文の作成
+		$sql = "";
+		$sql .= "SELECT ";
+		$sql .= "id AS question_id ";
+		$sql .= "FROM questions ";
+		$sql .= "WHERE ";
+		$sql .= "delete_flg = 0 ";
+		$sql .= "AND ";
+		$sql .= "close_flg = 0 ";
+		$sql .= "LIMIT 1 ";
+
+		// パラメータ設定
+		$param = [];
+		$param["question_id"] = $question_id;
+
+		try {
+			// SQLを実行
+			$result = DB::select($sql, $param);
+			// オブジェクトを配列に変換して格納
+			$question_data = json_decode(json_encode($result), true);
+			// 取得した件数をカウント
+			$select_count = count($question_data);
+			// 取得したデータの件数を返す
+			return $select_count;
+
+		} catch (\Exception $e){
+			// エラー時は-1を返す
+			return -1;
+		}
+	}
+
+
+
+
+	/**
 	 * 質問のいいね数を取得する
 	 * 
 	 * @param int $question_id 質問のID
@@ -140,10 +190,9 @@ class QuestionDatailSelectModel extends Model
 	 * 
 	 * @param array $answer_data 取得したデータを格納する配列
 	 * @param int $question_id 質問ID
-	 * @param string $order_by DESC or ASC
 	 * @return int $select_count 取得したデータの件数を返す エラー時は-1を返す
 	 */
-	public function selectAnswers(&$answer_data, $question_id, $order_by)
+	public function selectAnswers(&$answer_data, $question_id)
 	{
 		// 質問IDがない場合は-1を返して処理終了
 		if ($question_id == "") {
@@ -159,8 +208,8 @@ class QuestionDatailSelectModel extends Model
 		$sql .= "answers.id AS answer_id, ";
 		$sql .= "answers.answer_content AS answer_content, ";
 		$sql .= "answers.best_answer_flg AS best_answer_flg, ";
-		$sql .= "DATE_FORMAT(answers.created_at, '%Y/%c/%e %h:%i') AS created_at, ";
-		$sql .= "DATE_FORMAT(answers.updated_at, '%Y/%c/%e %h:%i') AS updated_at, ";
+		$sql .= "DATE_FORMAT(answers.created_at, '%Y/%c/%e %H:%i') AS created_at, ";
+		$sql .= "DATE_FORMAT(answers.updated_at, '%Y/%c/%e %H:%i') AS updated_at, ";
 		$sql .= "users.id AS user_table_id, ";
 		$sql .= "users.user_id AS user_id, ";
 		$sql .= "users.image AS image, ";
@@ -174,13 +223,9 @@ class QuestionDatailSelectModel extends Model
 		$sql .= "answers.delete_flg = 0 ";
 		$sql .= "AND ";
 		$sql .= "answers.question_id = :question_id ";
-
-		// 並べ替え条件の追加
-		if ($order_by !== "") {
-			$sql .= "ORDER BY ";
-			$sql .= "answers.updated_at ";
-			$sql .= $order_by;
-		}
+		$sql .= "ORDER BY ";
+		$sql .= "answers.best_answer_flg DESC, ";
+		$sql .= "answers.created_at DESC";
 
 		// パラメータ設定
 		$param = [];

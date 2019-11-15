@@ -13,7 +13,7 @@
 </div>
 
 <div class="ketchup-container">
-	<div class="row justify-content-center">
+	<div class="container-center">
 		<div class="top-contents">
 			<div class="question-area">
 				<div class="question_title">
@@ -72,10 +72,10 @@
 					<div class="count-good">
 						<a href="#"><i class="fas fa-thumbs-up"></i></a>
 						<div class="count-fukidashi"><a href="#"><p>5</p></a></div>
-						@if($user_type === 'questioner' && !isset($question['question_addition']))
+						@if($user_type === 'questioner' && !isset($question['question_addition']) && $question['close_flg'] === 0)
 						<a href="{{$question_id}}/addition"><button type="button" class="btn btn-outline-secondary">補足する</button></a>
 						@elseif($user_type === 'login')
-						<button type="button" class="btn btn-outline-danger">回答する</button>
+						<button type="button" class="btn btn-outline-danger" id="move_answer">回答する</button>
 						@endif
 					</div>
 				</div>
@@ -91,6 +91,11 @@
 						@foreach ($answer_data as $answer)
 							<div class="answer-reply">
 								<div class="answer-list">
+									@if ($loop->first && $question['close_flg'] === 1)
+									<div class="best-answer-header">
+										<p><i class="fas fa-crown gold"></i> ベストアンサーに選ばれた回答 <i class="fas fa-crown gold"></i></p>
+									</div>
+									@endif
 									<input type="hidden" name="answer_id" class="answer-id" value="{{$answer['answer_id']}}">
 									<div class="user-list">
 										<div class="user">
@@ -119,9 +124,16 @@
 										<button type="button" class="btn btn-outline-secondary reply-display">返信 ( {{count($answer['reply_data'])}} )</button>
 										@endif
 										@endisset
+										</div>
 									</div>
 								</div>
+								@if ($loop->first && $question['close_flg'] === 1)
+								<div class="best-answer-footer">
+									<p class="from-questioner">質問者からのコメント</p>
+									<p class="question-last-comment">{{$question['last_comment']}}</p>
+									<p class="question-last-comment-date">{{$question['updated_at']}}</p>
 								</div>
+								@endif
 								<div class="reply-list">
 									@isset ($answer['reply_data'])
 									@foreach ($answer['reply_data'] as $reply)
@@ -138,7 +150,7 @@
 									</div>
 									@endforeach
 									@endisset
-									@if($user_type !== 'logout')
+									@if($user_type !== 'logout' && $question['close_flg'] === 0)
 									<div class="reply-write-content">
 										<div class="user">
 											<a href="#"><img src="https://placehold.jp/50x50.png" width="30px"><span>{{ Auth::user()->user_id }}</span></a>
@@ -273,6 +285,6 @@
 @elseif($user_type === 'login' && $question['close_flg'] === 0)
 <script src="{{ asset('js/question_answer.js') }}"></script>
 @endif
-<script src="{{ asset('js/question_reply.js') }}"></script>
+<script src="{{ asset('js/question_common.js') }}"></script>
 @endsection
 @include('layouts.footer')
