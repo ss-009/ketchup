@@ -85,6 +85,6 @@
 	</div>
 </div>
 @section('pageJs')
-<script src="http://dev.ketchup/js/top.js"></script>
+<script src="{{ asset('js/top.js') }}" defer></script>
 @endsection
 @include('layouts.footer')
