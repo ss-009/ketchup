@@ -111,7 +111,10 @@
 										@isset ($answer['reply_data'])
 										@if(count($answer['reply_data']) === 0 && $question['close_flg'] === 1)
 										@elseif(count($answer['reply_data']) === 0)
-										<button type="button" class="btn btn-outline-secondary reply-display">返信する</button>
+											@if($user_type === 'logout')
+											@else
+											<button type="button" class="btn btn-outline-secondary reply-display">返信する</button>
+											@endif
 										@else
 										<button type="button" class="btn btn-outline-secondary reply-display">返信 ( {{count($answer['reply_data'])}} )</button>
 										@endif
@@ -257,7 +260,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline-secondary" data-dismiss="modal">閉じる</button>
-				<button type="button" class="btn btn-outline-danger" id="answer_post">ベストアンサーに選ぶ</button>
+				<button type="button" class="btn btn-outline-danger" id="best_answer_post">ベストアンサーに選ぶ</button>
 			</div>
 		</div>
 	</div>

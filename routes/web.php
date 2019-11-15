@@ -30,6 +30,7 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::post('/question/answer', 'QuestionDetailController@answer');
 	Route::get('/question/reply', 'QuestionDetailController@reply');
 	Route::post('/question/reply', 'QuestionDetailController@reply');
+	Route::post('/question/best_answer', 'QuestionDetailController@bestAnswer');
 });
 
 

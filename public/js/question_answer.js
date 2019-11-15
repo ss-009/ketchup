@@ -21,7 +21,7 @@ function answerToModal() {
 }
 
 // check & write answer
-function checkAnswer() {
+function checkWriteAnswer() {
 
 	// 回答の値と文字数を取得
 	var answer_content = $('#answer_content').val();

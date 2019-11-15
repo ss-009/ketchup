@@ -10,6 +10,7 @@ use App\Http\Controllers\CommonController;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Models\QuestionDatailSelectModel;
 use App\Http\Models\QuestionDatailInsertModel;
+use App\Http\Models\QuestionDatailUpdateModel;
 
 class QuestionDetailController extends Controller
 {
@@ -58,6 +59,7 @@ class QuestionDetailController extends Controller
 					throw new Exception();
 				}
 			}
+			$select_model = null;
 
 			// ユーザータイプを判定する
 			$user_type = 'logout';
@@ -116,6 +118,8 @@ class QuestionDetailController extends Controller
 				throw new Exception();
 			}
 
+			// 質問の存在チェック
+
 			// 回答一覧を取得する
 			$answer_data = [];
 			$order_by = '';
@@ -133,9 +137,9 @@ class QuestionDetailController extends Controller
 				}
 			}
 
-			// 登録に使うModelと値の設定
-			$insert_model = new QuestionDatailInsertModel;
+			// 登録に使う値とModelの設定
 			$date_time = date('Y/m/d H:i:s');
+			$insert_model = new QuestionDatailInsertModel;
 
 			// 登録処理
 			DB::beginTransaction();
@@ -161,6 +165,7 @@ class QuestionDetailController extends Controller
 			echo '<script type="text/javascript">alert("エラーが発生しました。");window.history.back(-2)</script>';
 		}
 	}
+
 
 
 	/**
@@ -193,10 +198,10 @@ class QuestionDetailController extends Controller
 				throw new Exception();
 			}
 
-			// 登録に使うModelと値の設定
-			$insert_model = new QuestionDatailInsertModel;
+			// 登録に使う値とModelの設定
 			$user_table_id = Auth::id();
 			$date_time = date('Y/m/d H:i:s');
+			$insert_model = new QuestionDatailInsertModel;
 
 			// 登録処理
 			DB::beginTransaction();
@@ -218,6 +223,73 @@ class QuestionDetailController extends Controller
 				throw new Exception();
 			}
 
+		} catch (\Exception $e) {
+			echo '<script type="text/javascript">alert("エラーが発生しました。");window.history.back(-2)</script>';
+		}
+	}
+
+
+
+	/**
+	 * ベストアンサーを選択
+	 *
+	 * @return View
+	 */
+	public function bestAnswer(Request $request)
+	{
+		try {
+			// データ取得
+			$data = $request->all();
+
+			// 変数に格納
+			$question_id = $data['question_id'];
+			$page_id = $data['page_id'];
+			$best_answer_id = $data['best_answer_id'];
+			$last_comment = $data['last_comment'];
+
+			// 改ざんチェック
+			if ($question_id !== $page_id) {
+				throw new Exception();
+			}
+
+			// 回答の存在チェック
+			$select_model = new QuestionDatailSelectModel;
+			$select_count = $select_model->checkAnswers($question_id, $best_answer_id);
+			$select_model = null;
+			if ($select_count !== 1) {
+				throw new Exception();
+			}
+
+			// 更新に使う値とModelの設定
+			$user_table_id = Auth::id();
+			$date_time = date('Y/m/d H:i:s');
+			$update_model = new QuestionDatailUpdateModel;
+			
+			// 登録処理
+			DB::beginTransaction();
+			try {
+
+				// 質問の終了処理
+				$result = $update_model->updateCloseFlgQuestions($question_id, $user_table_id, $last_comment, $date_time);
+
+				// 正常時は回答のベストアンサー処理
+				if ($result === 1) {
+					$result = $update_model->updateBestAnswers($best_answer_id, $date_time);
+
+					// 正常時はコミットしてリダイレクト
+					if ($result === 1) {
+						$request->session()->regenerateToken();
+						DB::commit();
+						return redirect()->action('QuestionDetailController@index', ['question_id' => $question_id]);
+
+					} else {
+						throw new Exception();
+					}
+				}
+			} catch (\Exception $e) {
+				DB::rollback();
+				throw new Exception();
+			}
 		} catch (\Exception $e) {
 			echo '<script type="text/javascript">alert("エラーが発生しました。");window.history.back(-2)</script>';
 		}

@@ -61,7 +61,7 @@
 	padding-bottom: 30px;
 }
 
-.top-question-status {
+.top-question-status, .top-question-status-finish {
 	width: 60px;
 }
 

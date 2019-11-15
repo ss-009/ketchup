@@ -1,9 +1,10 @@
 $(function(){
-	$(".best-answer").on('click', decisionBestAnswer);
+	$(".best-answer").on('click', choiceBestAnswer);
+	$("#best_answer_post").on('click', decisionBestAnswer);
 });
 
-// Determine the best answer.
-function decisionBestAnswer() {
+// Choice the best answer.
+function choiceBestAnswer() {
 
 	var answer_content = $(this).parents('.answer-list').find('.answer-content');
 	var answer_id = $(this).parents('.answer-list').find('.answer-id');
@@ -13,27 +14,31 @@ function decisionBestAnswer() {
 	$('#best_answer_id').val(answer_id.val());
 	$('#user_id').text(user_id.text());
 
-	// // コメントの文字数を取得
-	// var answer_content = $('#best_answer_content_label').val();
-	// var word_count = answer_content.length;
+}
 
-	// // 文字数チェック
-	// if(word_count < 3 || word_count > 2000) {
-	// 	alert('5文字以上2000文字以下で入力してください。')
-	// 	$('#modal_answer').modal('hide');
+// Determine the best answer.
+function decisionBestAnswer() {
 
-	// // 文字数OK時submit
-	// } else {
+	// コメントの文字数を取得
+	var last_comment = $('#last_comment').val();
+	var word_count = last_comment.length;
 
-	// 	// ページIDを取得しフォームに追加する
-	// 	var page_id = location.pathname.match( /[^/]+$/i )[0];
-	// 	var answer_form = $('#answer');
-	// 	answer_form.append($('<input />', {
-	// 		type: 'hidden',
-	// 		name: 'page_id',
-	// 		value: page_id,
-	// 	}));
+	// 文字数チェック
+	if(word_count < 5 || word_count > 2000) {
+		alert('5文字以上2000文字以下で入力してください。')
 
-	// 	answer_form.submit();
-	// }
+	// 文字数OK時submit
+	} else {
+
+		// ページIDを取得しフォームに追加する
+		var page_id = location.pathname.match( /[^/]+$/i )[0];
+		var best_answer_form = $('#best_answer');
+		best_answer_form.append($('<input />', {
+			type: 'hidden',
+			name: 'page_id',
+			value: page_id,
+		}));
+
+		best_answer_form.submit();
+	}
 }

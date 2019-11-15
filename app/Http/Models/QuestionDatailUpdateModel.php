@@ -83,14 +83,61 @@ class QuestionDatailUpdateModel extends Model
 
 
 	/**
-	 * 回答の更新を行う
+	 * 質問の終了処理を行う
 	 * 
-	 * @param string $answer_id 回答ID
-	 * @param int best_answer_flg ベストアンサーフラグ
+	 * @param string $question_id 質問ID
+	 * @param int $user_table_id ユーザーテーブルID
+	 * @param string $last_comment 終了コメント
 	 * @param date $date_time 現在日時
 	 * @return boolean $result 更新した件数を返す 1：正常、0：更新対象なし、エラー時：-1を返す
 	 */
-	public function updateAnswers($answer_id, $best_answer_flg, $date_time)
+	public function updateCloseFlgQuestions($question_id, $user_table_id, $last_comment, $date_time)
+	{
+		// キー項目がない場合はエラーで-1を返す
+		if ($question_id == "" || $user_table_id == "" || $last_comment == "" || $date_time == "") {
+			return -1;
+		}
+
+		// SQL文の作成
+		$sql = "";
+		$sql .= "UPDATE questions ";
+		$sql .= "SET ";
+		$sql .= "last_comment = :last_comment, ";
+		$sql .= "close_flg = 1, ";
+		$sql .= "updated_at = :updated_at ";
+		$sql .= "WHERE ";
+		$sql .= "id = :question_id ";
+		$sql .= "AND ";
+		$sql .= "user_table_id = :user_table_id ";
+
+		// パラメータ設定
+		$param = [];
+		$param["question_id"] = $question_id;
+		$param["user_table_id"] = $user_table_id;
+		$param["last_comment"] = $last_comment;
+		$param["updated_at"] = $date_time;
+
+		try {
+			// SQLを実行
+			$result = DB::update($sql, $param);
+			// 更新した件数を返す
+			return $result;
+		} catch (\Exception $e){
+			// エラー時は-1を返す
+			return -1;
+		}
+	}
+
+
+
+	/**
+	 * 回答のベストアンサー処理を行う
+	 * 
+	 * @param string $answer_id 回答ID
+	 * @param date $date_time 現在日時
+	 * @return boolean $result 更新した件数を返す 1：正常、0：更新対象なし、エラー時：-1を返す
+	 */
+	public function updateBestAnswers($answer_id, $date_time)
 	{
 		// キー項目がない場合はエラーで-1を返す
 		if ($answer_id == "" || $date_time == "") {
@@ -101,20 +148,15 @@ class QuestionDatailUpdateModel extends Model
 		$sql = "";
 		$sql .= "UPDATE answers ";
 		$sql .= "SET ";
+		$sql .= "best_answer_flg = 1, ";
 		$sql .= "updated_at = :date_time ";
-
-		// ベストアンサーフラグが1の場合
-		if ($best_answer_flg === 1) {
-			$sql .= ", best_answer_flg = 1 ";
-		}
-
 		$sql .= "WHERE ";
 		$sql .= "id = :answer_id ";
 
 		// パラメータ設定
 		$param = [];
-		$param["date_time"] = $date_time;
 		$param["answer_id"] = $answer_id;
+		$param["date_time"] = $date_time;
 
 		try {
 			// SQLを実行
