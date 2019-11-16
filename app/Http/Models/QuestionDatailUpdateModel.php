@@ -256,4 +256,48 @@ class QuestionDatailUpdateModel extends Model
 			return -1;
 		}
 	}
+
+
+
+	/**
+	 * PV数を更新する
+	 * 
+	 * @param string $question_id 質問ID
+	 * @param int $ip_address アクセスしたIPアドレス
+	 * @param date $date_time 現在日時
+	 * @return boolean $result 更新した件数を返す 1：正常、0：更新対象なし、エラー時：-1を返す
+	 */
+	public function updatePvQuestionMaps($question_id, $ip_address, $date_time)
+	{
+		// キー項目がない場合はエラーで-1を返す
+		if ($question_id == "" || $ip_address == "" || $date_time == "") {
+			return -1;
+		}
+
+		// SQL文の作成
+		$sql = "";
+		$sql .= "UPDATE pv_questions ";
+		$sql .= "SET ";
+		$sql .= "count_pv = count_pv + 1, ";
+		$sql .= "end_ip_address = :ip_address, ";
+		$sql .= "updated_at = :date_time ";
+		$sql .= "WHERE ";
+		$sql .= "id = :question_id ";
+
+		// パラメータ設定
+		$param = [];
+		$param["question_id"] = $question_id;
+		$param["ip_address"] = $ip_address;
+		$param["date_time"] = $date_time;
+
+		try {
+			// SQLを実行
+			$result = DB::update($sql, $param);
+			// 更新した件数を返す
+			return $result;
+		} catch (\Exception $e){
+			// エラー時は-1を返す
+			return -1;
+		}
+	}
 }

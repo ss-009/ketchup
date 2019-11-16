@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Auth;
 use DB;
 use Exception;
+use DateTime;
 use Illuminate\Http\Request;
 use App\Http\Controllers\CommonController;
 use Illuminate\Support\Facades\Validator;
@@ -81,6 +82,40 @@ class QuestionDetailController extends Controller
 							break;
 						}
 					}
+				}
+			}
+
+			// 最終アクセスのIPアドレス
+			$ip_address = $question_data[0]['end_ip_address'];
+			// アクセスしたIPアドレスを取得
+			$now_ip_address = request()->ip();
+			// 最終更新日時から＋60秒の日時を取得
+			$pv_after_60 = (new DateTime($question_data[0]['pv_updated_at']))->modify('+60 second');
+			// 現在日時
+			$date_time = new DateTime();
+
+			// 同一IPではない場合、または同一IPでも60秒（1分）経っていたら更新
+			if ($ip_address !== $now_ip_address ||
+			   ($ip_address === $now_ip_address && $date_time >= $pv_after_60)) {
+
+				// 更新に使うModelの設定
+				$update_model = new QuestionDatailUpdateModel;
+				
+				// 更新処理
+				DB::beginTransaction();
+				try {
+					// 質問の終了処理
+					$result = $update_model->updatePvQuestionMaps($question_id, $now_ip_address, $date_time);
+					// 正常時はコミット
+					if ($result === 1) {
+						DB::commit();
+
+					} else {
+						throw new Exception();
+					}
+				} catch (\Exception $e) {
+					DB::rollback();
+					throw new Exception();
 				}
 			}
 
@@ -283,7 +318,7 @@ class QuestionDetailController extends Controller
 			$date_time = date('Y/m/d H:i:s');
 			$update_model = new QuestionDatailUpdateModel;
 			
-			// 登録処理
+			// 更新処理
 			DB::beginTransaction();
 			try {
 

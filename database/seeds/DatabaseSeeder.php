@@ -19,5 +19,6 @@ class DatabaseSeeder extends Seeder
 		$this->call(TagMapsSeeder::class);
 		$this->call(GoodQuestionMapsSeeder::class);
 		$this->call(GoodAnswerMapsSeeder::class);
+		$this->call(PvQuestionsSeeder::class);
 	}
 }

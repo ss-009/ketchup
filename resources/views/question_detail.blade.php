@@ -55,7 +55,7 @@
 				@endif
 				<div class="question-status">
 					<div class="count-pv">
-						PV数：<span class="count-pv">5</span>
+						PV数：<span class="count-pv">{{$question['count_pv']}}</span>
 					</div>
 					<div class="count-answer">
 						回答数：<span class="count-pv">{{$count_answer}}</span>

@@ -46,7 +46,10 @@ class QuestionDatailSelectModel extends Model
 		$sql .= "users.id AS user_table_id, ";
 		$sql .= "users.user_id AS user_id, ";
 		$sql .= "users.image AS image, ";
-		$sql .= "users.score AS score ";
+		$sql .= "users.score AS score, ";
+		$sql .= "pv_questions.count_pv AS count_pv, ";
+		$sql .= "pv_questions.end_ip_address AS end_ip_address, ";
+		$sql .= "pv_questions.updated_at AS pv_updated_at ";
 		$sql .= "FROM questions ";
 		$sql .= "LEFT OUTER JOIN tags AS tag1 ";
 		$sql .= "ON questions.tag_id_1 = tag1.id ";
@@ -56,8 +59,12 @@ class QuestionDatailSelectModel extends Model
 		$sql .= "ON questions.tag_id_3 = tag3.id ";
 		$sql .= "LEFT OUTER JOIN users ";
 		$sql .= "ON questions.user_table_id = users.id ";
+		$sql .= "LEFT OUTER JOIN pv_questions ";
+		$sql .= "ON questions.id = pv_questions.question_id ";
 		$sql .= "WHERE ";
 		$sql .= "users.id IS NOT NULL ";
+		$sql .= "AND ";
+		$sql .= "pv_questions.question_id IS NOT NULL ";
 		$sql .= "AND ";
 		$sql .= "questions.delete_flg = 0 ";
 		$sql .= "AND ";
@@ -381,7 +388,7 @@ class QuestionDatailSelectModel extends Model
 		$sql .= "SELECT ";
 		$sql .= "replys.id AS reply_id, ";
 		$sql .= "replys.reply_content AS reply_content, ";
-		$sql .= "DATE_FORMAT(replys.created_at, '%Y/%c/%e %h:%i') AS created_at, ";
+		$sql .= "DATE_FORMAT(replys.created_at, '%Y/%c/%e %H:%i') AS created_at, ";
 		$sql .= "users.user_id AS user_id, ";
 		$sql .= "users.image AS image, ";
 		$sql .= "users.score AS score ";
