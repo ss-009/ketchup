@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Models\QuestionDatailSelectModel;
 use App\Http\Models\QuestionDatailInsertModel;
 use App\Http\Models\QuestionDatailUpdateModel;
+use App\Http\Models\QuestionDatailDeleteModel;
 
 class QuestionDetailController extends Controller
 {
@@ -25,6 +26,8 @@ class QuestionDetailController extends Controller
 		// $this->middleware('auth');
 	}
 
+
+
 	/**
 	 * 質問ページ表示
 	 *
@@ -35,10 +38,17 @@ class QuestionDetailController extends Controller
 		try {
 			// 質問データの取得
 			$question_data = [];
-			$select_model = new QuestionDatailSelectModel;
+			$select_model = new QuestionDatailSelectModel();
 			$select_count = $select_model->selectQuestionsData($question_data, $question_id);
 			// 質問データ未取得の場合エラー表示（後ほど404エラーページを出力する）
 			if ($select_count === 0 || $select_count === -1) {
+				throw new Exception();
+			}
+
+			// いいね数を取得
+			$count_good_quesiton = $select_model->selectCountGoodQuestions($question_id);
+			// データ取得時エラーの場合
+			if ($count_good_quesiton === -1) {
 				throw new Exception();
 			}
 
@@ -46,7 +56,7 @@ class QuestionDetailController extends Controller
 			$answer_data = [];
 			$order_by = 'DESC';
 			$count_answer = $select_model->selectAnswers($answer_data, $question_id, $order_by);
-			// 回答データ取得時エラーの場合
+			// データ取得時エラーの場合
 			if ($count_answer === -1) {
 				throw new Exception();
 			}
@@ -55,6 +65,7 @@ class QuestionDetailController extends Controller
 			$order_by = '';
 			foreach ($answer_data as &$answer) {
 				$reply_count = $select_model->selectReplys($answer['reply_data'], $question_id, $answer['answer_id'], $order_by);
+				$answer['count_good_answer'] = $select_model->selectCountGoodAnswers($answer['answer_id']);
 				// 返信データ取得時エラーの場合
 				if ($reply_count === -1) {
 					throw new Exception();
@@ -99,13 +110,14 @@ class QuestionDetailController extends Controller
 			   ($ip_address === $now_ip_address && $date_time >= $pv_after_60)) {
 
 				// 更新に使うModelの設定
-				$update_model = new QuestionDatailUpdateModel;
+				$update_model = new QuestionDatailUpdateModel();
 				
 				// 更新処理
 				DB::beginTransaction();
 				try {
 					// 質問の終了処理
 					$result = $update_model->updatePvQuestionMaps($question_id, $now_ip_address, $date_time);
+					$update_model = null;
 					// 正常時はコミット
 					if ($result === 1) {
 						DB::commit();
@@ -124,13 +136,16 @@ class QuestionDetailController extends Controller
 				'question' => $question_data[0],
 				'answer_data' => $answer_data,
 				'count_answer' => $count_answer,
-				'user_type' => $user_type
+				'user_type' => $user_type,
+				'count_good_quesiton' => $count_good_quesiton
 			]);
 
 		} catch (\Exception $e) {
 			echo '<script type="text/javascript">alert("エラーが発生しました。");window.history.back(-2)</script>';
 		}
 	}
+
+
 
 	/**
 	 * 回答する
@@ -154,7 +169,7 @@ class QuestionDetailController extends Controller
 			}
 
 			// 質問の存在チェック
-			$select_model = new QuestionDatailSelectModel;
+			$select_model = new QuestionDatailSelectModel();
 			$select_count = $select_model->checkQuestions($question_id);
 			if ($select_count !== 1) {
 				throw new Exception();
@@ -164,6 +179,7 @@ class QuestionDetailController extends Controller
 			$answer_data = [];
 			$order_by = '';
 			$select_count = $select_model->selectAnswers($answer_data, $question_id, $order_by);
+			$select_model = null;
 			if ($select_count === -1) {
 				throw new Exception();
 			}
@@ -178,7 +194,7 @@ class QuestionDetailController extends Controller
 
 			// 登録に使う値とModelの設定
 			$date_time = date('Y/m/d H:i:s');
-			$insert_model = new QuestionDatailInsertModel;
+			$insert_model = new QuestionDatailInsertModel();
 
 			// 登録処理
 			DB::beginTransaction();
@@ -230,14 +246,14 @@ class QuestionDetailController extends Controller
 			}
 
 			// 質問の存在チェック
-			$select_model = new QuestionDatailSelectModel;
+			$select_model = new QuestionDatailSelectModel();
 			$select_count = $select_model->checkQuestions($question_id);
 			if ($select_count !== 1) {
 				throw new Exception();
 			}
 
 			// 回答の存在チェック
-			$select_model = new QuestionDatailSelectModel;
+			$select_model = new QuestionDatailSelectModel();
 			$select_count = $select_model->checkAnswers($question_id, $answer_id);
 			$select_model = null;
 			if ($select_count !== 1) {
@@ -247,7 +263,7 @@ class QuestionDetailController extends Controller
 			// 登録に使う値とModelの設定
 			$user_table_id = Auth::id();
 			$date_time = date('Y/m/d H:i:s');
-			$insert_model = new QuestionDatailInsertModel;
+			$insert_model = new QuestionDatailInsertModel();
 
 			// 登録処理
 			DB::beginTransaction();
@@ -299,14 +315,14 @@ class QuestionDetailController extends Controller
 			}
 
 			// 質問の存在チェック
-			$select_model = new QuestionDatailSelectModel;
+			$select_model = new QuestionDatailSelectModel();
 			$select_count = $select_model->checkQuestions($question_id);
 			if ($select_count !== 1) {
 				throw new Exception();
 			}
 
 			// 回答の存在チェック
-			$select_model = new QuestionDatailSelectModel;
+			$select_model = new QuestionDatailSelectModel();
 			$select_count = $select_model->checkAnswers($question_id, $best_answer_id);
 			$select_model = null;
 			if ($select_count !== 1) {
@@ -316,7 +332,7 @@ class QuestionDetailController extends Controller
 			// 更新に使う値とModelの設定
 			$user_table_id = Auth::id();
 			$date_time = date('Y/m/d H:i:s');
-			$update_model = new QuestionDatailUpdateModel;
+			$update_model = new QuestionDatailUpdateModel();
 			
 			// 更新処理
 			DB::beginTransaction();
@@ -328,6 +344,7 @@ class QuestionDetailController extends Controller
 				// 正常時は回答のベストアンサー処理
 				if ($result === 1) {
 					$result = $update_model->updateBestAnswers($best_answer_id, $date_time);
+					$update_model = null;
 
 					// 正常時はコミットしてリダイレクト
 					if ($result === 1) {
@@ -345,6 +362,74 @@ class QuestionDetailController extends Controller
 			}
 		} catch (\Exception $e) {
 			echo '<script type="text/javascript">alert("エラーが発生しました。");window.history.back(-2)</script>';
+		}
+	}
+
+
+	/**
+	 * 質問にいいねをする、いいねを削除する
+	 *
+	 * @return View
+	 */
+	public function goodQuestion(Request $request) {
+		try {
+			// 値を変数に格納
+			$question_id = $request->input('question_id');
+			$user_table_id = Auth::id();
+			$date_time = date('Y/m/d H:i:s');
+
+			$user_status = '';
+			DB::beginTransaction();
+
+			// いいねしているか確認
+			$select_model = new QuestionDatailSelectModel();
+			$select_count = $select_model->checkGoodQuestions($question_id, $user_table_id);
+
+			if ($select_count === -1) {
+				throw new Exception();
+			} else if ($select_count === 0) {
+				// 登録していない場合登録
+				$insert_model = new QuestionDatailInsertModel();
+				$result = $insert_model->insertGoodQuestionMaps($question_id, $user_table_id, $date_time);
+				$insert_model = null;
+				if ($result !== true) {
+					throw new Exception();
+				}
+				$user_status = 1;
+			} else {
+				// 登録されている場合削除
+				$delete_model = new QuestionDatailDeleteModel();
+				$delete_count = $delete_model->deleteGoodQuestionMaps($question_id, $user_table_id);
+				$delete_model = null;
+				if ($delete_count < 1) {
+					throw new Exception();
+				}
+				$user_status = 0;
+			}
+
+			DB::commit();
+
+			// いいね数をカウントする
+			$select_count = $select_model->selectCountGoodQuestions($question_id);
+			if($select_count === -1) {
+				throw new Exception();
+			}
+			$select_model = null;
+
+			// 戻り値を設定してJSONで返す
+			$return_data = array(	'status_code'	=> 200,
+									'user_status'	=> $user_status,
+									'good_count'	=> $select_count
+			);
+			$return_json = json_encode($return_data);
+			return $return_json;
+
+		} catch (\Exception $e) {
+			DB::rollback();
+
+			$return_data = array('status_code'	=> 500);
+			$return_json = json_encode($return_data);
+			return $return_json;
 		}
 	}
 }

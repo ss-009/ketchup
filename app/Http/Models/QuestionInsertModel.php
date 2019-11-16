@@ -71,4 +71,90 @@ class QuestionInsertModel extends Model
 			return -1;
 		}
 	}
+
+
+
+	/**
+	 * 質問をPV数テーブルに登録する
+	 * 
+	 * @param string $question_id 質問ID
+	 * @param date $date_time 現在日時
+	 * @return boolean $result TRUE or FALSE 他エラー時は-1を返す
+	 */
+	public function insertPvQuestions($question_id, $date_time)
+	{
+		// キー項目がない場合はエラーで-1を返す
+		if ($question_id == "" || $date_time == "") {
+			return -1;
+		}
+
+		// SQL文の作成
+		$sql = "";
+		$sql .= "INSERT INTO pv_questions ";
+		$sql .= "SET ";
+		$sql .= "question_id = :question_id, ";
+		$sql .= "count_pv = 0, ";
+		$sql .= "created_at = :created_at, ";
+		$sql .= "updated_at = :updated_at ";
+
+		// パラメータ設定
+		$param = [];
+		$param["question_id"] = $question_id;
+		$param["created_at"] = $date_time;
+		$param["updated_at"] = $date_time;
+
+		try {
+			// SQLを実行
+			$result = DB::insert($sql, $param);
+			// インサートの結果を返す
+			return $result;
+		} catch (\Exception $e){
+			// エラー時は-1を返す
+			return -1;
+		}
+	}
+
+
+
+	/**
+	 * 質問のタグ情報をタグマップテーブルに登録する
+	 * 
+	 * @param string $question_id 質問ID
+	 * @param int $tag_table_id タグID
+	 * @param date $date_time 現在日時
+	 * @return boolean $result TRUE or FALSE 他エラー時は-1を返す
+	 */
+	public function insertTagMaps($question_id, $tag_table_id, $date_time)
+	{
+		// キー項目がない場合はエラーで-1を返す
+		if ($question_id == "" || $tag_table_id == "") {
+			return -1;
+		}
+
+		// SQL文の作成
+		$sql = "";
+		$sql .= "INSERT INTO tag_maps ";
+		$sql .= "SET ";
+		$sql .= "question_id = :question_id, ";
+		$sql .= "tag_table_id = :tag_table_id, ";
+		$sql .= "created_at = :created_at, ";
+		$sql .= "updated_at = :updated_at ";
+
+		// パラメータ設定
+		$param = [];
+		$param["question_id"] = $question_id;
+		$param["tag_table_id"] = $tag_table_id;
+		$param["created_at"] = $date_time;
+		$param["updated_at"] = $date_time;
+
+		try {
+			// SQLを実行
+			$result = DB::insert($sql, $param);
+			// インサートの結果を返す
+			return $result;
+		} catch (\Exception $e){
+			// エラー時は-1を返す
+			return -1;
+		}
+	}
 }

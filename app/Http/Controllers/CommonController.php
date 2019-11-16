@@ -28,7 +28,7 @@ class CommonController extends Controller
 
 		try {
 			$tag_list = [];
-			$select_model = new QuestionDatailSelectModel;
+			$select_model = new QuestionDatailSelectModel();
 			$select_count = $select_model->selectTags($tag_list);
 			$select_model = null;
 			

@@ -115,7 +115,7 @@ class QuestionDatailDeleteModel extends Model
 		$sql = "";
 		$sql .= "DELETE FROM good_question_maps ";
 		$sql .= "WHERE ";
-		$sql .= "id = :question_id ";
+		$sql .= "question_id = :question_id ";
 		$sql .= "AND ";
 		$sql .= "user_table_id = :user_table_id ";
 
@@ -163,6 +163,42 @@ class QuestionDatailDeleteModel extends Model
 		$param = [];
 		$param["answer_id"] = $answer_id;
 		$param["user_table_id"] = $user_table_id;
+
+		try {
+			// SQLを実行
+			$result = DB::delete($sql, $param);
+			// 削除の結果を返す
+			return $result;
+		} catch (\Exception $e){
+			// エラー時は-1を返す
+			return -1;
+		}
+	}
+
+
+
+	/**
+	 * 質問のタグマップを削除する
+	 * 
+	 * @param int $question_id 質問ID
+	 * @return int 削除した件数を返す 1以上：正常、0：削除対象なし、エラー時：-1を返す
+	 */
+	public function deleteTagMaps($question_id)
+	{
+		// キー項目がない場合はエラーで-1を返す
+		if ($question_id == "") {
+			return -1;
+		}
+
+		// SQL文の作成
+		$sql = "";
+		$sql .= "DELETE FROM tag_maps ";
+		$sql .= "WHERE ";
+		$sql .= "question_id = :question_id ";
+
+		// パラメータ設定
+		$param = [];
+		$param["question_id"] = $question_id;
 
 		try {
 			// SQLを実行

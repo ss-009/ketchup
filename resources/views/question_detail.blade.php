@@ -70,8 +70,10 @@
 				</div>
 				<div class="question-button">
 					<div class="count-good">
-						<a href="#"><i class="fas fa-thumbs-up"></i></a>
-						<div class="count-fukidashi"><a href="#"><p>5</p></a></div>
+						<a href="javascript:void(0)" id="count_good">
+							<i class="fas fa-thumbs-up"></i>
+							<div class="count-fukidashi"><p>{{$count_good_quesiton}}</p></div>
+						</a>
 						@if($user_type === 'questioner' && !isset($question['question_addition']) && $question['close_flg'] === 0)
 						<a href="{{$question_id}}/addition"><button type="button" class="btn btn-outline-secondary">補足する</button></a>
 						@elseif($user_type === 'login')
@@ -109,7 +111,7 @@
 									<div class="question-button">
 									<div class="count-good">
 										<a href="#"><i class="fas fa-thumbs-up"></i></a>
-										<div class="count-fukidashi"><a href="#"><p>5</p></a></div>
+										<div class="count-fukidashi"><a href="#"><p>{{$answer['count_good_answer']}}</p></a></div>
 										@if($user_type === 'questioner' && $question['close_flg'] === 0)
 										<button type="button" class="btn btn-outline-danger best-answer" data-toggle="modal" data-target="#modal_best_answer">ベストアンサーに選ぶ</button>
 										@endif
@@ -284,6 +286,9 @@
 <script src="{{ asset('js/question.js') }}"></script>
 @elseif($user_type === 'login' && $question['close_flg'] === 0)
 <script src="{{ asset('js/question_answer.js') }}"></script>
+@endif
+@if($user_type !== 'logout')
+<script src="{{ asset('js/question_good.js') }}"></script>
 @endif
 <script src="{{ asset('js/question_common.js') }}"></script>
 @endsection

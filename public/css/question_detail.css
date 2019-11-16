@@ -122,6 +122,10 @@
 	border-right: 10px solid #EEEEEE;
 }
 
+#count_good {
+	text-decoration: none;
+}
+
 .count-fukidashi p {
 	margin: 0;
 	padding: 0;

@@ -96,6 +96,37 @@ class QuestionDatailSelectModel extends Model
 
 
 	/**
+	 * 最新の質問IDを取得する
+	 * @param int $question_id 最新の質問ID
+	 * @return int $select_count 取得したデータの件数1を返す エラー時は-1を返す
+	 */
+	public function getLatestQuestionId()
+	{
+		// SQL文の作成
+		$sql = "";
+		$sql .= "SELECT ";
+		$sql .= "id ";
+		$sql .= "FROM questions ";
+		$sql .= "ORDER BY id DESC ";
+		$sql .= "LIMIT 1 ";
+
+		try {
+			// SQLを実行
+			$result = DB::select($sql);
+			// 質問IDを取得
+			$question_id = $result[0]->id;
+			// 取得したデータの件数を返す
+			return $question_id;
+
+		} catch (\Exception $e){
+			// エラー時は-1を返す
+			return -1;
+		}
+	}
+
+
+
+	/**
 	 * 指定の質問を取得する
 	 * 
 	 * @param int $question_id 指定の質問ID

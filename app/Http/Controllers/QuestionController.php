@@ -13,6 +13,7 @@ use App\Rules\TagUnselected;
 use App\Http\Models\QuestionInsertModel;
 use App\Http\Models\QuestionDatailSelectModel;
 use App\Http\Models\QuestionDatailUpdateModel;
+use App\Http\Models\QuestionDatailDeleteModel;
 
 class QuestionController extends Controller
 {
@@ -40,7 +41,7 @@ class QuestionController extends Controller
 	{
 		try {
 			$tag_list = [];
-			$select_model = new QuestionDatailSelectModel;
+			$select_model = new QuestionDatailSelectModel();
 			$select_count = $select_model->selectTags($tag_list);
 			$select_model = null;
 			
@@ -84,15 +85,15 @@ class QuestionController extends Controller
 
 		// タグID_2が選択されていてタグID_1と同じ値の時にエラーメッセージ
 		if ($tag_id_2 !== 0 && $tag_id_2 === $tag_id_1) {
-			$rules['tag_id_2'] = new TagDuplicate;
+			$rules['tag_id_2'] = new TagDuplicate();
 		}
 
 		// タグID_3が選択されていてタグID_2が未選択のときにエラーメッセージ
 		if ($tag_id_3 !== 0 && $tag_id_2 === 0) {
-			$rules['tag_id_3'] = new TagUnselected;
+			$rules['tag_id_3'] = new TagUnselected();
 		// タグID_3が選択されていてタグID_1 or 2と同じ値の時にエラーメッセージ
 		} else if ($tag_id_3 !== 0 && ($tag_id_3 === $tag_id_1 || $tag_id_3 === $tag_id_2)) {
-			$rules['tag_id_3'] = new TagDuplicate;
+			$rules['tag_id_3'] = new TagDuplicate();
 		}
 		
 		// バリデーション
@@ -106,7 +107,7 @@ class QuestionController extends Controller
 		$request->session()->put('tag_id_3', $tag_id_3);
 
 		// タグ名を取得
-		$common_controller = new CommonController;
+		$common_controller = new CommonController();
 		$tag_name_1 = $common_controller->tagIdToName($tag_id_1);
 		$tag_name_2 = $common_controller->tagIdToName($tag_id_2);
 		$tag_name_3 = $common_controller->tagIdToName($tag_id_3);
@@ -143,30 +144,55 @@ class QuestionController extends Controller
 			// セッションから値を取得
 			$question_title = $request->session()->get('question_title');
 			$question_content = $request->session()->get('question_content');
-			$tag_id_1 = $request->session()->get('tag_id_1');
-			$tag_id_2 = $request->session()->get('tag_id_2');
-			$tag_id_3 = $request->session()->get('tag_id_3');
+			$tag_table_id_1 = $request->session()->get('tag_id_1');
+			$tag_table_id_2 = $request->session()->get('tag_id_2');
+			$tag_table_id_3 = $request->session()->get('tag_id_3');
 
 			// 登録に使うModelと値の設定
-			$insert_model = new QuestionInsertModel;
 			$user_table_id = Auth::id();
 			$date_time = date('Y/m/d H:i:s');
+			$insert_model = new QuestionInsertModel();
 
 			// 登録処理
 			DB::beginTransaction();
 			try {
+				// 質問テーブルに登録
 				$result = $insert_model->insertQuestions($question_title, $question_content, $user_table_id,
-														$tag_id_1, $tag_id_2, $tag_id_3, $date_time);
+														$tag_table_id_1, $tag_table_id_2, $tag_table_id_3, $date_time);
+				if ($result !== true) {
+					throw new Exception();
+				}
+				
+				// 最新の質問IDを取得
+				$select_model = new QuestionDatailSelectModel();
+				$question_id = $select_model->getLatestQuestionId();
+				$select_model = null;
+				if ($question_id === -1) {
+					throw new Exception();
+				}
+
+				// PV数テーブルに登録
+				$result = $insert_model->insertPvQuestions($question_id, $date_time);
+				if ($result !== true) {
+					throw new Exception();
+				}
+
+				// タグマップテーブルに登録
+				$tag_id_list = array($tag_table_id_1, $tag_table_id_2, $tag_table_id_3);
+				foreach ($tag_id_list as $tag_id) {
+					if ($tag_id !== 0) {
+						$result = $insert_model->insertTagMaps($question_id, $tag_id, $date_time);
+						if ($result !== true) {
+							throw new Exception();
+						}
+					}
+				}
 				$insert_model = null;
 
 				// 正常登録時、二重投稿を防止しViewを表示
-				if ($result === true) {
-					DB::commit();
-					$request->session()->regenerateToken();
-					return view('question_complete');
-				} else {
-					throw new Exception();
-				}
+				$request->session()->regenerateToken();
+				DB::commit();
+				return view('question_complete');
 
 			} catch (\Exception $e) {
 				DB::rollback();
@@ -190,7 +216,7 @@ class QuestionController extends Controller
 
 			// 質問データの取得
 			$question_data = [];
-			$select_model = new QuestionDatailSelectModel;
+			$select_model = new QuestionDatailSelectModel();
 			$select_count = $select_model->selectQuestionsData($question_data, $question_id);
 			// 質問データ未取得の場合エラー表示（404エラーページを出力する）
 			if ($select_count === 0 || $select_count === -1) {
@@ -208,7 +234,7 @@ class QuestionController extends Controller
 
 			// タグを取得
 			$tag_list = [];
-			$select_model = new QuestionDatailSelectModel;
+			$select_model = new QuestionDatailSelectModel();
 			$select_count = $select_model->selectTags($tag_list);
 			$select_model = null;
 			if ($select_count === -1) {
@@ -244,8 +270,9 @@ class QuestionController extends Controller
 
 		// 質問データの取得
 		$question_data = [];
-		$select_model = new QuestionDatailSelectModel;
+		$select_model = new QuestionDatailSelectModel();
 		$select_count = $select_model->selectQuestionsData($question_data, $question_id);
+		$select_model = null;
 		// 質問データ未取得の場合エラー表示（404エラーページを出力する）
 		if ($select_count === 0 || $select_count === -1) {
 			echo '<script type="text/javascript">alert("エラーが発生しました。");window.history.back(-2)</script>';
@@ -275,15 +302,15 @@ class QuestionController extends Controller
 
 		// タグID_2が選択されていてタグID_1と同じ値の時にエラーメッセージ
 		if ($tag_id_2 !== 0 && $tag_id_2 === $tag_id_1) {
-			$rules['tag_id_2'] = new TagDuplicate;
+			$rules['tag_id_2'] = new TagDuplicate();
 		}
 
 		// タグID_3が選択されていてタグID_2が未選択のときにエラーメッセージ
 		if ($tag_id_3 !== 0 && $tag_id_2 === 0) {
-			$rules['tag_id_3'] = new TagUnselected;
+			$rules['tag_id_3'] = new TagUnselected();
 		// タグID_3が選択されていてタグID_1 or 2と同じ値の時にエラーメッセージ
 		} else if ($tag_id_3 !== 0 && ($tag_id_3 === $tag_id_1 || $tag_id_3 === $tag_id_2)) {
-			$rules['tag_id_3'] = new TagDuplicate;
+			$rules['tag_id_3'] = new TagDuplicate();
 		}
 		
 		// バリデーション
@@ -296,7 +323,7 @@ class QuestionController extends Controller
 		$request->session()->put('tag_id_3', $tag_id_3);
 
 		// タグ名を取得
-		$common_controller = new CommonController;
+		$common_controller = new CommonController();
 		$tag_name_1 = $common_controller->tagIdToName($tag_id_1);
 		$tag_name_2 = $common_controller->tagIdToName($tag_id_2);
 		$tag_name_3 = $common_controller->tagIdToName($tag_id_3);
@@ -333,9 +360,9 @@ class QuestionController extends Controller
 		try {
 			// セッションから値を取得
 			$question_addition = $request->session()->get('question_addition');
-			$tag_id_1 = $request->session()->get('tag_id_1');
-			$tag_id_2 = $request->session()->get('tag_id_2');
-			$tag_id_3 = $request->session()->get('tag_id_3');
+			$tag_table_id_1 = $request->session()->get('tag_id_1');
+			$tag_table_id_2 = $request->session()->get('tag_id_2');
+			$tag_table_id_3 = $request->session()->get('tag_id_3');
 
 			// question_idを取得
 			$url = $_SERVER['REQUEST_URI'];
@@ -343,10 +370,10 @@ class QuestionController extends Controller
 
 			// 質問データの取得
 			$question_data = [];
-			$select_model = new QuestionDatailSelectModel;
+			$select_model = new QuestionDatailSelectModel();
 			$select_count = $select_model->selectQuestionsData($question_data, $question_id);
 			// 質問データ未取得の場合エラー
-			if ($select_count === 0 || $select_count === -1) {
+			if ($select_count !== 1) {
 				throw new Exception();
 			}
 
@@ -360,25 +387,46 @@ class QuestionController extends Controller
 			}
 
 			// 更新に使うModelと値の設定
-			$update_model = new QuestionDatailUpdateModel;
 			$last_comment = '';
 			$date_time = date('Y/m/d H:i:s');
+			$update_model = new QuestionDatailUpdateModel();
 
 			// 更新処理
 			DB::beginTransaction();
 			try {
+				// 質問補足の登録（更新処理）
 				$update_count = $update_model->updateQuestions($question_id, $question_addition, $user_table_id,
-										$tag_id_1, $tag_id_2, $tag_id_3, $last_comment, $date_time);
+										$tag_table_id_1, $tag_table_id_2, $tag_table_id_3, $last_comment, $date_time);
 				$update_model = null;
-
-				// 正常登録時、二重投稿を防止しViewを表示
-				if ($update_count === 1) {
-					DB::commit();
-					$request->session()->regenerateToken();
-					return view('addition_complete');
-				} else {
+				if ($update_count !== 1) {
 					throw new Exception();
 				}
+
+				// 指定のタグマップを削除
+				$delete_model = new QuestionDatailDeleteModel;
+				$delete_count = $delete_model->deleteTagMaps($question_id);
+				$delete_model = null;
+				if ($delete_count < 1) {
+					throw new Exception();
+				}
+
+				// タグマップテーブルに登録
+				$insert_model = new QuestionInsertModel();
+				$tag_id_list = array($tag_table_id_1, $tag_table_id_2, $tag_table_id_3);
+				foreach ($tag_id_list as $tag_id) {
+					if ($tag_id !== 0) {
+						$result = $insert_model->insertTagMaps($question_id, $tag_id, $date_time);
+						if ($result !== true) {
+							throw new Exception();
+						}
+					}
+				}
+				$insert_model = null;
+
+				// 正常登録時、二重投稿を防止しViewを表示
+				DB::commit();
+				$request->session()->regenerateToken();
+				return view('addition_complete');
 
 			} catch (\Exception $e) {
 				DB::rollback();

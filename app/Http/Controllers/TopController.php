@@ -32,27 +32,28 @@ class TopController extends Controller
 		$question_list = [];
 		$tag_id = '';
 		$keyword = '';
-		$top_model = new TopSelectModel;
+		$select_model = new TopSelectModel();
 
 		// 質問リストを取得。取得エラーで戻り値が-1の時はエラーページを表示
-		$select_count = $top_model->selectQuestions($question_list, $tag_id, $keyword);
+		$select_count = $select_model->selectQuestions($question_list, $tag_id, $keyword);
 		if ($select_count === -1) {
 		}
 
 		// 表示するために配列の追加、整理を行う
 		foreach ($question_list as &$question) {
 			// 回答数を取得
-			$count_answer = $top_model->selectCountAnswers($question['question_id']);
+			$count_answer = $select_model->selectCountAnswers($question['question_id']);
 			if ($count_answer === -1) {
 			}
 			// いいね数を取得
-			$good_question = $top_model->selectCountGoodQuestions($question['question_id']);
+			$good_question = $select_model->selectCountGoodQuestions($question['question_id']);
 			if ($good_question === -1) {
 			}
 			// 回答数といいね数を配列に格納
 			$question['count_answer'] = $count_answer;
 			$question['good_question'] = $good_question;
 		}
+		$select_model = null;
 
 		// ページ番号と切り取り始める配列の番号を初期化
 		$page_num = $request->page;
