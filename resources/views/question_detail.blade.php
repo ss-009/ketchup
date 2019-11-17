@@ -70,7 +70,7 @@
 				</div>
 				<div class="question-button">
 					<div class="count-good">
-						<a href="javascript:void(0)" id="count_good">
+						<a id="count_good" @if($user_type !== 'logout') href="javascript:void(0)" @endif @if ($good_question === 1) class="question-good" @endif>
 							<i class="fas fa-thumbs-up"></i>
 							<div class="count-fukidashi"><p>{{$count_good_quesiton}}</p></div>
 						</a>
@@ -110,8 +110,10 @@
 									<p class="answer-content">{{$answer['answer_content']}}</p>
 									<div class="question-button">
 									<div class="count-good">
-										<a href="#"><i class="fas fa-thumbs-up"></i></a>
-										<div class="count-fukidashi"><a href="#"><p>{{$answer['count_good_answer']}}</p></a></div>
+										<a @if($user_type !== 'logout') href="javascript:void(0)" @endif class="answer-good @if ($user_type !== 'logout' && $answer['good_answer'] === 1) question-good @endif">
+											<i class="fas fa-thumbs-up"></i>
+											<div class="count-fukidashi"><p>{{$answer['count_good_answer']}}</p></div>
+										</a>
 										@if($user_type === 'questioner' && $question['close_flg'] === 0)
 										<button type="button" class="btn btn-outline-danger best-answer" data-toggle="modal" data-target="#modal_best_answer">ベストアンサーに選ぶ</button>
 										@endif

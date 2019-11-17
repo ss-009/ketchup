@@ -12,6 +12,7 @@ class GoodAnswerMapsSeeder extends Seeder
 	public function run()
 	{
 		$param = [
+			'question_id' => 1,
 			'answer_id' => 1,
 			'user_table_id' => 1,
 			'created_at' => date('Y-m-d H:i:s'),
@@ -20,6 +21,7 @@ class GoodAnswerMapsSeeder extends Seeder
 		DB::table('good_answer_maps')->insert($param);
 
 		$param = [
+			'question_id' => 1,
 			'answer_id' => 2,
 			'user_table_id' => 2,
 			'created_at' => date('Y-m-d H:i:s'),

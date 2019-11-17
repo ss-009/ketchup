@@ -116,19 +116,39 @@
 	content: "";
 	position: absolute;
 	top: 50%;
-	left: -20px;
-	margin-top: -10px;
-	border: 10px solid transparent;
-	border-right: 10px solid #EEEEEE;
+	left: -16px;
+	margin-top: -8px;
+	border: 8px solid transparent;
+	border-right: 8px solid #EEEEEE;
 }
 
-#count_good {
-	text-decoration: none;
+#count_good, .answer-good {
+	text-decoration: none!important;
+}
+
+.question-good i {
+	color: #A80000!important;
+	transition: all 1s ease 0s;
+}
+
+.question-good div {
+	background-color: #A80000!important;
+	transition: background-color 1s ease 0s;
+}
+
+.question-good p {
+	color: #FFFFFF!important;
+}
+
+.question-good .count-fukidashi:before {
+	border-right: 10px solid #A80000!important;
+	transition: all 1s ease 0s;
 }
 
 .count-fukidashi p {
 	margin: 0;
 	padding: 0;
+	font-family: Noto Sans JP,sans-serif!important;
 }
 
 .count-fukidashi a, .count-fukidashi a:hover {

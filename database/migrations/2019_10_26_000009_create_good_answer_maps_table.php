@@ -15,6 +15,7 @@ class CreateGoodAnswerMapsTable extends Migration
 	{
 		Schema::create('good_answer_maps', function (Blueprint $table) {
 			$table->bigIncrements('id');
+			$table->bigInteger('question_id');
 			$table->bigInteger('answer_id');
 			$table->bigInteger('user_table_id');
 			$table->dateTime('created_at');

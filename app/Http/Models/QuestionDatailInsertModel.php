@@ -154,15 +154,16 @@ class QuestionDatailInsertModel extends Model
 	/**
 	 * 回答に対していいねを登録する
 	 * 
+	 * @param string $question_id 質問ID
 	 * @param string $answer_id 回答ID
 	 * @param int $user_table_id ユーザーテーブルID
 	 * @param date $date_time 現在日時
 	 * @return boolean $result TRUE or FALSE 他エラー時は-1を返す
 	 */
-	public function insertGoodAnswerMaps($answer_id, $user_table_id, $date_time)
+	public function insertGoodAnswerMaps($question_id, $answer_id, $user_table_id, $date_time)
 	{
 		// キー項目がない場合はエラーで-1を返す
-		if ($answer_id == "" || $user_table_id == "" || $date_time == "") {
+		if ($question_id == "" || $answer_id == "" || $user_table_id == "" || $date_time == "") {
 			return -1;
 		}
 
@@ -170,6 +171,7 @@ class QuestionDatailInsertModel extends Model
 		$sql = "";
 		$sql .= "INSERT INTO good_answer_maps ";
 		$sql .= "SET ";
+		$sql .= "question_id = :question_id, ";
 		$sql .= "answer_id = :answer_id, ";
 		$sql .= "user_table_id = :user_table_id, ";
 		$sql .= "created_at = :created_at, ";
@@ -177,6 +179,7 @@ class QuestionDatailInsertModel extends Model
 
 		// パラメータ設定
 		$param = [];
+		$param["question_id"] = $question_id;
 		$param["answer_id"] = $answer_id;
 		$param["user_table_id"] = $user_table_id;
 		$param["created_at"] = $date_time;

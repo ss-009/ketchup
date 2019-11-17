@@ -61,25 +61,50 @@ class QuestionDetailController extends Controller
 				throw new Exception();
 			}
 
-			// レスを取得し、回答データの配列にレスを追加する
+			// 回答のレスといいね数を取得し、回答データの配列に追加する
 			$order_by = '';
 			foreach ($answer_data as &$answer) {
 				$reply_count = $select_model->selectReplys($answer['reply_data'], $question_id, $answer['answer_id'], $order_by);
-				$answer['count_good_answer'] = $select_model->selectCountGoodAnswers($answer['answer_id']);
+				$answer['count_good_answer'] = $select_model->selectCountGoodAnswers($question_id, $answer['answer_id']);
 				// 返信データ取得時エラーの場合
-				if ($reply_count === -1) {
+				if ($reply_count === -1 || $answer['count_good_answer'] === -1) {
 					throw new Exception();
 				}
 			}
-			$select_model = null;
 
 			// ユーザータイプを判定する
 			$user_type = 'logout';
+			// 質問にいいねしているか判定する
+			$good_question = '';
 
 			// ログイン済みかチェック
 			if (Auth::check()) {
 				$user_table_id = Auth::id();
 				$user_type = 'login';
+
+				// 質問にいいねしているか確認
+				$select_count = $select_model->checkGoodQuestions($question_id, $user_table_id);
+				if ($select_count === -1) {
+					throw new Exception();
+				} else if ($select_count === 0) {
+					$good_question = 0;
+				} else {
+					$good_question = 1;
+				}
+
+				// 回答にいいねしているか確認
+				foreach ($answer_data as &$answer2) {
+					$select_count = $select_model->checkGoodAnswers($question_id, $answer2['answer_id'], $user_table_id);
+					if ($select_count === -1) {
+						throw new Exception();
+					} else if ($select_count === 0) {
+						$answer2['good_answer'] = 0;
+					} else {
+						$answer2['good_answer'] = 1;
+					}
+				}
+
+				$select_model = null;
 
 				// 質問者かチェック
 				if ($question_data[0]['user_table_id'] === $user_table_id) {
@@ -87,8 +112,8 @@ class QuestionDetailController extends Controller
 				
 				// 質問に回答済みかチェック
 				} else {
-					foreach ($answer_data as $data) {
-						if ($data['user_table_id'] === $user_table_id) {
+					foreach ($answer_data as $answer3) {
+						if ($answer3['user_table_id'] === $user_table_id) {
 							$user_type = 'respondent';
 							break;
 						}
@@ -137,7 +162,8 @@ class QuestionDetailController extends Controller
 				'answer_data' => $answer_data,
 				'count_answer' => $count_answer,
 				'user_type' => $user_type,
-				'count_good_quesiton' => $count_good_quesiton
+				'count_good_quesiton' => $count_good_quesiton,
+				'good_question' => $good_question
 			]);
 
 		} catch (\Exception $e) {
@@ -170,7 +196,7 @@ class QuestionDetailController extends Controller
 
 			// 質問の存在チェック
 			$select_model = new QuestionDatailSelectModel();
-			$select_count = $select_model->checkQuestions($question_id);
+			$select_count = $select_model->checkQuestions($question_id, 0);
 			if ($select_count !== 1) {
 				throw new Exception();
 			}
@@ -247,7 +273,7 @@ class QuestionDetailController extends Controller
 
 			// 質問の存在チェック
 			$select_model = new QuestionDatailSelectModel();
-			$select_count = $select_model->checkQuestions($question_id);
+			$select_count = $select_model->checkQuestions($question_id, 0);
 			if ($select_count !== 1) {
 				throw new Exception();
 			}
@@ -316,7 +342,7 @@ class QuestionDetailController extends Controller
 
 			// 質問の存在チェック
 			$select_model = new QuestionDatailSelectModel();
-			$select_count = $select_model->checkQuestions($question_id);
+			$select_count = $select_model->checkQuestions($question_id, 0);
 			if ($select_count !== 1) {
 				throw new Exception();
 			}
@@ -374,17 +400,23 @@ class QuestionDetailController extends Controller
 	public function goodQuestion(Request $request) {
 		try {
 			// 値を変数に格納
-			$question_id = $request->input('question_id');
+			$url = $_SERVER['HTTP_REFERER'];
+			$question_id = preg_replace('/[^0-9]/', '', $url);
 			$user_table_id = Auth::id();
 			$date_time = date('Y/m/d H:i:s');
-
 			$user_status = '';
+
+			// 質問の存在チェック
+			$select_model = new QuestionDatailSelectModel();
+			$select_count = $select_model->checkQuestions($question_id, '');
+			if ($select_count !== 1) {
+				throw new Exception();
+			}
+
 			DB::beginTransaction();
 
 			// いいねしているか確認
-			$select_model = new QuestionDatailSelectModel();
 			$select_count = $select_model->checkGoodQuestions($question_id, $user_table_id);
-
 			if ($select_count === -1) {
 				throw new Exception();
 			} else if ($select_count === 0) {
@@ -411,6 +443,89 @@ class QuestionDetailController extends Controller
 
 			// いいね数をカウントする
 			$select_count = $select_model->selectCountGoodQuestions($question_id);
+			if($select_count === -1) {
+				throw new Exception();
+			}
+			$select_model = null;
+
+			// 戻り値を設定してJSONで返す
+			$return_data = array(	'status_code'	=> 200,
+									'user_status'	=> $user_status,
+									'good_count'	=> $select_count
+			);
+			$return_json = json_encode($return_data);
+			return $return_json;
+
+		} catch (\Exception $e) {
+			DB::rollback();
+
+			$return_data = array('status_code'	=> 500);
+			$return_json = json_encode($return_data);
+			return $return_json;
+		}
+	}
+
+
+
+	/**
+	 * 回答にいいねをする、いいねを削除する
+	 *
+	 * @return View
+	 */
+	public function goodAnswer(Request $request) {
+		try {
+			// 値を変数に格納
+			$url = $_SERVER['HTTP_REFERER'];
+			$question_id = preg_replace('/[^0-9]/', '', $url);
+			$answer_id = $request->get('answer_id');
+			$user_table_id = Auth::id();
+			$date_time = date('Y/m/d H:i:s');
+			$user_status = '';
+
+			// 質問の存在チェック
+			$select_model = new QuestionDatailSelectModel();
+			$select_count = $select_model->checkQuestions($question_id, '');
+			if ($select_count !== 1) {
+				throw new Exception();
+			}
+
+			// 回答の存在チェック
+			$select_model = new QuestionDatailSelectModel();
+			$select_count = $select_model->checkAnswers($question_id, $answer_id);
+			if ($select_count !== 1) {
+				throw new Exception();
+			}
+
+			DB::beginTransaction();
+
+			// いいねしているか確認
+			$select_count = $select_model->checkGoodAnswers($question_id, $answer_id, $user_table_id);
+			if ($select_count === -1) {
+				throw new Exception();
+			} else if ($select_count === 0) {
+				// 登録していない場合登録
+				$insert_model = new QuestionDatailInsertModel();
+				$result = $insert_model->insertGoodAnswerMaps($question_id, $answer_id, $user_table_id, $date_time);
+				$insert_model = null;
+				if ($result !== true) {
+					throw new Exception();
+				}
+				$user_status = 1;
+			} else {
+				// 登録されている場合削除
+				$delete_model = new QuestionDatailDeleteModel();
+				$delete_count = $delete_model->deleteGoodAnswersMaps($question_id, $answer_id, $user_table_id);
+				$delete_model = null;
+				if ($delete_count < 1) {
+					throw new Exception();
+				}
+				$user_status = 0;
+			}
+
+			DB::commit();
+
+			// いいね数をカウントする
+			$select_count = $select_model->selectCountGoodAnswers($question_id, $answer_id);
 			if($select_count === -1) {
 				throw new Exception();
 			}

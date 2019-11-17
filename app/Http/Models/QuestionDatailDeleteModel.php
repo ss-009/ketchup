@@ -140,14 +140,15 @@ class QuestionDatailDeleteModel extends Model
 	/**
 	 * 回答のいいねを削除する
 	 * 
+	 * @param string $question_id 質問ID
 	 * @param string $answer_id 回答ID
 	 * @param int $user_table_id ユーザーテーブルID
 	 * @return int 削除した件数を返す 1：正常、0：更新対象なし、エラー時：-1を返す
 	 */
-	public function deleteGoodAnswersMaps($answer_id, $user_table_id)
+	public function deleteGoodAnswersMaps($question_id, $answer_id, $user_table_id)
 	{
 		// キー項目がない場合はエラーで-1を返す
-		if ($answer_id == "" || $user_table_id == "") {
+		if ($question_id == "" || $answer_id == "" || $user_table_id == "") {
 			return -1;
 		}
 
@@ -155,12 +156,15 @@ class QuestionDatailDeleteModel extends Model
 		$sql = "";
 		$sql .= "DELETE FROM good_answer_maps ";
 		$sql .= "WHERE ";
-		$sql .= "id = :answer_id ";
+		$sql .= "question_id = :question_id ";
+		$sql .= "AND ";
+		$sql .= "answer_id = :answer_id ";
 		$sql .= "AND ";
 		$sql .= "user_table_id = :user_table_id ";
 
 		// パラメータ設定
 		$param = [];
+		$param["question_id"] = $question_id;
 		$param["answer_id"] = $answer_id;
 		$param["user_table_id"] = $user_table_id;
 

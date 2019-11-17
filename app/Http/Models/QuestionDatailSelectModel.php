@@ -130,9 +130,10 @@ class QuestionDatailSelectModel extends Model
 	 * 指定の質問を取得する
 	 * 
 	 * @param int $question_id 指定の質問ID
+	 * @param int $close_flg 終了フラグを指定
 	 * @return int $select_count 取得したデータの件数1を返す エラー時は-1を返す
 	 */
-	public function checkQuestions($question_id)
+	public function checkQuestions($question_id, $close_flg)
 	{
 		// 質問IDがない場合は-1を返して処理終了
 		if ($question_id == "") {
@@ -148,14 +149,21 @@ class QuestionDatailSelectModel extends Model
 		$sql .= "id AS question_id ";
 		$sql .= "FROM questions ";
 		$sql .= "WHERE ";
-		$sql .= "delete_flg = 0 ";
-		$sql .= "AND ";
-		$sql .= "close_flg = 0 ";
-		$sql .= "LIMIT 1 ";
+		$sql .= "id = :question_id ";
 
 		// パラメータ設定
 		$param = [];
 		$param["question_id"] = $question_id;
+
+		if ($close_flg === 0) {
+			$sql .= "AND ";
+			$sql .= "close_flg = :close_flg ";
+			$param["close_flg"] = $close_flg;
+		}
+
+		$sql .= "AND ";
+		$sql .= "delete_flg = 0 ";
+		$sql .= "LIMIT 1 ";
 
 		try {
 			// SQLを実行
@@ -192,16 +200,10 @@ class QuestionDatailSelectModel extends Model
 		// SQL文の作成
 		$sql = "";
 		$sql .= "SELECT ";
-		$sql .= "count(good_question_maps.id) AS count_good_question_maps_id ";
-		$sql .= "FROM questions ";
-		$sql .= "LEFT OUTER JOIN good_question_maps ";
-		$sql .= "ON questions.id = good_question_maps.question_id ";
+		$sql .= "count(id) AS count_good_question_maps_id ";
+		$sql .= "FROM good_question_maps ";
 		$sql .= "WHERE ";
-		$sql .= "good_question_maps.question_id IS NOT NULL ";
-		$sql .= "AND ";
-		$sql .= "questions.delete_flg = 0 ";
-		$sql .= "AND ";
-		$sql .= "questions.id = :question_id ";
+		$sql .= "question_id = :question_id ";
 
 		// パラメータ設定
 		$param = [];
@@ -290,32 +292,30 @@ class QuestionDatailSelectModel extends Model
 	/**
 	 * 回答のいいね数を取得する
 	 * 
+	 * @param int $question_id 質問のID
 	 * @param int $answer_id 回答のID
 	 * @return int $select_count 取得したデータの件数を返す エラー時は-1を返す
 	 */
-	public function selectCountGoodAnswers($answer_id)
+	public function selectCountGoodAnswers($question_id, $answer_id)
 	{
 		// 質問IDがない場合は-1を返して処理終了
-		if ($answer_id == "") {
+		if ($question_id == "" || $answer_id == "") {
 			return -1;
 		}
 
 		// SQL文の作成
 		$sql = "";
 		$sql .= "SELECT ";
-		$sql .= "count(good_answer_maps.id) AS count_good_answer_maps_id ";
-		$sql .= "FROM answers ";
-		$sql .= "LEFT OUTER JOIN good_answer_maps ";
-		$sql .= "ON answers.id = good_answer_maps.answer_id ";
+		$sql .= "count(id) AS count_good_answer_maps_id ";
+		$sql .= "FROM good_answer_maps ";
 		$sql .= "WHERE ";
-		$sql .= "good_answer_maps.answer_id IS NOT NULL ";
+		$sql .= "question_id = :question_id ";
 		$sql .= "AND ";
-		$sql .= "answers.delete_flg = 0 ";
-		$sql .= "AND ";
-		$sql .= "answers.id = :answer_id ";
+		$sql .= "answer_id = :answer_id ";
 
 		// パラメータ設定
 		$param = [];
+		$param["question_id"] = $question_id;
 		$param["answer_id"] = $answer_id;
 
 		try {
@@ -628,14 +628,15 @@ class QuestionDatailSelectModel extends Model
 	/**
 	 * 指定の回答に指定のユーザーがいいねをしているかチェック
 	 * 
+	 * @param int $question_id 質問のID
 	 * @param int $answer_id 回答のID
 	 * @param int $user_table_id ユーザーテーブルID
 	 * @return int $select_count いいねをしている場合1、していない場合0、エラー-1
 	 */
-	public function checkGoodAnswers($answer_id, $user_table_id)
+	public function checkGoodAnswers($question_id, $answer_id, $user_table_id)
 	{
 		// 質問IDかユーザーテーブルIDがない場合は-1を返して処理終了
-		if ($answer_id == "" || $user_table_id == "") {
+		if ($question_id == "" || $answer_id == "" || $user_table_id == "") {
 			return -1;
 		}
 
@@ -644,13 +645,16 @@ class QuestionDatailSelectModel extends Model
 		$sql .= "SELECT id AS id ";
 		$sql .= "FROM good_answer_maps ";
 		$sql .= "WHERE ";
+		$sql .= "question_id = :question_id ";
+		$sql .= "AND ";
 		$sql .= "answer_id = :answer_id ";
 		$sql .= "AND ";
 		$sql .= "user_table_id = :user_table_id ";
-		$sql .= "LIMIT 1; ";
+		$sql .= "LIMIT 1 ";
 
 		// パラメータ設定
 		$param = [];
+		$param["question_id"] = $question_id;
 		$param["answer_id"] = $answer_id;
 		$param["user_table_id"] = $user_table_id;
 
