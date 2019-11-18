@@ -80,7 +80,7 @@
 				</li>
 				@endforeach
 			</ul>
-			{{ $question_list->appends(['sort' => 'votes'])->links() }}
+			{{ $question_list->appends(['sort' => $sort])->links() }}
 			{{ $question_list->links() }}
 		</div>
 	@include('layouts.side')

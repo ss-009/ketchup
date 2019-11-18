@@ -77,8 +77,8 @@ function sortQuestions() {
 /* Click page navigation */
 function clickPageNavigation() {
 
-	$('.pagination').find('.active').removeClass('active');
-	$(this).addClass('active');
+	// $('.pagination').find('.active').removeClass('active');
+	// $(this).addClass('active');
 
 	// var click = $(this).text();
 
