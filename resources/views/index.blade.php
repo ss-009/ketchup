@@ -19,12 +19,13 @@
 				<form class="form-inline float-right">
 					<div class="dropdown ml-2">
 							<select class="form-control" id="sort">
-							<option>質問日時が新しい順</option>
-							<option>質問日時が古い順</option>
-							<option>更新日時が新しい順</option>
-							<option>回答数が多い順</option>
-							<option>回答数が少ない順</option>
-							<option>いいねが多い順</option>
+							<option value="1">質問日時が新しい順</option>
+							<option value="2">質問日時が古い順</option>
+							<option value="3">更新日時が新しい順</option>
+							<option value="4">回答数が多い順</option>
+							<option value="5">回答数が少ない順</option>
+							<option value="6">いいねが多い順</option>
+							<option value="7">PV数が多い順</option>
 						</select>
 					</div>
 				</form>
@@ -79,6 +80,7 @@
 				</li>
 				@endforeach
 			</ul>
+			{{ $question_list->appends(['sort' => 'votes'])->links() }}
 			{{ $question_list->links() }}
 		</div>
 	@include('layouts.side')

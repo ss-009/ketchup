@@ -55,7 +55,8 @@ class TopSelectModel extends Model
 		$sql .= "questions.id AS question_id, ";
 		$sql .= "questions.question_title AS question_title, ";
 		$sql .= "questions.close_flg AS close_flg, ";
-		$sql .= "DATE_FORMAT(questions.created_at, '%Y年%c月%e日 %H:%i') AS created_at, ";
+		$sql .= "questions.created_at AS created_at, ";
+		$sql .= "questions.updated_at AS updated_at, ";
 		$sql .= "tag1.id AS tag_table_id_1, ";
 		$sql .= "tag2.id AS tag_table_id_2, ";
 		$sql .= "tag3.id AS tag_table_id_3, ";
@@ -66,7 +67,8 @@ class TopSelectModel extends Model
 		$sql .= "tag2.tag_name AS tag_name_2, ";
 		$sql .= "tag3.tag_name AS tag_name_3, ";
 		$sql .= "users.user_id AS user_id, ";
-		$sql .= "users.image AS image ";
+		$sql .= "users.image AS image, ";
+		$sql .= "pv_questions.count_pv AS count_pv ";
 		$sql .= "FROM questions ";
 		$sql .= "LEFT OUTER JOIN tags AS tag1 ";
 		$sql .= "ON questions.tag_id_1 = tag1.id ";
@@ -76,6 +78,8 @@ class TopSelectModel extends Model
 		$sql .= "ON questions.tag_id_3 = tag3.id ";
 		$sql .= "LEFT OUTER JOIN users ";
 		$sql .= "ON questions.user_table_id = users.id ";
+		$sql .= "LEFT OUTER JOIN pv_questions ";
+		$sql .= "ON questions.id = pv_questions.question_id ";
 		$sql .= "WHERE ";
 		$sql .= "users.id IS NOT NULL ";
 		$sql .= "AND ";

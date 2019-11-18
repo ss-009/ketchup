@@ -395,7 +395,7 @@ class QuestionDetailController extends Controller
 	/**
 	 * 質問にいいねをする、いいねを削除する
 	 *
-	 * @return View
+	 * @return Object
 	 */
 	public function goodQuestion(Request $request) {
 		try {

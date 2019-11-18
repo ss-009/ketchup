@@ -233,3 +233,8 @@ p {
 .footer-li a:hover {
 	color: #9d9d9d;
 }
+
+.active {
+	background-color: #3490dc!important;
+	color: #FFFFFF!important;
+}
