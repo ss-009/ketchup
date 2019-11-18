@@ -161,7 +161,7 @@ class TopController extends Controller
 				'sort' => $sort
 			]);
 		} catch (\Exception $e) {
-			echo 'ERROR';
+			return response()->view('errors.404');
 		}
 	}
 
@@ -306,7 +306,7 @@ class TopController extends Controller
 				'sort' => $sort
 			]);
 		} catch (\Exception $e) {
-			echo 'ERROR';
+			return response()->view('errors.404');
 		}
 	}
 }

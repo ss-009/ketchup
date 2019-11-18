@@ -40,9 +40,9 @@ class QuestionDetailController extends Controller
 			$question_data = [];
 			$select_model = new QuestionDatailSelectModel();
 			$select_count = $select_model->selectQuestionsData($question_data, $question_id);
-			// 質問データ未取得の場合エラー表示（後ほど404エラーページを出力する）
+			// 質問データ未取得の場合エラー表示
 			if ($select_count === 0 || $select_count === -1) {
-				throw new Exception();
+				return response()->view('errors.404');
 			}
 
 			// いいね数を取得
