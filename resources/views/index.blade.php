@@ -17,12 +17,12 @@
 		<div class="top-contents">
 			@isset($search_tag)
 			<div class="top-contents-search">
-				<p>タグ：『 {{$search_tag}} 』の検索結果</p>
+				<p>タグ：『 {{$search_tag}} 』の検索結果<span>{{$select_count}}件</span></p>
 			</div>
 			@endisset
 			@isset($keyword)
 			<div class="top-contents-search">
-				<p>キーワード：『 {{$keyword}} 』の検索結果</p>
+				<p>キーワード：『 {{$keyword}} 』の検索結果<span>{{$select_count}}件</span></p>
 			</div>
 			@endisset
 			<div class="top-contents-header">
@@ -46,8 +46,8 @@
 				<li class="top-question">
 					<div class="top-question-left">
 						<div class="top-answer-count">
-							<div class="top-answer-count-div"><a class="top-answer-count-a" href="question/{{$question['question_id']}}">回答数</a></div>
-								<p class="top-answer-count-p"><a class="top-answer-count-a" href="question/{{$question['question_id']}}">{{$question['count_answer']}}</a></p>
+							<div class="top-answer-count-div"><a class="top-answer-count-a" href="/question/{{$question['question_id']}}">回答数</a></div>
+								<p class="top-answer-count-p"><a class="top-answer-count-a" href="/question/{{$question['question_id']}}">{{$question['count_answer']}}</a></p>
 							</a>
 						</div>
 						<div>
@@ -60,22 +60,22 @@
 					</div>
 					<div class="top-question-inner d-inline-block">
 						<div class="top-question-title">
-							<a href="question/{{$question['question_id']}}">{{$question['question_title']}}</a>
+							<a href="/question/{{$question['question_id']}}">{{$question['question_title']}}</a>
 						</div>
 						<div></div>
 						<div class="top-question-tag">
 							<ul class="question-tag-ul">
 								<li class="question-tag-li">
-									<a href="{{$question['tag_id_1']}}">{{$question['tag_name_1']}}</a>
+									<a href="/tag/{{$question['tag_id_1']}}">{{$question['tag_name_1']}}</a>
 								</li>
 								@if ($question['tag_table_id_2'] !== 0)
 								<li class="question-tag-li">
-									<a href="{{$question['tag_id_2']}}">{{$question['tag_name_2']}}</a>
+									<a href="/tag/{{$question['tag_id_2']}}">{{$question['tag_name_2']}}</a>
 								</li>
 								@endif
 								@if ($question['tag_table_id_3'] !== 0)
 								<li class="question-tag-li">
-									<a href="{{$question['tag_id_3']}}">{{$question['tag_name_3']}}</a>
+									<a href="/tag/{{$question['tag_id_3']}}">{{$question['tag_name_3']}}</a>
 								</li>
 								@endif
 							</ul>
@@ -90,7 +90,11 @@
 				</li>
 				@endforeach
 			</ul>
-			{{ $question_list->appends(['sort' => $sort])->links() }}
+			@isset($keyword)
+				{{ $question_list->appends(['q' => $keyword])->appends(['sort' => $sort])->links() }}	
+				@else
+				{{ $question_list->appends(['sort' => $sort])->links() }}
+			@endisset
 			@else
 			<div class="none-questions">質問がありません。</div>
 			@endif

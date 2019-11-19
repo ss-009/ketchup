@@ -1,7 +1,7 @@
 $(function(){
 
 	// Dropdown set
-	$('.dropdown-menu .dropdown-item').on('click', setDropdownList)
+	$('.dropdown-menu .dropdown-item').on('click', setDropdownList);
 
 	// Dropdown TAB-key
 	$("body").keyup(keyPressTabKey);
@@ -19,7 +19,7 @@ $(function(){
 		placement	: 'bottom',
 		trigger		: 'hover'
 	});
-
+	
 });
 
 /* Set dropdown list */
@@ -46,5 +46,18 @@ function removeClass() {
 
 /* Sort questions */
 function sortQuestions() {
-	location.href = "?sort=" + $('#sort').val();
+	var arg  = new Object;
+	url = location.search.substring(1).split('&');
+	for(i=0; url[i]; i++) {
+		var k = url[i].split('=');
+		arg[k[0]] = k[1];
+	}
+	var q = arg.q;
+
+	if(q == null){
+		href = "?sort=" + $('#sort').val();
+	}else{
+		href = "?q=" + q + "&sort=" + $('#sort').val();;
+	}
+	location.href = href;
 }

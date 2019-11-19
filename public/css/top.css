@@ -120,8 +120,11 @@
 	font-weight: bold;
 	padding: 10px;
 	margin-top: 10px;
-
 	background-color: #EEEEEE;
+}
+
+.top-contents-search span {
+	margin-left: 20px;
 }
 
 .top-contents-header:first-child {

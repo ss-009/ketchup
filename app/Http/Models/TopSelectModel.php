@@ -47,6 +47,9 @@ class TopSelectModel extends Model
 	 */
 	public function selectQuestions(&$question_list, $tag_id, $keyword)
 	{
+		if($keyword === NULL){
+			return 0;
+		}
 		// データ格納用配列の初期化
 		$question_list = [];
 		// SQL文の作成

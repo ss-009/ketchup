@@ -154,6 +154,11 @@ class SearchController extends Controller
 					throw new Exception();
 			}
 
+			// 質問日時のハイフンをスラッシュに置換
+			foreach ($question_list as &$val) {
+				$val['created_at'] = str_replace('-', '/', $val['created_at']);
+			}
+
 			// ページ番号と切り取り始める配列の番号を初期化
 			$page = 1;
 			if (isset($data['page'])) {
@@ -183,7 +188,8 @@ class SearchController extends Controller
 				'question_list' => $result,
 				'sort' => $sort,
 				'ranking_tag_list' => $ranking_tag_list,
-				'search_tag' => $tag_name
+				'search_tag' => $tag_name,
+				'select_count' => $select_count
 			]);
 		} catch (\Exception $e) {
 			return abort(404);
@@ -203,9 +209,12 @@ class SearchController extends Controller
 			// 質問リストの取得に必要な配列と変数
 			$question_list = [];
 			$tag_id = '';
-			$keyword = '';
 			$select_model = new TopSelectModel();
+			
 			$keyword = $request->get('q');
+			if($keyword === ''){
+				$keyword = NULL;
+			}
 
 			// 質問リストを取得。取得エラーで戻り値が-1の時はエラーページを表示
 			$select_count = $select_model->selectQuestions($question_list, $tag_id, $keyword);
@@ -314,6 +323,11 @@ class SearchController extends Controller
 					throw new Exception();
 			}
 
+			// 質問日時のハイフンをスラッシュに置換
+			foreach ($question_list as &$val) {
+				$val['created_at'] = str_replace('-', '/', $val['created_at']);
+			}
+
 			// ページ番号と切り取り始める配列の番号を初期化
 			$page = 1;
 			if (isset($data['page'])) {
@@ -343,10 +357,11 @@ class SearchController extends Controller
 				'question_list' => $result,
 				'sort' => $sort,
 				'ranking_tag_list' => $ranking_tag_list,
-				'keyword' => $keyword
+				'keyword' => $keyword,
+				'select_count' => $select_count
 			]);
 		} catch (\Exception $e) {
-			echo 'ERROR!!';
+			return abort(404);
 		}
 	}
 }

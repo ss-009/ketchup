@@ -144,6 +144,11 @@ class TopController extends Controller
 					throw new Exception();
 			}
 
+			// 質問日時のハイフンをスラッシュに置換
+			foreach ($question_list as &$val) {
+				$val['created_at'] = str_replace('-', '/', $val['created_at']);
+			}
+
 			// ページ番号と切り取り始める配列の番号を初期化
 			$page = 1;
 			if (isset($data['page'])) {
