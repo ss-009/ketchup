@@ -27,10 +27,8 @@ function goodQuestion() {
 
 // good answer
 function goodAnswer() {
-
 	var good_answer = $(this);
 	var answer_id = good_answer.parents('.answer-list').find('.answer-id').val();
-
 	$.ajax({
 		headers: {
 			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

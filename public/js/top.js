@@ -53,7 +53,6 @@ function sortQuestions() {
 		arg[k[0]] = k[1];
 	}
 	var q = arg.q;
-
 	if(q == null){
 		href = "?sort=" + $('#sort').val();
 	}else{
