@@ -115,6 +115,15 @@
 	background-clip: border-box;
 }
 
+.top-contents-search {
+	font-size: 25px;
+	font-weight: bold;
+	padding: 10px;
+	margin-top: 10px;
+
+	background-color: #EEEEEE;
+}
+
 .top-contents-header:first-child {
 	border-radius: calc(.25rem - 1px) calc(.25rem - 1px) 0 0;
 }

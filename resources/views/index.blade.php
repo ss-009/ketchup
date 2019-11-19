@@ -15,22 +15,32 @@
 <div class="ketchup-container">
 	<div class="container-center">
 		<div class="top-contents">
+			@isset($search_tag)
+			<div class="top-contents-search">
+				<p>タグ：『 {{$search_tag}} 』の検索結果</p>
+			</div>
+			@endisset
+			@isset($keyword)
+			<div class="top-contents-search">
+				<p>キーワード：『 {{$keyword}} 』の検索結果</p>
+			</div>
+			@endisset
 			<div class="top-contents-header">
 				<form class="form-inline float-right">
 					<div class="dropdown ml-2">
 							<select class="form-control" id="sort">
-							<option value="1">質問日時が新しい順</option>
-							<option value="2">質問日時が古い順</option>
-							<option value="3">更新日時が新しい順</option>
-							<option value="4">回答数が多い順</option>
-							<option value="5">回答数が少ない順</option>
-							<option value="6">いいねが多い順</option>
-							<option value="7">PV数が多い順</option>
+							<option value="1" @if($sort == 1) selected @endif>質問日時が新しい順</option>
+							<option value="2" @if($sort == 2) selected @endif>質問日時が古い順</option>
+							<option value="3" @if($sort == 3) selected @endif>更新日時が新しい順</option>
+							<option value="4" @if($sort == 4) selected @endif>回答数が多い順</option>
+							<option value="5" @if($sort == 5) selected @endif>回答数が少ない順</option>
+							<option value="6" @if($sort == 6) selected @endif>いいねが多い順</option>
+							<option value="7" @if($sort == 7) selected @endif>PV数が多い順</option>
 						</select>
 					</div>
 				</form>
 			</div>
-
+			@if(count($question_list) > 0)
 			<ul class="top-question-list">
 				@foreach ($question_list as $question)
 				<li class="top-question">
@@ -81,6 +91,9 @@
 				@endforeach
 			</ul>
 			{{ $question_list->appends(['sort' => $sort])->links() }}
+			@else
+			<div class="none-questions">質問がありません。</div>
+			@endif
 		</div>
 	@include('layouts.side')
 	</div>

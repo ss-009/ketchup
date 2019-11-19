@@ -46,23 +46,5 @@ function removeClass() {
 
 /* Sort questions */
 function sortQuestions() {
-	$.ajax({
-		headers: {
-			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-		},
-		url     : '/question/sort_question',
-		data    : { 'sort' : $('#sort').val() },
-		type    : 'POST',
-		dataType: 'json',
-		success: function(data){
-			if (data['status_code'] === 200) {
-				if (data['user_status'] === 1) {
-					$('#count_good').addClass("question-good");
-				} else {
-					$('#count_good').removeClass("question-good");
-				}
-				$('#count_good').find('p').text(data['good_count']);
-			}
-		}
-	});
+	location.href = "?sort=" + $('#sort').val();
 }

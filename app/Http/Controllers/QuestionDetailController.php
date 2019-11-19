@@ -42,7 +42,7 @@ class QuestionDetailController extends Controller
 			$select_count = $select_model->selectQuestionsData($question_data, $question_id);
 			// 質問データ未取得の場合エラー表示
 			if ($select_count === 0 || $select_count === -1) {
-				return response()->view('errors.404');
+				return abort(404);
 			}
 
 			// いいね数を取得
@@ -121,6 +121,15 @@ class QuestionDetailController extends Controller
 				}
 			}
 
+			// タグランキングを取得する
+			$ranking_tag_list = [];
+			$common = new CommonController();
+			$result = $common->getTagRanking($ranking_tag_list);
+			$common = null;
+			if ($result === -1) {
+				throw new Exception();
+			}
+
 			// 最終アクセスのIPアドレス
 			$ip_address = $question_data[0]['end_ip_address'];
 			// アクセスしたIPアドレスを取得
@@ -163,7 +172,8 @@ class QuestionDetailController extends Controller
 				'count_answer' => $count_answer,
 				'user_type' => $user_type,
 				'count_good_quesiton' => $count_good_quesiton,
-				'good_question' => $good_question
+				'good_question' => $good_question,
+				'ranking_tag_list' => $ranking_tag_list
 			]);
 
 		} catch (\Exception $e) {

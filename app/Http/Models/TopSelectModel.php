@@ -270,18 +270,15 @@ class TopSelectModel extends Model
 	public function selectTagsCount(&$count_tag_list)
 	{
 		// データ格納用配列の初期化
-		$tag_list = [];
+		$count_tag_list = [];
 
 		// SQL文の作成
 		$sql = "";
 		$sql .= "SELECT ";
-		$sql .= "tags.tag_id AS tag_id, ";
-		$sql .= "tags.tag_name AS tag_name, ";
-		$sql .= "count(tag_maps.tag_table_id) AS count_tag_id ";
-		$sql .= "FROM tags ";
-		$sql .= "LEFT OUTER JOIN tag_maps ";
-		$sql .= "ON tags.id = tag_maps.tag_table_id ";
-		$sql .= "GROUP BY tag_maps.tag_table_id ";
+		$sql .= "tag_table_id, ";
+		$sql .= "count(tag_table_id) AS count_tag_id ";
+		$sql .= "FROM tag_maps ";
+		$sql .= "GROUP BY tag_table_id ";
 		$sql .= "ORDER BY count_tag_id DESC ";
 
 		try {
@@ -299,6 +296,50 @@ class TopSelectModel extends Model
 			return -1;
 		}
 	}
+
+
+
+	/**
+	 * タグテーブルIDからタグIDとタグ名を取得する
+	 * 
+	 * @param array $tag_data 取得したデータを格納する配列
+	 * @param int $tag_table_id タグテーブルID
+	 * @return int $select_count 取得したデータの件数を返す エラー時は-1を返す
+	 */
+	public function selectTagIdName(&$tag_data, $tag_table_id)
+	{
+		// データ格納用配列の初期化
+		$tag_data = [];
+
+		// SQL文の作成
+		$sql = "";
+		$sql .= "SELECT ";
+		$sql .= "tag_id, ";
+		$sql .= "tag_name ";
+		$sql .= "FROM tags ";
+		$sql .= "WHERE id = :tag_table_id ";
+		$sql .= "LIMIT 1 ";
+
+		$param = [];
+		$param['tag_table_id'] = $tag_table_id;
+
+		try {
+			// SQLを実行
+			$result = DB::select($sql, $param);
+			// オブジェクトを配列に変換して格納
+			$tag_data = json_decode(json_encode($result), true);
+			// 取得した件数をカウント
+			$select_count = count($tag_data);
+			// 取得したデータの件数を返す
+			return $select_count;
+
+		} catch (\Exception $e){
+			// エラー時は-1を返す
+			return -1;
+		}
+	}
+
+	
 
 	/**
 	 * ユーザー情報の一覧と件数を取得する

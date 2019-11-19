@@ -15,7 +15,8 @@ Route::get('/', 'TopController@index');
 Route::post('/sort', 'TopController@sort');
 
 Route::get('/question/{question_id}', 'QuestionDetailController@index');
-Route::get('/tag/{tag_id}', 'TagController@index');
+Route::get('/tag/{tag_id}', 'SearchController@tag');
+Route::get('/search', 'SearchController@search');
 
 Route::group(['middleware' => 'auth'], function() {
 	// 質問投稿

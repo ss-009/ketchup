@@ -220,7 +220,7 @@ class QuestionController extends Controller
 			$select_count = $select_model->selectQuestionsData($question_data, $question_id);
 			// 質問データ未取得の場合エラー表示
 			if ($select_count === 0 || $select_count === -1) {
-				return response()->view('errors.404');
+				return abort(404);
 			}
 
 			// ユーザーIDを取得
@@ -273,7 +273,7 @@ class QuestionController extends Controller
 		$select_model = new QuestionDatailSelectModel();
 		$select_count = $select_model->selectQuestionsData($question_data, $question_id);
 		$select_model = null;
-		// 質問データ未取得の場合エラー表示（404エラーページを出力する）
+		// 質問データ未取得の場合エラー表示
 		if ($select_count === 0 || $select_count === -1) {
 			echo '<script type="text/javascript">alert("エラーが発生しました。");window.history.back(-2)</script>';
 		}

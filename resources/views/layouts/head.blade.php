@@ -35,8 +35,10 @@
 							<img src="{{ asset('img/common/ketchupHeader.png') }}" alt="Ketchup">
 						</a>
 						<div class="search_container d-inline-block align-middle">
-							<input type="text" class="rounded align-top" size="25" placeholder="キーワード検索" autofocus>
-							<a href="javascript:void(0)"><img src="{{ asset('img/common/search.svg') }}" alt="検索" id="search"></a>
+							<form method="get" name="search" action="/search">
+								<input type="text" name="q" class="rounded align-top" size="25" @isset($keyword) value="{{$keyword}}" @endisset placeholder="キーワード検索" autofocus>
+								<a href="javascript:search.submit()"><img src="{{ asset('img/common/search.svg') }}" alt="検索" id="search"></a>
+							</form>
 						</div>
 					</div>
 

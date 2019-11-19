@@ -238,3 +238,8 @@ p {
 	background-color: #3490dc!important;
 	color: #FFFFFF!important;
 }
+
+.none-questions {
+	text-align: center;
+	padding: 30px;
+}
