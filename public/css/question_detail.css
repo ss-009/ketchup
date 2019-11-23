@@ -184,10 +184,6 @@
 	margin-top: 50px;
 }
 
-.last-comment-area p {
-	font-size: 12px!important;
-}
-
 .last-comment {
 	width: 100%;
 	font-size: 14px!important;
@@ -345,15 +341,19 @@ div.reply-content:last-child{
 
 .question-content p, .answer-write-content textarea, .answer-list p, .reply-content p, .reply-area,
 .answer-none, .top-entry-datetime, .question-status, #answer_content_label, #reply_content_label, .addition-body p,
-#best_answer_content_label, .last-comment, .last-comment-area p, .question-last-comment, .question-last-comment-date {
+#best_answer_content_label, .last-comment, .content-input-p, .question-last-comment, .question-last-comment-date {
 	font-family: 'Nunito';
 	color: #333;
 }
 
 .question-content p, #answer_content_label, .answer-list p, #reply_content_label, .addition-body p,
-#best_answer_content_label, .last-comment, .last-comment-area p {
+#best_answer_content_label, .last-comment, .content-input-p {
 	white-space: pre-wrap;
 	font-size: 16px;
 	color: #333;
 	letter-spacing: 0.5px;
+}
+
+.content-input-p {
+	font-size: 12px!important;
 }

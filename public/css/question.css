@@ -3,3 +3,81 @@
 .required {
 	color: #FF0000;
 }
+
+.form-control {
+	width: 80%;
+}
+
+::placeholder {
+	color: #b1b1b1!important;
+}
+
+.form-m {
+	padding-right: 100px;
+	font-size: 16px;
+	margin: auto;
+	width: 1200px;
+}
+
+input, textarea {
+	font-family: 'Nunito';
+	color: #333;
+}
+
+.form-control {
+	box-shadow: none!important;
+}
+
+#question_content {
+	height: 150px;
+}
+
+#question_addition {
+	height: 120px;	
+}
+
+.content {
+	white-space: pre-wrap;
+	font-size: 16px;
+	color: #333;
+	letter-spacing: 0.5px;
+	width: 60%;
+}
+
+.content-confirm {
+	flex: 1 1 auto;
+	padding: 1.25rem;
+	padding-right: 100px;
+	justify-content: center;
+	margin: auto;
+}
+
+.content-header {
+	text-align: center;
+	margin: 25px;
+	font-size: 28px;
+	font-weight: bold;
+}
+
+.btn-confirm {
+	text-align: center;
+	margin-left: 300px;
+}
+
+.btn-update {
+	text-align: right;
+}
+
+.btn-confirm .btn-outline-secondary, .btn-update .btn-outline-secondary {
+	padding: 7px 10px;
+	margin-right: 5px;
+}
+
+.btn-confirm .btn-outline-danger, .btn-update .btn-outline-danger {
+	padding: 7px 40px;
+}
+
+.content-body {
+	text-align: center;
+	font-size: 20px;
+}

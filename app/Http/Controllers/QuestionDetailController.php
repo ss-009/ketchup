@@ -204,6 +204,12 @@ class QuestionDetailController extends Controller
 				throw new Exception();
 			}
 
+			// 文字数チェック
+			$word_count = mb_strlen($answer_content);
+			if ($word_count < 5 || $word_count > 2000) {
+				throw new Exception();
+			}
+
 			// 質問の存在チェック
 			$select_model = new QuestionDatailSelectModel();
 			$select_count = $select_model->checkQuestions($question_id, 0);
@@ -281,6 +287,12 @@ class QuestionDetailController extends Controller
 				throw new Exception();
 			}
 
+			// 文字数チェック
+			$word_count = mb_strlen($reply_content);
+			if ($word_count < 5 || $word_count > 1000) {
+				throw new Exception();
+			}
+
 			// 質問の存在チェック
 			$select_model = new QuestionDatailSelectModel();
 			$select_count = $select_model->checkQuestions($question_id, 0);
@@ -347,6 +359,12 @@ class QuestionDetailController extends Controller
 
 			// 改ざんチェック
 			if ($question_id !== $page_id) {
+				throw new Exception();
+			}
+
+			// 文字数チェック
+			$word_count = mb_strlen($last_comment);
+			if ($word_count < 5 || $word_count > 40) {
 				throw new Exception();
 			}
 

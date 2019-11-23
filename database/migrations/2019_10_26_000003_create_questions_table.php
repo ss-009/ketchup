@@ -22,7 +22,7 @@ class CreateQuestionsTable extends Migration
 			$table->bigInteger('tag_id_1');
 			$table->bigInteger('tag_id_2')->nullable();
 			$table->bigInteger('tag_id_3')->nullable();
-			$table->string('last_comment', 30)->nullable();
+			$table->string('last_comment', 40)->nullable();
 			$table->unsignedTinyInteger('close_flg');
 			$table->dateTime('created_at');
 			$table->dateTime('updated_at');

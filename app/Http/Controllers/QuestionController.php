@@ -192,7 +192,9 @@ class QuestionController extends Controller
 				// 正常登録時、二重投稿を防止しViewを表示
 				$request->session()->regenerateToken();
 				DB::commit();
-				return view('question_complete');
+				return view('question_complete')->with([
+					'question_id' => $question_id,
+				]);
 
 			} catch (\Exception $e) {
 				DB::rollback();
@@ -294,6 +296,7 @@ class QuestionController extends Controller
 		$tag_id_1 = (int)$data['tag_id_1'];
 		$tag_id_2 = (int)$data['tag_id_2'];
 		$tag_id_3 = (int)$data['tag_id_3'];
+		$created_at = $question_data[0]['created_at'];
 
 		// バリデーションルール
 		$rules = [	'question_addition' => 'required|min:5|max:1000',
@@ -343,7 +346,8 @@ class QuestionController extends Controller
 			'tag_id_3' => $tag_id_3,
 			'tag_name_1' => $tag_name_1,
 			'tag_name_2' => $tag_name_2,
-			'tag_name_3' => $tag_name_3
+			'tag_name_3' => $tag_name_3,
+			'created_at' => $created_at
 		]);
 	}
 
@@ -426,7 +430,9 @@ class QuestionController extends Controller
 				// 正常登録時、二重投稿を防止しViewを表示
 				DB::commit();
 				$request->session()->regenerateToken();
-				return view('addition_complete');
+				return view('addition_complete')->with([
+					'question_id' => $question_id,
+				]);
 
 			} catch (\Exception $e) {
 				DB::rollback();

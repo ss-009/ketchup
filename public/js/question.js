@@ -19,8 +19,8 @@ function decisionBestAnswer() {
 	var last_comment = $('#last_comment').val();
 	var word_count = last_comment.length;
 	// 文字数チェック
-	if(word_count < 5 || word_count > 2000) {
-		alert('5文字以上2000文字以下で入力してください。')
+	if(word_count < 5 || word_count > 40) {
+		alert('5文字以上40文字以下で入力してください。')
 	// 文字数OK時submit
 	} else {
 		// ページIDを取得しフォームに追加する

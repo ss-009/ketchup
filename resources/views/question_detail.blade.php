@@ -156,11 +156,12 @@
 									@endisset
 									@if($user_type !== 'logout' && $question['close_flg'] === 0)
 									<div class="reply-write-content">
-										<div class="user">
+										<div class="user d-inline-block">
 											<a href="#"><img src="https://placehold.jp/50x50.png" width="30px"><span>{{ Auth::user()->user_id }}</span></a>
 										</div>
+										<div class="content-input-p d-inline-block mt-2 float-right"><span class="text-danger">※</span><span>5文字以上1000文字以下</span></div>
 										<input type="hidden" name="answer_id" class="answer-id" value="{{$answer['answer_id']}}">
-										<textarea class="reply-area"></textarea>
+										<textarea class="reply-area" maxlength='1000'></textarea>
 										<div class="reply-write-button"><button type="button" class="btn btn-outline-danger reply-button" data-toggle="modal" data-target="#modal_reply">返信する</button></div>
 									</div>
 									@endif
@@ -175,10 +176,11 @@
 					回答する
 					</div>
 					<div class="answer-write-content">
-						<div class="user">
+						<div class="user d-inline-block">
 							<a href="#"><img src="https://placehold.jp/50x50.png" width="40px"><span>{{ Auth::user()->user_id }}</span></a>
 						</div>
-						<textarea id="answer_area"></textarea>
+						<div class="content-input-p d-inline-block mt-3 float-right"><span class="text-danger">※</span><span>5文字以上2000文字以下</span></div>
+						<textarea id="answer_area" maxlength='2000'></textarea>
 						<div class="answer-write-button"><button type="button" class="btn btn-outline-danger answer-button" data-toggle="modal" data-target="#modal_answer" id="answer_button">回答する</button></div>
 					</div>
 				</div>
@@ -267,8 +269,8 @@
 					</div>
 					<p id="best_answer_content_label"></p>
 					<div class="last-comment-area">
-						<p><span class="text-danger">※</span>コメント：<span>5文字以上50文字以下</span></p>
-						<textarea class="last-comment" name="last_comment" id="last_comment">ありがとうございました。</textarea>
+						<p class="content-input-p"><span class="text-danger">※</span>コメント：<span>5文字以上40文字以下</span></p>
+						<textarea class="last-comment" name="last_comment" id="last_comment" maxlength='40'>ありがとうございました。</textarea>
 					</div>
 					<input type="hidden" name="question_id" value="{{$question_id}}">
 					<input type="hidden" name="best_answer_id" id="best_answer_id">

@@ -168,17 +168,6 @@
 	box-shadow:none;
 }
 
-.form-control-focus {
-	color: #171717;
-	border-color: #a1cbef!important;
-	outline: 0!important;
-	box-shadow: 0 0 0 .2rem rgba(52, 144, 220, .25)!important;
-}
-
-.form-control:hover {
-	background-color: #EEEEEE;
-}
-
 /* contents question list */
 
 .top-question-left {
