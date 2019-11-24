@@ -12,11 +12,13 @@
 */
 
 Route::get('/', 'TopController@index');
-Route::post('/sort', 'TopController@sort');
 
 Route::get('/question/{question_id}', 'QuestionDetailController@index');
 Route::get('/tag/{tag_id}', 'SearchController@tag');
 Route::get('/search', 'SearchController@search');
+Route::post('/sort', 'TopController@sort');
+
+Route::get('/user/{user_id}', 'UserController@index');
 
 Route::group(['middleware' => 'auth'], function() {
 	// 質問投稿
@@ -39,9 +41,20 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::post('/question/good_question', 'QuestionDetailController@goodQuestion');
 	// 回答にいいね
 	Route::post('/question/good_answer', 'QuestionDetailController@goodAnswer');
+	// ユーザー情報
+	Route::post('/user/info', 'UserController@info');
+	// ユーザー情報変更確認
+	Route::post('/user/info/confirm', 'UserController@confirm');
+	// ユーザー情報変更
+	Route::post('/user/info/conplete', 'UserController@update');
+	// パスワード変更
+	Route::post('/user/password', 'UserController@password');
+	Route::post('/user/password/complete', 'UserController@passwordUpdate');
+	// 退会ページ
+	Route::post('/user/unsubscribe', 'UserController@unsubscribe');
+	Route::post('/user/unsubscribe/complete', 'UserController@delete');
+
 });
 
-
 Auth::routes();
-
 Route::get('/home', 'HomeController@index')->name('home');

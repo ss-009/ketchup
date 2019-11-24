@@ -35,16 +35,16 @@ class QuestionDetailController extends Controller
 	 */
 	public function index($question_id)
 	{
-		try {
-			// 質問データの取得
-			$question_data = [];
-			$select_model = new QuestionDatailSelectModel();
-			$select_count = $select_model->selectQuestionsData($question_data, $question_id);
-			// 質問データ未取得の場合エラー表示
-			if ($select_count === 0 || $select_count === -1) {
-				return abort(404);
-			}
+		// 質問データの取得
+		$question_data = [];
+		$select_model = new QuestionDatailSelectModel();
+		$select_count = $select_model->selectQuestionsData($question_data, $question_id);
+		// 質問データ未取得の場合エラー表示
+		if ($select_count === 0 || $select_count === -1) {
+			return abort(404);
+		}
 
+		try {
 			// いいね数を取得
 			$count_good_quesiton = $select_model->selectCountGoodQuestions($question_id);
 			// データ取得時エラーの場合
