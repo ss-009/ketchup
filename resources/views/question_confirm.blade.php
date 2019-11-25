@@ -41,7 +41,7 @@
 				</div>
 				<div class="user-date">
 					<div class="user">
-						<a href="#"><img src="https://placehold.jp/50x50.png" width="40px"><span>{{ Auth::user()->user_id }}</span></a>
+						<a href="/user/{{ Auth::user()->user_id }}"><img src="https://placehold.jp/50x50.png" width="40px"><span>{{ Auth::user()->user_id }}</span></a>
 					</div>
 				</div>
 				<div class="question-content"><p>{{$question_content}}</p></div>

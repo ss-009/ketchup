@@ -204,7 +204,7 @@ class UserController extends Controller
 			return view('user')->with([
 				'question_list' => $result,
 				'sort' => $sort,
-				'user_data' => $user_data,
+				'user_data' => $user_data[0],
 			]);
 		} catch (\Exception $e) {
 			echo '<script type="text/javascript">alert("エラーが発生しました。");window.history.back(-2)</script>';

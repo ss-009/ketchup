@@ -83,7 +83,7 @@
 						<div class="top-question-data">
 							<div class="top-entry-datetime d-inline-block">投稿日時：{{$question['created_at']}}</div>
 							<!-- <div class="top-question-user d-inline-block"><a href="#"><img src="{{$question['image']}}">{{$question['user_id']}}</a></div> -->
-							<div class="top-question-user d-inline-block"><a href="#"><img src="{{ asset('img/common/test-user.png') }}">{{$question['user_id']}}</a></div>
+							<div class="top-question-user d-inline-block"><a href="/user/{{$question['user_id']}}"><img src="{{ asset('img/common/test-user.png') }}">{{$question['user_id']}}</a></div>
 							<div class="top-good-count d-inline-block"><i class="fas fa-thumbs-up"></i>{{$question['good_question']}}</div>
 						</div>	
 					</div>

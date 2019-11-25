@@ -40,7 +40,7 @@
 				</div>
 				<div class="user-date">
 					<div class="user">
-						<a href="#"><img src="https://placehold.jp/50x50.png" width="40px"><span>{{$question['user_id']}}</span></a>
+						<a href="/user/{{$question['user_id']}}"><img src="https://placehold.jp/50x50.png" width="40px"><span>{{$question['user_id']}}</span></a>
 					</div>
 					<div class="date">
 						<div class="top-entry-datetime">投稿日時：{{$question['created_at']}}</div>
@@ -101,7 +101,7 @@
 									<input type="hidden" name="answer_id" class="answer-id" value="{{$answer['answer_id']}}">
 									<div class="user-list">
 										<div class="user">
-											<a href="#"><img src="https://placehold.jp/50x50.png" width="40px"><span class="user-id">{{$answer['user_id']}}</span></a>
+											<a href="/user/{{$answer['user_id']}}"><img src="https://placehold.jp/50x50.png" width="40px"><span class="user-id">{{$answer['user_id']}}</span></a>
 										</div>
 										<div class="date">
 											<div class="top-entry-datetime">投稿日時：{{$answer['created_at']}}</div>
@@ -144,7 +144,7 @@
 									<div class="reply-content">
 										<div class="user-list">
 											<div class="user">
-												<a href="#"><img src="https://placehold.jp/50x50.png" width="30px"><span>{{$reply['user_id']}}</span></a>
+												<a href="/user/{{$reply['user_id']}}"><img src="https://placehold.jp/50x50.png" width="30px"><span>{{$reply['user_id']}}</span></a>
 											</div>
 											<div class="date">
 												<div class="top-entry-datetime">投稿日時：{{$reply['created_at']}}</div>
@@ -157,7 +157,7 @@
 									@if($user_type !== 'logout' && $question['close_flg'] === 0)
 									<div class="reply-write-content">
 										<div class="user d-inline-block">
-											<a href="#"><img src="https://placehold.jp/50x50.png" width="30px"><span>{{ Auth::user()->user_id }}</span></a>
+											<a href="/user/{{ Auth::user()->user_id }}"><img src="https://placehold.jp/50x50.png" width="30px"><span>{{ Auth::user()->user_id }}</span></a>
 										</div>
 										<div class="content-input-p d-inline-block mt-2 float-right"><span class="text-danger">※</span><span>5文字以上1000文字以下</span></div>
 										<input type="hidden" name="answer_id" class="answer-id" value="{{$answer['answer_id']}}">
@@ -177,7 +177,7 @@
 					</div>
 					<div class="answer-write-content">
 						<div class="user d-inline-block">
-							<a href="#"><img src="https://placehold.jp/50x50.png" width="40px"><span>{{ Auth::user()->user_id }}</span></a>
+							<a href="/user/{{ Auth::user()->user_id }}"><img src="https://placehold.jp/50x50.png" width="40px"><span>{{ Auth::user()->user_id }}</span></a>
 						</div>
 						<div class="content-input-p d-inline-block mt-3 float-right"><span class="text-danger">※</span><span>5文字以上2000文字以下</span></div>
 						<textarea id="answer_area" maxlength='2000'></textarea>

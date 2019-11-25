@@ -97,12 +97,13 @@ class UserSelectModel extends Model
 		// SQL文の作成
 		$sql = "";
 		$sql .= "SELECT ";
-		$sql .= "user_id, ";
+		$sql .= "id AS id, ";
+		$sql .= "user_id AS user_id, ";
 		$sql .= "email, ";
 		$sql .= "profile, ";
 		$sql .= "image, ";
 		$sql .= "score, ";
-		$sql .= "created_at ";
+		$sql .= "DATE_FORMAT(created_at, '%Y/%c/%e ～') AS created_at ";
 		$sql .= "FROM users ";
 		$sql .= "WHERE ";
 		$sql .= "deleted_at IS NULL ";

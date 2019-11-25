@@ -4,13 +4,52 @@
 @section('pageCss')
 <link href="{{ asset('css/common.css') }}" rel="stylesheet">
 <link href="{{ asset('css/top.css') }}" rel="stylesheet">
+<link href="{{ asset('css/user.css') }}" rel="stylesheet">
 @endsection
 
 @include('layouts.head')
 
 <div class="ketchup-container">
 	<div class="container-center">
+
+		<div class="user-data">
+			<div class="user-img">
+				<img src="{{ asset('img/common/test-user.png') }} " width="200px">
+			</div>
+			<div class="user-id-created-at">
+				<div class="user-id">
+				{{$user_data['user_id']}}
+				</div>
+				<div class="user-created-at">
+				{{$user_data['created_at']}}
+				</div>
+			</div>
+			<div class="user-profile">
+			@isset($user_data['profile'])
+			{{$user_data['profile']}}
+			@else
+			プロフィール：未記入
+			@endif
+			</div>
+
+			@if (Auth::check())
+				@if(Auth::id() === $user_data['id'])
+				<div class="user-account">
+					<div class="user-info"><a href="#"><span>■</span>ユーザー情報を編集する</a></div>
+					<div class="user-password"><a href="#"><span>■</span>パスワードを変更する</a></div>
+					<div class="user-unsubscribe"><a href="#"><span>■</span>退会はこちら</a></div>
+				</div>
+				@endif
+			@endif
+
+		</div>
+
 		<div class="top-contents">
+			<div class="flg-list">
+				<span><a class="flg-active" href="/user/{{$user_data['user_id']}}?flg=q" id="flg_q">質問一覧</button></a></span>
+				<span><a href="/user/{{$user_data['user_id']}}?flg=a" id="flg_a">回答一覧</button></a></span>
+				<span><a href="/user/{{$user_data['user_id']}}?flg=b" id="flg_b">ベストアンサー</button></a></span>
+			</div>
 			<div class="top-contents-header">
 				<form class="form-inline float-right">
 					<div class="dropdown ml-2">
@@ -69,7 +108,7 @@
 						<div class="top-question-data">
 							<div class="top-entry-datetime d-inline-block">投稿日時：{{$question['created_at']}}</div>
 							<!-- <div class="top-question-user d-inline-block"><a href="#"><img src="{{$question['image']}}">{{$question['user_id']}}</a></div> -->
-							<div class="top-question-user d-inline-block"><a href="#"><img src="{{ asset('img/common/test-user.png') }}">{{$question['user_id']}}</a></div>
+							<div class="top-question-user d-inline-block"><a href="/user/{{$question['user_id']}}"><img src="{{ asset('img/common/test-user.png') }}">{{$question['user_id']}}</a></div>
 							<div class="top-good-count d-inline-block"><i class="fas fa-thumbs-up"></i>{{$question['good_question']}}</div>
 						</div>	
 					</div>

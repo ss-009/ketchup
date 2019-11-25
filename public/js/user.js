@@ -1,5 +1,8 @@
 $(function(){
 
+	// Judgment active flg
+	judgmentActiveFlg();
+
 	// Dropdown set
 	$('.dropdown-menu .dropdown-item').on('click', setDropdownList);
 
@@ -39,6 +42,30 @@ function removeClass() {
 
 /* Sort questions */
 function sortQuestions() {
+	var flg = returnFlg();
+	if(flg == null){
+		href = "?sort=" + $('#sort').val();
+	}else{
+		href = "?flg=" + flg + "&sort=" + $('#sort').val();;
+	}
+	location.href = href;
+}
+
+/* Judgment active flg */
+function judgmentActiveFlg() {
+	var flg = returnFlg();
+	if(flg == 'a' || flg == 'b'){
+		$('#flg_q').removeClass("flg-active");
+		if(flg == 'a') {
+			$('#flg_a').addClass("flg-active");
+		} else if (flg == 'b') {
+			$('#flg_b').addClass("flg-active");
+		}
+	}
+}
+
+/* Return flg */
+function returnFlg() {
 	var arg  = new Object;
 	url = location.search.substring(1).split('&');
 	for(i=0; url[i]; i++) {
@@ -46,10 +73,5 @@ function sortQuestions() {
 		arg[k[0]] = k[1];
 	}
 	var flg = arg.flg;
-	if(flg == null){
-		href = "?sort=" + $('#sort').val();
-	}else{
-		href = "?flg=" + flg + "&sort=" + $('#sort').val();;
-	}
-	location.href = href;
+	return flg;
 }

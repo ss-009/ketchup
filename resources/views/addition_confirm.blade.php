@@ -41,7 +41,7 @@
 				</div>
 				<div class="user-date">
 					<div class="user">
-						<a href="#"><img src="https://placehold.jp/50x50.png" width="40px"><span>{{ Auth::user()->user_id }}</span></a>
+						<a href="/user/{{ Auth::user()->user_id }}"><img src="https://placehold.jp/50x50.png" width="40px"><span>{{ Auth::user()->user_id }}</span></a>
 					</div>
 					<div class="date">
 						<div class="top-entry-datetime">投稿日時：{{$created_at}}</div>

@@ -46,7 +46,7 @@ Route::group(['middleware' => 'auth'], function() {
 	// ユーザー情報変更確認
 	Route::post('/user/info/confirm', 'UserController@confirm');
 	// ユーザー情報変更
-	Route::post('/user/info/conplete', 'UserController@update');
+	Route::post('/user/info/complete', 'UserController@update');
 	// パスワード変更
 	Route::post('/user/password', 'UserController@password');
 	Route::post('/user/password/complete', 'UserController@passwordUpdate');
