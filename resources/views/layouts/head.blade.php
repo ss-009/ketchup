@@ -72,10 +72,18 @@
 									</a>
 
 									<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+										<a class="dropdown-item" href="/user/{{ Auth::user()->user_id }}">
+											{{ __('プロフィール') }}
+										</a>
 										<a class="dropdown-item" href="{{ route('logout') }}"
 										onclick="event.preventDefault();
 														document.getElementById('logout-form').submit();">
-											{{ __('Logout') }}
+											{{ __('ユーザー情報を編集') }}
+										</a>
+										<a class="dropdown-item" href="{{ route('logout') }}"
+										onclick="event.preventDefault();
+														document.getElementById('logout-form').submit();">
+											{{ __('ログアウト') }}
 										</a>
 
 										<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

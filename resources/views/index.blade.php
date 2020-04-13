@@ -96,7 +96,7 @@
 				{{ $question_list->appends(['sort' => $sort])->links() }}
 			@endisset
 			@else
-			<div class="none-questions">質問がありません。</div>
+			<div class="none-questions">該当する質問がありません。</div>
 			@endif
 		</div>
 	@include('layouts.side')

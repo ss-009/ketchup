@@ -35,8 +35,7 @@
 			@if (Auth::check())
 				@if(Auth::id() === $user_data['id'])
 				<div class="user-account">
-					<div class="user-info"><a href="#"><span>■</span>ユーザー情報を編集する</a></div>
-					<div class="user-password"><a href="#"><span>■</span>パスワードを変更する</a></div>
+					<div class="user-info"><a href="#"><span>■</span>ユーザー情報を編集</a></div>
 					<div class="user-unsubscribe"><a href="#"><span>■</span>退会はこちら</a></div>
 				</div>
 				@endif
@@ -117,7 +116,7 @@
 			</ul>
 			{{ $question_list->appends(['sort' => $sort])->links() }}
 			@else
-			<div class="none-questions">質問がありません。</div>
+			<div class="none-questions">該当する質問がありません。</div>
 			@endif
 		</div>
 	</div>

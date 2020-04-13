@@ -9,38 +9,35 @@
 		</div>
 
 		<div class="header-bottom-end d-inline-block align-middle">
-			<div class="top-user">
-				<div class="top-user-register">
-					<p>ユーザーID</p>
-					<input id="user_id" name="user_id" type="text" class="rounded @error('user_id') is-invalid @enderror" value="{{ old('user_id') }}" placeholder="ketchup" required autocomplete="user_id">
-					@error('user_id')
-						<span class="invalid-feedback" role="alert">
-							<strong>{{ $message }}</strong>
-						</span>
-					@enderror
+			<form method="POST" action="{{ route('register') }}">
+			@csrf
+				<div class="top-user">
+					<div class="top-user-register">
+						<p>ユーザーID</p>
+						<input id="user_id" name="user_id" type="text" class="rounded @error('user_id') is-invalid @enderror" value="{{ old('user_id') }}" placeholder="ketchup" required autocomplete="user_id">
+						@error('user_id')
+							<p class="error-message">※{{ $message }}</p>
+						@enderror
+					</div>
+					<div class="top-user-register">
+						<p>メールアドレス</p>
+						<input id="email" name="email" type="text" class="rounded @error('email') is-invalid @enderror" value="{{ old('email') }}" placeholder="info@ketchup-music.com" required autocomplete="email">
+						@error('email')
+							<p class="error-message">※{{ $message }}</p>
+						@enderror
+					</div>
+					<div class="top-user-register">
+						<p>パスワード (英数字記号8文字以上)</p>
+						<input id="password" name="password" type="password" class="rounded @error('password') is-invalid @enderror" value="{{ old('password') }}" placeholder="********" required autocomplete="current-password">
+						@error('password')
+							<p class="error-message">※{{ $message }}</p>
+						@enderror
+					</div>
 				</div>
-				<div class="top-user-register">
-					<p>メールアドレス</p>
-					<input id="email" name="email" type="text" class="rounded @error('email') is-invalid @enderror" value="{{ old('email') }}" placeholder="info@ketchup-music.com" required autocomplete="email">
-					@error('email')
-						<span class="invalid-feedback" role="alert">
-							<strong>{{ $message }}</strong>
-						</span>
-					@enderror
+				<div class="text-center pt-1">
+					<button class="top-user-register-sign-up" type="submit" id="top_register">登録する</a>
 				</div>
-				<div class="top-user-register">
-					<p>パスワード (英数字記号8文字以上)</p>
-					<input id="password" name="password" type="password" class="rounded @error('password') is-invalid @enderror" value="{{ old('password') }}" placeholder="********" required autocomplete="current-password">
-					@error('password')
-						<span class="invalid-feedback" role="alert">
-							<strong>{{ $message }}</strong>
-						</span>
-					@enderror
-				</div>
-			</div>
-			<div class="text-center pt-1">
-				<a class="top-user-register-sign-up" href="javascript:void(0)" id="top_register">登録する</a>
-			</div>
+			</form>
 			<div class="sns-register mt-5">
 				<div class="sns-auth bg-light d-inline-block">
 					<a href="javascript:void(0)" class="sns-auth-span">
@@ -62,5 +59,6 @@
 				</div>
 			</div>
 		</div>
+		</form>
 	</div>
 </div>
